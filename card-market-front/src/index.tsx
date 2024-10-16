@@ -8,6 +8,7 @@ import Root from './routes/Root';
 import UserForm from './pages/UserForm/UserForm';
 import Login from './pages/Login/Login';
 import Buy from './pages/Buy/Buy';
+import Sell from './pages/Sell/Sell';
 import { configureStore } from '@reduxjs/toolkit';
 import globalReducer from './core/reducers';
 import { Provider } from 'react-redux';
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "buy",
         element: <Buy />,
+      },
+      {
+        path: "sell",
+        element: <Sell />,
       }
     ]
   }

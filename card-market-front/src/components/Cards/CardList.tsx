@@ -3,9 +3,16 @@ import CardProps from '../../models/CardProps';
 import { CardService } from '../../services/card.service';
 import Card from './Card';
 import CardPreview from './CardPreview';
+import { useSelector } from 'react-redux';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar, Grid, Box } from '@mui/material';
 
-const CardList: React.FC = () => {
+interface CardListProps{
+    fetchMethod: 'all' | 'user';
+}
+
+const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all' }) => {
+    const currentUser = useSelector((state: any) => state.userReducer.currentUser)
+
     const [cards, setCards] = useState<CardProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -15,7 +22,14 @@ const CardList: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await CardService.getAllCards();
+                let response: CardProps[];
+                console.log(fetchMethod === 'all');
+                console.log(currentUser);
+                if (fetchMethod === 'all') {
+                    response = await CardService.getAllCards(); // Appel API pour toutes les cartes
+                } else {
+                    response = await CardService.getUserCards(currentUser.id); // Appel API pour les cartes de l'utilisateur
+                }
                 setCards(response);
             } catch (error: any) {
                 setError(error.message);
