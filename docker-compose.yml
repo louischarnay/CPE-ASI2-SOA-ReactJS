@@ -58,7 +58,7 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ./ollama:/root/.ollama
+      - ./card-market-back/ollama:/root/.ollama
     networks:
       - back-network
 
