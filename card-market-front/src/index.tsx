@@ -12,6 +12,7 @@ import Sell from './pages/Sell/Sell';
 import { configureStore } from '@reduxjs/toolkit';
 import globalReducer from './core/reducers';
 import { Provider } from 'react-redux';
+import Create from './pages/Create/Create';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "create",
+        element: <Create />
       },
       {
         path: "buy",

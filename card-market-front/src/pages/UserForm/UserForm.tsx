@@ -51,7 +51,7 @@ const UserForm = () => {
     const postUser = async () => {
         try {
             const response = await AuthService.register({
-                login: formData.email,
+                login: formData.firstName,
                 pwd: formData.password,
                 account: 0,
                 lastName: formData.lastName,
