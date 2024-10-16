@@ -107,9 +107,22 @@ const CardList: React.FC = () => {
                         <CardPreview {...selectedCard} />
                     </Box>
                 ) : (
-                    <Typography variant="h6" align="center">
-                        Cliquez sur une carte pour voir les détails
-                    </Typography>
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            top: '50%',
+                            right: '5%', // Ajustement pour l'espacement
+                            transform: 'translateY(-50%)',
+                            width: 'calc(20% - 40px)', // 30% de la largeur moins les marges
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Typography variant="h6" align="center">
+                            Cliquez sur une carte pour voir les détails
+                        </Typography>
+                    </Box>
                 )}
             </Grid>
         </Grid>
