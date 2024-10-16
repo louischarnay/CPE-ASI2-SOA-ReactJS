@@ -31,6 +31,8 @@ services:
   card-generator:
     build: ./card-market-back/card-generator
     container_name: card-market-card-generator
+    ports:
+      - "8081:8081"
     networks:
       - back-network
 
