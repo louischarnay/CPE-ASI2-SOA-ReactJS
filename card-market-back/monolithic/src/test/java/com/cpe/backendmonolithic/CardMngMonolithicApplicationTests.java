@@ -1,4 +1,4 @@
-package com.cpe.springboot;
+package com.cpe.backendmonolithic;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
