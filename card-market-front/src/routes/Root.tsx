@@ -3,6 +3,7 @@ import NavBar from "../components/NavBar/Navbar";
 import { Container } from "@mui/material";
 
 export default function Root() {
+
   return (
     <>
       <NavBar/>
