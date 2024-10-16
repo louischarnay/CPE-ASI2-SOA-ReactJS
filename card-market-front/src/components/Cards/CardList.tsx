@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CardProps from '../models/CardProps';
+import CardProps from '../../models/CardProps';
 import Card from './Card';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar } from '@mui/material';
 
