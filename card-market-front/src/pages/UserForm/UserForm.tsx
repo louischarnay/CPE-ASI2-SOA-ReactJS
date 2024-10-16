@@ -1,24 +1,9 @@
-<<<<<<< Updated upstream
-const UserForm = () => {
-    return (
-        <>
-        <h1>Register</h1>
-        </>
-    )
-}
-
-export default UserForm;
-=======
 import { useState } from 'react';
-import { TextField, Button, Checkbox, FormControlLabel, Box } from '@mui/material';
-
-// import './UserForm.css';
+import { TextField, Button, Checkbox, FormControlLabel, Box, Typography } from '@mui/material';
 
 const UserForm = () => {
-    const url = "http://tp.cpe.fr:8083/user";
-
     const [formData, setFormData] = useState({
-        surName: '',
+        firstName: '',
         lastName: '',
         email: '',
         password: '',
@@ -26,16 +11,25 @@ const UserForm = () => {
         acceptedTerms: false
     });
 
+    // Handle changes in input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
+
+        setFormData((prevData) => ({
+            ...prevData,
             [name]: type === 'checkbox' ? checked : value
-        });
+        }));
     };
 
+    // Handle form submission
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // Validate password and terms acceptance
+        if ( !formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.rePassword ) {
+            alert('All fields are required');
+            return;
+        }
         if (formData.password !== formData.rePassword) {
             alert('Passwords do not match');
             return;
@@ -45,10 +39,12 @@ const UserForm = () => {
             return;
         }
 
-        postUser();
+        postUser(); // Function to handle user registration
     };
 
+    // Function to post user data
     const postUser = async () => {
+        const url = "http://tp.cpe.fr:8083/users";
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -59,31 +55,26 @@ const UserForm = () => {
                     login: formData.email,
                     pwd: formData.password,
                     lastName: formData.lastName,
-                    surName: formData.surName,
+                    firstName: formData.firstName,
                     email: formData.email
                 })
             });
-
-            if (!response.ok) {
-                // Extract and show the error message if available
-                const errorData = await response.json();
-                alert(`Error: ${errorData.message || 'Error creating user'}`);
+            if (response.ok) {
+                alert('User created');
             } else {
-                alert('User created successfully!');
+                alert('Error creating user');
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('Network error. Please try again later.');
+            alert('Error creating user');
         }
     };
 
     return (
-        <>
-            <Box 
+        <Box 
             component="form" 
             onSubmit={handleSubmit}
             sx={{
-                maxWidth: 500,
+                maxWidth: 400,
                 margin: '50px auto',
                 padding: 4,
                 backgroundColor: '#f9f9f9',
@@ -94,21 +85,16 @@ const UserForm = () => {
                 gap: 2,
             }}
         >
+            <Typography variant="h5" gutterBottom>
+                Register
+            </Typography>
             <TextField
                 label="First Name"
                 variant="outlined"
                 fullWidth
                 name="firstName"
-                value={formData.surName}
+                value={formData.firstName}
                 onChange={handleChange}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                sx={{
-                    '& .MuiOutlinedInput-root': {
-                        borderRadius: '4px',
-                    },
-                }}
             />
             <TextField
                 label="Last Name"
@@ -117,9 +103,15 @@ const UserForm = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                InputLabelProps={{
-                    shrink: true,
-                }}
+            />
+            <TextField
+                label="Email"
+                variant="outlined"
+                type="email"
+                fullWidth
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
             />
             <TextField
                 label="Password"
@@ -129,9 +121,6 @@ const UserForm = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                InputLabelProps={{
-                    shrink: true,
-                }}
             />
             <TextField
                 label="Re-Password"
@@ -141,9 +130,6 @@ const UserForm = () => {
                 name="rePassword"
                 value={formData.rePassword}
                 onChange={handleChange}
-                InputLabelProps={{
-                    shrink: true,
-                }}
             />
             <FormControlLabel
                 control={
@@ -154,12 +140,6 @@ const UserForm = () => {
                     />
                 }
                 label="I agree to the Terms and Conditions"
-                sx={{
-                    marginBottom: 2,
-                    '& .MuiTypography-root': {
-                        fontSize: '14px',
-                    },
-                }}
             />
             <Button
                 type="submit"
@@ -177,9 +157,7 @@ const UserForm = () => {
                 Submit
             </Button>
         </Box>
-        </>
     );
 };
 
 export default UserForm;
->>>>>>> Stashed changes
