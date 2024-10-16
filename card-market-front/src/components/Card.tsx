@@ -1,19 +1,24 @@
 import React, { FC } from 'react';
 import CardProps from '../models/CardProps';
+import { TableRow, TableCell } from '@mui/material';
 
-const Card: FC<CardProps> = ({ name, description, family, hp, energy, defense, attack, price }) => {
-    return(
-        <tr>
-            <td>{name}</td>
-            <td>{description}</td>
-            <td>{family}</td>
-            <td>{hp}</td>
-            <td>{energy}</td>
-            <td>{defense}</td>
-            <td>{attack}</td>
-            <td>{price}</td>
-        </tr>
-    )
+interface CardComponentProps extends CardProps {
+    onClick: () => void;
 }
+
+const Card: FC<CardComponentProps> = ({ name, description, family, hp, energy, defense, attack, price, onClick }) => {
+    return (
+        <TableRow hover onClick={onClick} style={{ cursor: 'pointer' }}>
+            <TableCell>{name}</TableCell>
+            <TableCell>{description}</TableCell>
+            <TableCell>{family}</TableCell>
+            <TableCell>{hp}</TableCell>
+            <TableCell>{energy}</TableCell>
+            <TableCell>{defense}</TableCell>
+            <TableCell>{attack}</TableCell>
+            <TableCell>{price}</TableCell>
+        </TableRow>
+    );
+};
 
 export default Card;
