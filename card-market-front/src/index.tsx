@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Home from './pages/Home/Home';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root';
 import UserForm from './pages/UserForm/UserForm';
 import Login from './pages/Login/Login';
@@ -17,6 +17,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     children: [
+      {
+        path: "/",
+        element: <Navigate to="/home" replace={true} />
+      },
       {
         path: "home/",
         element: <Home />,

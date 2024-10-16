@@ -77,7 +77,7 @@ const CardList: React.FC = () => {
                         </TableHead>
                         <TableBody>
                             {cards.map((card: CardProps) => (
-                                <Card key={card.name} {...card} onClick={() => handleCardClick(card)} />
+                                <Card key={card.id} {...card} onClick={() => handleCardClick(card)} />
                             ))}
                         </TableBody>
                     </Table>
