@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import CardProps from '../../models/CardProps';
+import { CardService } from '../../services/card.service';
 import Card from './Card';
 import CardPreview from './CardPreview';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar, Grid, Box } from '@mui/material';
 
 const CardList: React.FC = () => {
-    const url = 'http://tp.cpe.fr:8083/cards';
-
     const [cards, setCards] = useState<CardProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -16,12 +15,8 @@ const CardList: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('Une erreur est survenue lors de la requête API');
-                }
-                const result: CardProps[] = await response.json();
-                setCards(result);
+                const response = await CardService.getAllCards();
+                setCards(response);
             } catch (error: any) {
                 setError(error.message);
             } finally {
