@@ -1,4 +1,4 @@
-import CardList from "../../components/CardList";
+import CardList from "../../components/Cards/CardList";
 
 const Buy = () => {
     return (
