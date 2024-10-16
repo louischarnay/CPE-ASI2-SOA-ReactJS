@@ -1,7 +1,9 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Link, Typography } from '@mui/material';
+import { Link } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
+import './UserComponent.css'
 
 const UserComponent = () => {
     const navigate = useNavigate();
@@ -12,17 +14,18 @@ const UserComponent = () => {
         <>
             {currentUser ? (
                 <div className='header-top'>
-                    <div>
-
-                    <Link component="button" onClick={() => navigate("/login")}>
-                        <AccountCircleIcon />
-                    </Link>
-                    <span><b>{currentUser.surName}</b></span>
+                    <div className='first-part'>
+                        <Link component="button" onClick={() => navigate("/login")}>
+                            <AccountCircleIcon />
+                        </Link>
+                        <span><b>{currentUser.surName}</b></span>
+                        <Link component="button" onClick={() => navigate("/register")}>
+                            <AddIcon />
+                        </Link>
                     </div>
                     <span>{currentUser.account}€</span>
                 </div>
             ) : (
-                // Sinon, afficher un bouton pour rediriger vers la page de login
                 <Link component="button" onClick={() => navigate("/login")}>
                     <AccountCircleIcon />
                 </Link>
