@@ -7,7 +7,10 @@ export class CardService {
 
     static async getUserCards(userId: number) {
         const result = await apiFetch(`/cards`, 'GET');
-        console.log(result);
         return result.filter((card: any) => card.userId === userId);
+    }
+
+    static async generateCard(imagePrompt: string, descriptionPrompt: string) {
+        const result = await apiFetch(`/generateCard`, 'POST', {imagePrompt, descriptionPrompt});
     }
 }

@@ -8,6 +8,10 @@ const CreateForm = () => {
         acceptedTerms: false,
     });
 
+    const generateCard = () => {
+        
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
 
@@ -31,6 +35,7 @@ const CreateForm = () => {
             return;
         }
 
+        generateCard()
     };
 
     return (
