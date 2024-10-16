@@ -1,4 +1,4 @@
-interface CardProps {
+type CardProps = {
     name: string;
     description: string;
     family: string;
