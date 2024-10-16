@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import CardProps from '../../models/CardProps';
 import { TableRow, TableCell } from '@mui/material';
-import CardPreview from './CardPreview';
 
 interface CardComponentProps extends CardProps {
     onClick: () => void;
