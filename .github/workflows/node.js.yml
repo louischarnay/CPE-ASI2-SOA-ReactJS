@@ -26,9 +26,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-      working-directory: ./card-market-front
-    - run: npm run build --if-present
-      working-directory: ./card-market-front
-    - run: npm test
-      working-directory: ./card-market-front
+    - run: cd card-market-front && npm ci
+    - run: cd card-market-front && npm run build --if-present
+    - run: cd card-market-front && npm test
