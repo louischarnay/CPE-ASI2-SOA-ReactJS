@@ -1,0 +1,11 @@
+.pagetitle-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
