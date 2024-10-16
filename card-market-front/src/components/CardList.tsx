@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import CardProps from '../models/CardProps';
 import Card from './Card';
 
-interface CardPropsTable {
-    cards: Array<CardProps>;
-}
-
 const CardList: React.FC = () => {
 
     const url = 'http://tp.cpe.fr:8083/cards';
