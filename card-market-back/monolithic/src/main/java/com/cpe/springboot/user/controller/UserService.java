@@ -65,17 +65,15 @@ public class UserService {
 	}
 
 	public List<UserModel> getUserByLoginPwd(String login, String pwd) {
-		List<UserModel> ulist = null;
-		ulist = userRepository.findByLoginAndPwd(login, pwd);
-		return ulist;
+        return userRepository.findByLoginAndPwd(login, pwd);
 	}
 
 	private UserModel fromUDtoToUModel(UserDTO user) {
 		UserModel u = new UserModel(user);
-		List<CardModel> cardList = new ArrayList<CardModel>();
+		List<CardModel> cardList = new ArrayList<>();
 		for (Integer cardId : user.getCardList()) {
 			Optional<CardModel> card = cardModelService.getCard(cardId);
-			if (card.isPresent()) {
+            if (card.isPresent()) {
 				cardList.add(card.get());
 			}
 		}
