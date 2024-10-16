@@ -31,5 +31,5 @@ jobs:
       working-directory: ./card-market-front
     - run: npm run build --if-present
       working-directory: ./card-market-front
-    - run: npm test --passWithNoTests
+    - run: npm test -- --passWithNoTests
       working-directory: ./card-market-front
