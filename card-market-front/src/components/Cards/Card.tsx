@@ -6,17 +6,17 @@ interface CardComponentProps extends CardProps {
     onClick: () => void;
 }
 
-const Card: FC<CardComponentProps> = ({ name, description, family, hp, energy, defense, attack, price, onClick }) => {
+const Card: FC<CardComponentProps> = (props) => {
     return (
-        <TableRow hover onClick={onClick} style={{ cursor: 'pointer' }}>
-            <TableCell>{name}</TableCell>
-            <TableCell>{description}</TableCell>
-            <TableCell>{family}</TableCell>
-            <TableCell>{hp}</TableCell>
-            <TableCell>{energy}</TableCell>
-            <TableCell>{defense}</TableCell>
-            <TableCell>{attack}</TableCell>
-            <TableCell>{price}</TableCell>
+        <TableRow hover onClick={props.onClick} style={{ cursor: 'pointer' }}>
+            <TableCell>{props.name}</TableCell>
+            <TableCell>{props.description}</TableCell>
+            <TableCell>{props.family}</TableCell>
+            <TableCell>{props.hp}</TableCell>
+            <TableCell>{props.energy}</TableCell>
+            <TableCell>{props.defense}</TableCell>
+            <TableCell>{props.attack}</TableCell>
+            <TableCell>{props.price}</TableCell>
         </TableRow>
     );
 };

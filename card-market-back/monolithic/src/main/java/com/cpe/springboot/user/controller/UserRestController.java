@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.cpe.springboot.common.tools.DTOMapper;
-import com.cpe.springboot.user.model.AuthDTO;
 import com.cpe.springboot.user.model.UserDTO;
 import com.cpe.springboot.user.model.UserModel;
 
-//ONLY FOR TEST NEED ALSO TO ALLOW CROOS ORIGIN ON WEB BROWSER SIDE
+//ONLY FOR TEST NEED ALSO TO ALLOW CROSS ORIGIN ON WEB BROWSER SIDE
 @CrossOrigin
 @RestController
 public class UserRestController {
@@ -65,17 +64,5 @@ public class UserRestController {
 	public void deleteUser(@PathVariable String id) {
 		userService.deleteUser(id);
 	}
-	
-	@RequestMapping(method=RequestMethod.POST,value="/auth")
-	private Integer getAllCourses(@RequestBody AuthDTO authDto) {
-		 List<UserModel> uList = userService.getUserByLoginPwd(authDto.getUsername(),authDto.getPassword());
-		if( uList.size() > 0) {
-			
-			return uList.get(0).getId();
-		}
-		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Authentification Failed",null);
-
-	}
-	
 
 }

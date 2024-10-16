@@ -17,7 +17,7 @@ import com.cpe.springboot.card.model.CardDTO;
 import com.cpe.springboot.card.model.CardModel;
 import com.cpe.springboot.common.tools.DTOMapper;
 
-//ONLY FOR TEST NEED ALSO TO ALLOW CROOS ORIGIN ON WEB BROWSER SIDE
+//ONLY FOR TEST NEED ALSO TO ALLOW CROSS ORIGIN ON WEB BROWSER SIDE
 @CrossOrigin
 @RestController
 
