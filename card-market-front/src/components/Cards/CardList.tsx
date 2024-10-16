@@ -23,8 +23,6 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all' }) => {
         const fetchData = async () => {
             try {
                 let response: CardProps[];
-                console.log(fetchMethod === 'all');
-                console.log(currentUser);
                 if (fetchMethod === 'all') {
                     response = await CardService.getAllCards(); // Appel API pour toutes les cartes
                 } else {
