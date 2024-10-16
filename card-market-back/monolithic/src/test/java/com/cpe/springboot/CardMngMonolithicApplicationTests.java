@@ -7,7 +7,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class CardGeneratorApplicationTests {
+public class CardMngMonolithicApplicationTests {
 
 	@Test
 	public void contextLoads() {
