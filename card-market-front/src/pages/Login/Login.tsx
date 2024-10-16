@@ -1,4 +1,4 @@
-import { Box, Button, FormControlLabel, Link, TextField, Typography } from "@mui/material";
+import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -11,11 +11,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         firstName: '',
-        lastName: '',
-        email: '',
         password: '',
-        rePassword: '',
-        acceptedTerms: false
     });
 
     // Handle changes in input fields
@@ -43,70 +39,83 @@ const Login = () => {
 
     // Function to post user data
     const postUser = async () => {
-        const response: number = await AuthService.login({ username: formData.firstName, password: formData.password });
-        const user: User = await UserService.getUserById(response)
-        dispatch({
-            type: 'UPDATE_CURRENT_USER',
-            payload: user
-        })
-        navigate("/")
+        try {
+
+            const response: number = await AuthService.login({ username: formData.firstName, password: formData.password });
+            const user: User = await UserService.getUserById(response)
+            dispatch({
+                type: 'UPDATE_CURRENT_USER',
+                payload: user
+            })
+            navigate("/")
+        }
+        catch (err) {
+            alert("Error, wrong first name or password")
+            setFormData({
+                firstName: formData.firstName,
+                password: '',
+            })
+        }
 
     };
 
     return (
-        <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{
-                maxWidth: 400,
-                margin: '50px auto',
-                padding: 4,
-                backgroundColor: '#f9f9f9',
-                borderRadius: 2,
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-            }}
-        >
-            <Typography variant="h5" gutterBottom>
-                Login
-            </Typography>
-            <TextField
-                label="First Name"
-                variant="outlined"
-                fullWidth
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-            />
-
-            <TextField
-                label="Password"
-                variant="outlined"
-                type="password"
-                fullWidth
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-            />
-
-            <Button
-                type="submit"
-                variant="contained"
-                fullWidth
+        <>
+            <Box
+                component="form"
+                onSubmit={handleSubmit}
                 sx={{
-                    padding: '10px 0',
-                    backgroundColor: '#4CAF50',
-                    color: '#fff',
-                    '&:hover': {
-                        backgroundColor: '#45a049',
-                    },
+                    maxWidth: 400,
+                    margin: '50px auto',
+                    padding: 4,
+                    backgroundColor: '#f9f9f9',
+                    borderRadius: 2,
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
                 }}
             >
-                Submit
-            </Button>
-        </Box>
+                <Typography variant="h5" gutterBottom>
+                    Login
+                </Typography>
+                <TextField
+                    label="First Name"
+                    variant="outlined"
+                    fullWidth
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                />
+
+                <TextField
+                    label="Password"
+                    variant="outlined"
+                    type="password"
+                    fullWidth
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                />
+
+                <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    sx={{
+                        padding: '10px 0',
+                        backgroundColor: '#4CAF50',
+                        color: '#fff',
+                        '&:hover': {
+                            backgroundColor: '#45a049',
+                        },
+                    }}
+                >
+                    Submit
+                </Button>
+            </Box>
+            <Link component="button" onClick={() => navigate("/register")}>create a new user</Link>
+        </>
     );
 };
 

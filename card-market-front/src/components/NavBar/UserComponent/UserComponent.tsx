@@ -1,14 +1,16 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from '@mui/material';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import './UserComponent.css'
+import User from '../../../models/user.model';
 
-const UserComponent = () => {
+type NavbarProps = {
+    currentUser: User;
+}
+
+const UserComponent = ({currentUser} : NavbarProps) => {
     const navigate = useNavigate();
-
-    const currentUser = useSelector((state: any) => state.userReducer.currentUser)
 
     return (
         <>

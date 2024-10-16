@@ -22,19 +22,19 @@ const router = createBrowserRouter([
         element: <Navigate to="/home" replace={true} />
       },
       {
-        path: "home/",
+        path: "home",
         element: <Home />,
       },
       {
-        path: "register/",
+        path: "register",
         element: <UserForm />,
       },
       {
-        path: "login/",
+        path: "login",
         element: <Login />,
       },
       {
-        path: "buy/",
+        path: "buy",
         element: <Buy />,
       }
     ]

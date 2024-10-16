@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { TextField, Button, Checkbox, FormControlLabel, Box, Typography } from '@mui/material';
+import { AuthService } from '../../services/auth.service';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const UserForm = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -44,28 +49,23 @@ const UserForm = () => {
 
     // Function to post user data
     const postUser = async () => {
-        const url = "http://tp.cpe.fr:8083/users";
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    login: formData.email,
-                    pwd: formData.password,
-                    lastName: formData.lastName,
-                    firstName: formData.firstName,
-                    email: formData.email
-                })
-            });
-            if (response.ok) {
-                alert('User created');
-            } else {
-                alert('Error creating user');
-            }
-        } catch (error) {
-            alert('Error creating user');
+            const response = await AuthService.register({
+                login: formData.email,
+                pwd: formData.password,
+                account: 0,
+                lastName: formData.lastName,
+                surName: formData.firstName,
+                email: formData.email,
+                cardList: []
+            })
+            dispatch({
+                type: 'UPDATE_CURRENT_USER',
+                payload: response
+            })
+            navigate("/")
+        } catch (err) {
+            alert(err)
         }
     };
 
