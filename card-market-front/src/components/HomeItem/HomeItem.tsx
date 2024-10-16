@@ -1,4 +1,4 @@
-import { IconProps } from "@mui/material";
+import { Button, IconProps } from "@mui/material";
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,10 +12,10 @@ const HomeItem = ({ icon, description, redirection }: HomeItemProps) => {
     const navigate = useNavigate();
     
     return (
-        <div onClick={() => navigate(redirection)}>
+        <Button variant="outlined" onClick={() => navigate(redirection)}>
             {icon}
             {description}
-        </div>
+        </Button>
     )
 }
 
