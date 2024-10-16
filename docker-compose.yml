@@ -11,7 +11,7 @@ services:
       - card-network
 
   backend:
-    build: ./card-market-back
+    build: ./card-market-back/monolithic
     container_name: card-market-back
     ports:
       - "8080:8080"
