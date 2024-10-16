@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CardGenerator {
 
-    @Autowired
-    private ProducerTemplate producerTemplate;
+        @Autowired
+        private ProducerTemplate producerTemplate;
 
-    @PostMapping("/generate")
-    public String generate(@RequestBody String cardNumber) {
-        producerTemplate.sendBody("direct:start", cardNumber);
-        return "Card generated";
-    }
+        @PostMapping("/generateImage")
+        public String sendMessageToTopic(@RequestBody String message) {
+                producerTemplate.sendBody("direct:sendToGenerateImage", message);
+                return "Message sent to topic generate-image";
+        }
 }

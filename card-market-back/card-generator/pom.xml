@@ -49,10 +49,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Apache Camel Spring Boot starter -->
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
-			<version>4.5.0</version>
+			<version>4.5.0</version> <!-- Update to your version -->
+		</dependency>
+
+		<!-- Apache Camel JMS starter -->
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-jms-starter</artifactId>
+			<version>4.5.0</version> <!-- Update to your version -->
 		</dependency>
 	</dependencies>
 
