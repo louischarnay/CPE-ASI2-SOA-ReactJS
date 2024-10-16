@@ -9,7 +9,7 @@
 		<version>3.2.5</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.cpe.springboot</groupId>
+	<groupId>com.cpe</groupId>
 	<artifactId>backendmonolithic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>backendmonolithic</name>
