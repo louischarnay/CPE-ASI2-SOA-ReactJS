@@ -17,7 +17,7 @@ import com.cpe.springboot.common.tools.DTOMapper;
 import com.cpe.springboot.user.model.UserDTO;
 import com.cpe.springboot.user.model.UserModel;
 
-//ONLY FOR TEST NEED ALSO TO ALLOW CROOS ORIGIN ON WEB BROWSER SIDE
+//ONLY FOR TEST NEED ALSO TO ALLOW CROSS ORIGIN ON WEB BROWSER SIDE
 @CrossOrigin
 @RestController
 public class UserRestController {
