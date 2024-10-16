@@ -1,14 +1,3 @@
-<<<<<<< Updated upstream
-const UserForm = () => {
-    return (
-        <>
-        <h1>Register</h1>
-        </>
-    )
-}
-
-export default UserForm;
-=======
 import { useState } from 'react';
 import { TextField, Button, Checkbox, FormControlLabel, Box } from '@mui/material';
 
@@ -182,4 +171,3 @@ const UserForm = () => {
 };
 
 export default UserForm;
->>>>>>> Stashed changes

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import CardProps from '../models/CardProps';
+import CardProps from '../../models/CardProps';
 import { TableRow, TableCell } from '@mui/material';
 
 interface CardComponentProps extends CardProps {
