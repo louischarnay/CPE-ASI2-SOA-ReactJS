@@ -1,11 +1,17 @@
-FROM openjdk:17
+FROM maven:3.8.4-openjdk-17 AS build
 
-RUN mkdir -p /app/SP
+WORKDIR /app
 
-WORKDIR /app/SP
+COPY ./pom.xml .
+
+COPY ./src ./src
 
 RUN mvn clean install
 
-COPY ./target/asi2-backendmarket-monolithic-student-0.0.1-SNAPSHOT.jar asi2-backendmarket-monolithic-student-0.0.1-SNAPSHOT.jar
+FROM openjdk:17
 
-CMD ["java","-jar","asi2-backendmarket-monolithic-student-0.0.1-SNAPSHOT.jar"]
+WORKDIR /app
+
+COPY --from=build /app/target/backendmonolithic-0.0.1-SNAPSHOT.jar backendmonolithic-0.0.1-SNAPSHOT.jar
+
+CMD ["java", "-jar", "backendmonolithic-0.0.1-SNAPSHOT.jar"]

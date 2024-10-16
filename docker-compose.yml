@@ -8,15 +8,16 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
     networks:
-      - card-network
+      - public-network
 
-  backend:
+  backend-monolithic:
     build: ./card-market-back/monolithic
-    container_name: card-market-back
+    container_name: card-market-back-monolithic
     ports:
       - "8080:8080"
     networks:
-      - card-network
+      - public-network
+      - back-network
 
   active-mq:
     image: rmohr/activemq
@@ -25,14 +26,44 @@ services:
       - "8161:8161"
       - "61616:61616"
     networks:
-      - card-network
+      - back-network
 
   card-generator:
     build: ./card-market-back/card-generator
     container_name: card-market-card-generator
     networks:
-      - card-network
+      - back-network
+
+  image-generator:
+    build: ./card-market-back/image-generator
+    container_name: card-market-image-generator
+    networks:
+      - back-network
+    ports:
+      - "8082:8082"
+
+  image-generator-lib:
+    image: registry.gitlab.com/js-asi2/asi2-resources/img-gene-neural-love-api:v1.0
+    container_name: image-generator-lib
+    ports:
+      - "8090:8080"
+    environment:
+      - external.iaimgapi.token=${NEURAL_LOVE_API_KEY}
+    networks:
+      - back-network
+
+  prompt-generator-lib:
+    image: ollama/ollama
+    container_name: prompt-generator-lib
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    networks:
+      - back-network
 
 networks:
-  card-network:
+  public-network:
+    driver: bridge
+  back-network:
     driver: bridge
