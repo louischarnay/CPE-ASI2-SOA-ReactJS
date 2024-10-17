@@ -44,6 +44,22 @@ services:
     ports:
       - "8082:8082"
 
+  description-generator:
+    build: ./card-market-back/description-generator
+    container_name: card-market-description-generator
+    networks:
+      - back-network
+    ports:
+      - "8083:8083"
+
+  properties-generator:
+    build: ./card-market-back/properties-generator
+    container_name: card-market-properties-generator
+    networks:
+      - back-network
+    ports:
+      - "8084:8084"
+
   image-generator-lib:
     image: registry.gitlab.com/js-asi2/asi2-resources/img-gene-neural-love-api:v1.0
     container_name: image-generator-lib

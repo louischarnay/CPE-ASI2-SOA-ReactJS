@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cpe</groupId>
-	<artifactId>imagegenerator</artifactId>
+	<artifactId>propertiesgenerator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>imagegenerator</name>
-	<description>Image Generator</description>
+	<name>propertiesgenerator</name>
+	<description>Properties Generator</description>
 
 	<properties>
 		<java.version>17</java.version>

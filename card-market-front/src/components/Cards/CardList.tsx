@@ -26,9 +26,12 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick })
                 let response: CardProps[];
                 if (fetchMethod === 'all') {
                     response = await CardService.getAllCards(); // Appel API pour toutes les cartes
-                } else {
+                } else if (fetchMethod === 'user' && currentUser != null) {
                     response = await CardService.getUserCards(currentUser.id); // Appel API pour les cartes de l'utilisateur
-                }
+                } else {
+                    setError('Problème de récupération des cartes');
+                    response = [];
+                } 
                 setCards(response);
             } catch (error: any) {
                 setError(error.message);
