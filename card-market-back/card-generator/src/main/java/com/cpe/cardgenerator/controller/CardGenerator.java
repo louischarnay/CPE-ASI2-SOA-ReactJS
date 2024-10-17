@@ -1,5 +1,6 @@
 package com.cpe.cardgenerator.controller;
 
+import com.cpe.cardgenerator.message.MessageService;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,22 +13,14 @@ public class CardGenerator {
         @Autowired
         private ProducerTemplate producerTemplate;
 
-        public void sendMessageToTopic(@RequestBody String message) {
-                producerTemplate.sendBody("direct:sendToGenerateImage", message);
-        }
-
-        public void sendMessageToTopic2(@RequestBody String message) {
-                producerTemplate.sendBody("direct:sendToGenerateDesc", message);
-        }
-
-        public void sendMessageToTopic3(@RequestBody String message) {
-                producerTemplate.sendBody("direct:sendToGenerateProp", message);
-        }
+        @Autowired
+        private MessageService messageService;
 
         @PostMapping("/generateCard")
-        public String generateCard(@RequestBody String message) {
-                sendMessageToTopic(message);
-                sendMessageToTopic2(message);
-                return "Card generated";
+        public String generateCard(@RequestBody String imagePrompt, @RequestBody String descPrompt) {
+                Long id = messageService.createNewMessageEntry();
+                producerTemplate.sendBodyAndHeader("direct:sendToGenerateImage", imagePrompt, "id", id);
+                producerTemplate.sendBodyAndHeader("direct:sendToGenerateDesc", descPrompt, "id", id);
+                return "Card generation initiated with ID: " + id;
         }
 }
