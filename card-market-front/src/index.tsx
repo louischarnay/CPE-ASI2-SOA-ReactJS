@@ -13,6 +13,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import globalReducer from './core/reducers';
 import { Provider } from 'react-redux';
 import Create from './pages/Create/Create';
+import ProtectedRoute from './routes/ProtectedRoot';
 
 const router = createBrowserRouter([
   {
@@ -35,17 +36,18 @@ const router = createBrowserRouter([
         path: "login",
         element: <Login />,
       },
+      // Les routes protégées
       {
         path: "create",
-        element: <Create />
+        element: <ProtectedRoute element={<Create />} /> // Protège la route "create"
       },
       {
         path: "buy",
-        element: <Buy />,
+        element: <ProtectedRoute element={<Buy />} /> // Protège la route "buy"
       },
       {
         path: "sell",
-        element: <Sell />,
+        element: <ProtectedRoute element={<Sell />} /> // Protège la route "sell"
       }
     ]
   }
