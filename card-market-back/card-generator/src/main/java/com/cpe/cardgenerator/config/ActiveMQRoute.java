@@ -9,5 +9,9 @@ public class ActiveMQRoute extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:sendToGenerateImage")
                 .to("jms:topic:generate-image");
+        from("direct:sendToGenerateDesc")
+                .to("jms:topic:generate-desc");
+        from("direct:sendToGenerateProp")
+                .to("jms:topic:generate-prop");
     }
 }
