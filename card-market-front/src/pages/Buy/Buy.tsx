@@ -9,6 +9,17 @@ const Buy = () => {
         console.log("carte à acheter")
         setOpen(true)
     }
+
+    const handleClose = (
+        event: React.SyntheticEvent | Event,
+        reason?: SnackbarCloseReason,
+        ) => {
+            if (reason === 'clickaway') {
+            return;
+            }
+    
+            setOpen(false);
+        };
     
     return (
         <div>
@@ -17,6 +28,7 @@ const Buy = () => {
                 open={open}
                 autoHideDuration={6000}
                 message="You just bought a card"
+                onClose={handleClose}
             />
         </div>
     );

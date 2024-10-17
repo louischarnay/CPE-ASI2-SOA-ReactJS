@@ -9,6 +9,17 @@ const Sell = () => {
         const response = null
         setOpen(true)
     }
+
+    const handleClose = (
+        event: React.SyntheticEvent | Event,
+        reason?: SnackbarCloseReason,
+        ) => {
+            if (reason === 'clickaway') {
+            return;
+            }
+    
+            setOpen(false);
+        };
     
     return (
         <div>
@@ -17,6 +28,7 @@ const Sell = () => {
                 open={open}
                 autoHideDuration={6000}
                 message="You just sold your card"
+                onClose={handleClose}
             />
         </div>
     );
