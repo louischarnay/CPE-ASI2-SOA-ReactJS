@@ -2,6 +2,10 @@ import { apiFetch } from "../utils/apiFetch";
 
 export class StoreService {
     static async sell(cardId: number, userId: number) {
-        return apiFetch(`/store/sell`, 'POST', {cardId: cardId, userId: userId, storeId: 0})
+        return apiFetch(`/store/sell`, 'POST', {card_id: cardId, user_id: userId, store_id: 0})
+    }
+
+    static async buy(cardId: number, userId: number) {
+        return apiFetch(`/store/sell`, 'POST', {card_id: cardId, user_id: userId, store_id: 0})
     }
 }
