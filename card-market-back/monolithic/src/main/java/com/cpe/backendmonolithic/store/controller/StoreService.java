@@ -40,7 +40,7 @@ public class StoreService {
 		}
 		UserModel u = u_option.get();
 		CardModel c = c_option.get();
-		if (u.getAccount() > c.getPrice()) {
+		if (u.getAccount() >= c.getPrice()) {
 			u.addCard(c);
 			u.setAccount(u.getAccount() - c.getPrice());
 			userService.updateUser(u);
