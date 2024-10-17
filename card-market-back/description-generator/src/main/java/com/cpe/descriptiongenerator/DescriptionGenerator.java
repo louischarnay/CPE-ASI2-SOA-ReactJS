@@ -1,0 +1,13 @@
+package com.cpe.descriptiongenerator;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DescriptionGenerator {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DescriptionGenerator.class, args);
+	}
+
+}
