@@ -2,8 +2,11 @@ import { useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
 import { StoreService } from "../../services/store.service";
 import User from "../../models/user.model";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { Button } from "@mui/material";
 
 
 const Sell = () => {
@@ -30,6 +33,19 @@ const Sell = () => {
     
             setOpen(false);
         };
+
+    const action = (
+        <Fragment>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </Fragment>
+    );
     
     return (
         <div>
@@ -39,6 +55,7 @@ const Sell = () => {
                 autoHideDuration={6000}
                 message="You just sold your card"
                 onClose={handleClose}
+                action={action}
             />
         </div>
     );
