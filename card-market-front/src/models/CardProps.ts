@@ -12,6 +12,7 @@ type CardProps = {
     attack: number;
     price: number;
     userId?: number;
+    handleCLick: (e : any) => void;
 }
 
 export default CardProps;

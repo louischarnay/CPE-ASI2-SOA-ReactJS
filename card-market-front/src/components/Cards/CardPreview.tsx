@@ -1,53 +1,56 @@
-import React, { FC } from 'react';
 import CardProps from '../../models/CardProps';
 import { Card, CardContent, CardMedia, Typography, CardActions, Button } from '@mui/material';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import './CardPreview.css'
 
-const CardPreview: FC<CardProps> = (props) => {
+const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, id, hp, energy, defense, attack, price, userId, handleCLick} : CardProps) => {
     return (
+        <>
         <Card style={{ maxWidth: 345, margin: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
             {/* Image de la carte */}
             <CardMedia
                 component="img"
                 height="200"
-                image={props.imgUrl}
-                alt={props.name}
-            />
+                image={imgUrl}
+                alt={name}
+                />
 
             {/* Contenu de la carte */}
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                    {props.name}
+                    {name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    <strong>Famille : </strong> {props.family}
+                    <strong>Famille : </strong> {family}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {props.description}
+                    {description}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    <strong>HP : </strong>{props.hp}
+                    <strong>HP : </strong>{hp}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    <strong>Énergie : </strong>{props.energy}
+                    <strong>Énergie : </strong>{energy}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    <strong>Défense : </strong>{props.defense}
+                    <strong>Défense : </strong>{defense}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    <strong>Attaque : </strong>{props.attack}
+                    <strong>Attaque : </strong>{attack}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    <strong>Prix : </strong>{props.price}€
+                    <strong>Prix : </strong>{price}€
                 </Typography>
             </CardContent>
 
             {/* Bouton au centre en bas */}
             <CardActions style={{ justifyContent: 'center' }}>
-                <Button variant="contained" color="primary">
-                    Voir Détails
+                <Button variant="contained" color="primary" onClick={() => handleCLick(id)}> 
+                   <PaymentsIcon className='pr'/> {price}€
                 </Button>
             </CardActions>
         </Card>
+        </>
     );
 };
 

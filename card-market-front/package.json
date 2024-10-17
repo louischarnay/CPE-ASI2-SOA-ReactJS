@@ -2,7 +2,7 @@
   "name": "card-market-front",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://tp.cpe.fr:8083",
+  "proxy": "http://localhost:8080/api",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.13.3",

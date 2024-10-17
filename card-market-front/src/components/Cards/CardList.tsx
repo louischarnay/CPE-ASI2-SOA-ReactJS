@@ -6,11 +6,12 @@ import CardPreview from './CardPreview';
 import { useSelector } from 'react-redux';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar, Grid, Box } from '@mui/material';
 
-interface CardListProps{
+interface CardListProps {
     fetchMethod: 'all' | 'user';
+    handleClick: (e : any) => void
 }
 
-const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all' }) => {
+const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick }) => {
     const currentUser = useSelector((state: any) => state.userReducer.currentUser)
 
     const [cards, setCards] = useState<CardProps[]>([]);
@@ -111,7 +112,22 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all' }) => {
                             alignItems: 'center',
                         }}
                     >
-                        <CardPreview {...selectedCard} />
+                        <CardPreview
+                            handleCLick={handleClick}
+                            affinity={selectedCard.affinity}
+                            attack={selectedCard.attack}
+                            defense={selectedCard.defense}
+                            description={selectedCard.description}
+                            energy={selectedCard.energy}
+                            family={selectedCard.family}
+                            hp={selectedCard.hp}
+                            id={selectedCard.id}
+                            imgUrl={selectedCard.imgUrl}
+                            name={selectedCard.name}
+                            price={selectedCard.price}
+                            smallImgUrl={selectedCard.smallImgUrl}
+                            userId={selectedCard.userId} 
+                        />
                     </Box>
                 ) : (
                     <Box
