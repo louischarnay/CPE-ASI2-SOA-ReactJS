@@ -1,4 +1,4 @@
-const BASE_API_URL = 'http://tp.cpe.fr:8083';
+const BASE_API_URL = 'http://localhost:8080/api';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 

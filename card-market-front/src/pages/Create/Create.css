@@ -3,3 +3,12 @@
     flex-direction: column;
     justify-content: center;
 }
+
+.center-card {
+    display: flex;
+    justify-content: center;
+}
+
+.width-card {
+    width: 365px;
+}
