@@ -1,33 +1,45 @@
 package com.cpe.cardgenerator.config;
 
+import com.cpe.cardgenerator.message.MessageService;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ActiveMQListenerRoute extends RouteBuilder {
+    @Autowired
+    private MessageService messageService;  // Add the message service to process messages
+
     @Override
     public void configure() throws Exception {
-        // Listen on the 'imageGenerated' topic
+        // Listen on the 'image-generated' topic
         from("jms:topic:image-generated")
                 .log("Received message from image-generated topic: ${body}")
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
-                    // Add any custom logic for processing the message
-                    System.out.println("Processing message: " + message);
+                    Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
+                    messageService.processImageMessage(id, message);  // Process the image message
+                    System.out.println("Processing image message for ID: " + id);
                 });
+
+        // Listen on the 'desc-generated' topic
         from("jms:topic:desc-generated")
                 .log("Received message from desc-generated topic: ${body}")
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
-                    // Add any custom logic for processing the message
-                    System.out.println("Processing message: " + message);
+                    Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
+                    messageService.processDescMessage(id, message);  // Process the description message
+                    System.out.println("Processing description message for ID: " + id);
                 });
+
+        // Listen on the 'prop-generated' topic (optional if needed)
         from("jms:topic:prop-generated")
                 .log("Received message from prop-generated topic: ${body}")
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
-                    // Add any custom logic for processing the message
-                    System.out.println("Processing message: " + message);
+                    Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
+                    // Handle the property message logic (if required)
+                    System.out.println("Processing property message for ID: " + id);
                 });
     }
 }
