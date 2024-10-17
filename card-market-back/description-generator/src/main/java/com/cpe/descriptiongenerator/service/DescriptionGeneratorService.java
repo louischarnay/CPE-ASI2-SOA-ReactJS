@@ -14,21 +14,18 @@ import com.google.gson.Gson;
 public class DescriptionGeneratorService {
 
     private static final String BASE_URL = "http://localhost:11434";
+    private static final String MODEL = "qwen2:0.5b";
 
     private final RestTemplate restTemplate;
 
     public DescriptionGeneratorService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        loadModel();
     }
 
     public void loadModel() {
         String url = BASE_URL + "/api/pull";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        HttpEntity<String> request = new HttpEntity<>("{ \"name\": \"qwen2:0.5b\" }", headers);
+        HttpEntity<String> request = new HttpEntity<>(String.format("{ \"name\": \"%s\" }", MODEL));
         System.out.println("Loading model...");
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 
@@ -40,9 +37,11 @@ public class DescriptionGeneratorService {
     }
 
     public String generateDescription(String promptTxt) {
+        loadModel();
+
         String url = BASE_URL + "/api/generate";
 
-        String jsonBody = String.format("{ \"model\": \"qwen2:0.5b\", \"prompt\": \"%s\", \"stream\": false }", promptTxt);
+        String jsonBody = String.format("{ \"model\": \"%s\", \"prompt\": \"%s\", \"stream\": false }", MODEL, promptTxt);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
