@@ -56,6 +56,13 @@
 			<version>4.5.0</version> <!-- Update to your version -->
 		</dependency>
 
+		<dependency>
+			<groupId>tp.cpe</groupId>
+			<artifactId>colorToProperties</artifactId>
+			<version>1.1.2</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
