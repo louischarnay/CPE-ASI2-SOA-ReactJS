@@ -1,8 +1,10 @@
 import CardList from "../../components/Cards/CardList";
 
 const Sell = () => {
-    const handleCLick = (id: any) => {
-        console.log(id)
+    const handleCLick = async (id: any) => {
+        const response = null
+
+        // TODO NOTIF
     }
     
     return (
