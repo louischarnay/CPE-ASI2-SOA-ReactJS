@@ -1,59 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import CardProps from '../../models/CardProps';
-import { CardService } from '../../services/card.service';
 import Card from './Card';
 import CardPreview from './CardPreview';
-import { useSelector } from 'react-redux';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar, Grid, Box } from '@mui/material';
 
 interface CardListProps {
     fetchMethod: 'all' | 'user';
-    handleClick: (e : any) => void
+    handleClick: (e : any) => void;
+    cards: CardProps[];
 }
 
-const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick }) => {
-    const currentUser = useSelector((state: any) => state.userReducer.currentUser)
+const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, cards }) => {
 
-    const [cards, setCards] = useState<CardProps[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // État pour stocker la carte sélectionnée
-
-    // Fonction qui fait la requête à l'API
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let response: CardProps[];
-                if (fetchMethod === 'all') {
-                    response = await CardService.getAllCards(); // Appel API pour toutes les cartes
-                } else if (fetchMethod === 'user' && currentUser != null) {
-                    response = await CardService.getUserCards(currentUser.id); // Appel API pour les cartes de l'utilisateur
-                } else {
-                    setError('Problème de récupération des cartes');
-                    response = [];
-                } 
-                setCards(response);
-            } catch (error: any) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    // Gestion de l'état "loading" et "error"
-    if (loading) {
-        return (
-            <TableContainer component={Paper} style={{ padding: '20px', height: '100%' }}>
-                <Typography variant="h6" align="center">
-                    Chargement des cartes...
-                </Typography>
-                <CircularProgress style={{ display: 'block', margin: 'auto' }} />
-            </TableContainer>
-        );
-    }
 
     if (error) {
         return (

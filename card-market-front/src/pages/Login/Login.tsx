@@ -5,6 +5,8 @@ import { useState } from "react";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import User from "../../models/user.model";
+import CardProps from "../../models/CardProps";
+import { CardService } from "../../services/card.service";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -47,6 +49,17 @@ const Login = () => {
                 type: 'UPDATE_CURRENT_USER',
                 payload: user
             })
+            const userCards : CardProps[] = await CardService.getUserCards(user.id);
+            dispatch({
+                type: 'UPDATE_USER_CARDS',
+                payload: userCards
+            })
+            const buyCards : CardProps[] = await CardService.getAllCards();
+            dispatch({
+                type: 'UPDATE_BUY_CARDS',
+                payload: buyCards
+            })
+
             navigate("/")
         }
         catch (err) {

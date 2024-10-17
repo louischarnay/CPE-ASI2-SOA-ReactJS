@@ -11,6 +11,6 @@ export class CardService {
     }
 
     static async generateCard(imagePrompt: string, descriptionPrompt: string) {
-        const result = await apiFetch(`/generateCard`, 'POST', {imagePrompt, descriptionPrompt});
+        return await apiFetch(`/generateCard`, 'POST', {imagePrompt, descriptionPrompt});
     }
 }

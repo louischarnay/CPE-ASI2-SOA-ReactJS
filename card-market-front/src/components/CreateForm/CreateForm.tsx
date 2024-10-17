@@ -1,5 +1,8 @@
 import { Box, Button, Checkbox, FormControlLabel, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { CardService } from "../../services/card.service";
+import useSse from "../../hooks/useSse";
+import config from "../../config/config.json"
 
 const CreateForm = () => {
     const [formData, setFormData] = useState({
@@ -8,9 +11,16 @@ const CreateForm = () => {
         acceptedTerms: false,
     });
 
-    const generateCard = () => {
-        
+    const generateCard = async () => {
+        await CardService.generateCard(formData.imagePrompt, formData.descriptionPrompt);
     }
+
+    useSse(`${config.url}/sse-endpoint`, (data) => {
+        console.log(data); 
+    }, (error) => {
+        console.error("SSE Error: ", error);
+    });
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;

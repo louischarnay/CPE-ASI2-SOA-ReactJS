@@ -3,6 +3,8 @@ import { TextField, Button, Checkbox, FormControlLabel, Box, Typography } from '
 import { AuthService } from '../../services/auth.service';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import CardProps from '../../models/CardProps';
+import { CardService } from '../../services/card.service';
 
 const UserForm = () => {
     const navigate = useNavigate();
@@ -62,6 +64,16 @@ const UserForm = () => {
             dispatch({
                 type: 'UPDATE_CURRENT_USER',
                 payload: response
+            })
+            const userCards : CardProps[] = await CardService.getUserCards(response.id);
+            dispatch({
+                type: 'UPDATE_USER_CARDS',
+                payload: userCards
+            })
+            const buyCards : CardProps[] = await CardService.getAllCards();
+            dispatch({
+                type: 'UPDATE_BUY_CARDS',
+                payload: buyCards
             })
             navigate("/")
         } catch (err) {

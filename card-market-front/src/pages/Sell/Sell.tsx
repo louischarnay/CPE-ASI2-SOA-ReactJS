@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
 import { StoreService } from "../../services/store.service";
 import User from "../../models/user.model";
@@ -6,18 +6,24 @@ import { useState, Fragment } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button } from "@mui/material";
-
+import { UserService } from "../../services/user.service";
+import { CardService } from "../../services/card.service";
+import CardProps from "../../models/CardProps";
 
 const Sell = () => {
     const currentUser : User = useSelector((state: any) => state.userReducer.currentUser)
+    const cards : CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
 
     const handleCLick = async (cardId: any) => {
         try {
             const response = await StoreService.sell(cardId, currentUser.id)
-            console.log(response)
-            setOpen(true)
+            if (response) {
+                setOpen(true)
+                updateData(currentUser.id)
+
+            }
         } catch (err) {
             console.log(err)
         }
@@ -34,6 +40,27 @@ const Sell = () => {
             setOpen(false);
         };
 
+        
+    const updateData = async (userId: number) => {
+        const user = await UserService.getUserById(userId)
+        dispatch({
+            type: 'UPDATE_CURRENT_USER',
+            payload: user
+        })
+
+        const userCards = await CardService.getUserCards(userId)
+        dispatch({
+            type: 'UPDATE_USER_CARDS',
+            payload: userCards
+        })
+
+        const cards = await CardService.getAllCards()
+        dispatch({
+            type: 'UPDATE_BUY_CARDS',
+            payload: cards
+        })
+    }
+
     const action = (
         <Fragment>
             <IconButton
@@ -49,7 +76,7 @@ const Sell = () => {
     
     return (
         <div>
-            <CardList fetchMethod="user" handleClick={handleCLick}/>
+            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards}/>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
