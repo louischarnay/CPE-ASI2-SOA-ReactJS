@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class ActiveMQRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-        from("direct:sendToGenerateOrchestrator")
+        from("direct:sendToOrchestrator")
                 .to("jms:topic:image-generated");
     }
 }
