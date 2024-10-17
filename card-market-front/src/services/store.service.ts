@@ -6,6 +6,6 @@ export class StoreService {
     }
 
     static async buy(cardId: number, userId: number) {
-        return apiFetch(`/store/sell`, 'POST', {card_id: cardId, user_id: userId, store_id: 0})
+        return apiFetch(`/store/buy`, 'POST', {card_id: cardId, user_id: userId, store_id: 0})
     }
 }

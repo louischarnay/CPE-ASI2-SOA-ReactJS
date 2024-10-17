@@ -4,7 +4,6 @@ import { StoreService } from "../../services/store.service";
 import User from "../../models/user.model";
 import { useState } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
-import { useState } from "react";
 
 
 const Sell = () => {
@@ -13,13 +12,9 @@ const Sell = () => {
 
     const handleCLick = async (cardId: any) => {
         try {
-
             const response = await StoreService.sell(cardId, currentUser.id)
             console.log(response)
             setOpen(true)
-
-            
-            // TODO NOTIF
         } catch (err) {
             console.log(err)
         }
