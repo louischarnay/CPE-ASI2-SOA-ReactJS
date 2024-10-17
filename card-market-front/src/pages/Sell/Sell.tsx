@@ -1,14 +1,14 @@
 import { useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
-import { CardService } from "../../services/card.service";
 import { StoreService } from "../../services/store.service";
 import User from "../../models/user.model";
+import { useState } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 
 
 const Sell = () => {
     const currentUser : User = useSelector((state: any) => state.userReducer.currentUser)
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleCLick = async (cardId: any) => {
         try {

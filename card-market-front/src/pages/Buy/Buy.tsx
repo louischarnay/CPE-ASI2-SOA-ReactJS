@@ -1,9 +1,9 @@
-import * as React from 'react';
+import { useState } from "react";
 import CardList from "../../components/Cards/CardList";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 
 const Buy = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleCLick = (e: any) => {
         console.log("carte à acheter")
