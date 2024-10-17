@@ -1,19 +1,15 @@
 package com.cpe.descriptiongenerator.config;
 
-import com.cpe.descriptiongenerator.service.DescriptionGeneratorService;
+import com.cpe.descriptiongenerator.service.MessageService;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ActiveMQListenerRoute extends RouteBuilder {
 
     @Autowired
-    private DescriptionGeneratorService descriptionGeneratorService;
-
-    @Autowired
-    private JmsTemplate jmsTemplate;
+    private MessageService messageService;
 
     @Override
     public void configure() throws Exception {
@@ -22,12 +18,8 @@ public class ActiveMQListenerRoute extends RouteBuilder {
                 .log("Received message from generate-desc topic: ${body}")
                 .process(exchange -> {
                     String promptText = exchange.getIn().getBody(String.class);
-                    System.out.println("Prompt text: " + promptText);
-
-                    String descriptionData = descriptionGeneratorService.generateDescription(promptText);
-
-                    jmsTemplate.convertAndSend("jms:topic:desc-generated", descriptionData);
-                    System.out.println("Description sent to 'desc-generated' topic.");
+                    Long id = exchange.getIn().getHeader("id", Long.class);
+                    messageService.processDescMessage(id, promptText);
                 });
     }
 }
