@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 @Service
 public class DescriptionGeneratorService {
 
-    private static final String BASE_URL = "http://localhost:11434";
+    private static final String BASE_URL = "http://prompt-generator-lib:11434";
     private static final String MODEL = "qwen2:0.5b";
 
     private final RestTemplate restTemplate;
@@ -51,6 +51,7 @@ public class DescriptionGeneratorService {
 
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
             DescriptionResponse data = new Gson().fromJson(response.getBody(), DescriptionResponse.class);
+            System.out.println("Description generated successfully: " + data.getResponse());
             return data.getResponse();
         } else {
             throw new RuntimeException("Failed to generate description: " + response.getStatusCode());

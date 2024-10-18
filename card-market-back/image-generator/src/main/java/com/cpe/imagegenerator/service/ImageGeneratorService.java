@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ImageGeneratorService {
 
-    private static final String BASE_URL = "http://localhost:8090";
+    private static final String BASE_URL = "http://image-generator-lib:8080";
 
     private final RestTemplate restTemplate;
 

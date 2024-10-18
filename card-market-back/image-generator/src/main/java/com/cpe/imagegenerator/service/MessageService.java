@@ -1,5 +1,6 @@
 package com.cpe.imagegenerator.service;
 
+import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ public class MessageService {
     private ImageGeneratorService imageGeneratorService;
 
     @Autowired
-    private JmsTemplate jmsTemplate;
+    private ProducerTemplate producerTemplate;
 
     // Method to process the image message
     public void processImageMessage(Long id, String promptText) {
@@ -21,7 +22,7 @@ public class MessageService {
 
         String imageData = imageGeneratorService.generateImage(promptText);
 
-        jmsTemplate.convertAndSend("jms:topic:image-generated", imageData);
+        producerTemplate.sendBodyAndHeader("direct:sendToOrchestrator", imageData, "id", id);
         System.out.println("Image sent to 'image-generated' topic.");
     }
 }

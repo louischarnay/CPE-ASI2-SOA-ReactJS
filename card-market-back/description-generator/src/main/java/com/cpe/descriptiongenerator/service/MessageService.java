@@ -1,5 +1,6 @@
 package com.cpe.descriptiongenerator.service;
 
+import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ public class MessageService {
     private DescriptionGeneratorService descriptionGeneratorService;
 
     @Autowired
-    private JmsTemplate jmsTemplate;
+    private ProducerTemplate producerTemplate;
 
     // Method to process the image message
     public void processDescMessage(Long id, String promptText) {
@@ -19,9 +20,9 @@ public class MessageService {
         // For example, you could store it in the database, log it, or trigger some other logic.
         System.out.println("Processing image for ID: " + id + " with details: " + promptText);
 
-        String imageData = descriptionGeneratorService.generateDescription(promptText);
+        String description = descriptionGeneratorService.generateDescription(promptText);
 
-        jmsTemplate.convertAndSend("jms:topic:image-generated", imageData);
-        System.out.println("Image sent to 'image-generated' topic.");
+        producerTemplate.sendBodyAndHeader("direct:sendToOrchestrator", description, "id", id);
+        System.out.println("Description sent to 'desc-generated' topic.");
     }
 }
