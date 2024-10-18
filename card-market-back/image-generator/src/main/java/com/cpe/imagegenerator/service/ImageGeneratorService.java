@@ -1,5 +1,7 @@
 package com.cpe.imagegenerator.service;
 
+import com.cpe.imagegenerator.model.ImageResponse;
+import com.google.gson.Gson;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,8 +31,10 @@ public class ImageGeneratorService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            System.out.println("Image generated successfully: " + response.getBody());
-            return response.getBody();
+            ImageResponse data = new Gson().fromJson(response.getBody(), ImageResponse.class);
+            String fullUrl = BASE_URL + data.getUrl();
+            System.out.println("Image generated successfully: " + fullUrl);
+            return fullUrl;
         } else {
             throw new RuntimeException("Failed to generate image: " + response.getStatusCode());
         }
