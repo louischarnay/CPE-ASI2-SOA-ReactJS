@@ -1,5 +1,6 @@
 package com.cpe.cardgenerator.message;
 
+import com.cpe.cardgenerator.controller.CardGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +19,16 @@ public class MessageService {
     }
 
     public void processImageMessage(Long id, String message) {
-        MessageStatus status = repository.findById(id).orElseThrow(() -> new RuntimeException("Message not found"));
+        MessageStatus status = repository.findById(id).orElse(new MessageStatus());
+        status.setImageURL(message);
         status.setImageReceived(true);
         repository.save(status);
         checkAndTriggerEvent(status);
     }
 
     public void processDescMessage(Long id, String message) {
-        MessageStatus status = repository.findById(id).orElseThrow(() -> new RuntimeException("Message not found"));
+        MessageStatus status = repository.findById(id).orElse(new MessageStatus());
+        status.setDesc(message);
         status.setDescReceived(true);
         repository.save(status);
         checkAndTriggerEvent(status);
@@ -35,7 +38,18 @@ public class MessageService {
         if (status.isImageReceived() && status.isDescReceived()) {
             // Both messages are received, trigger an event
             System.out.println("Both image and description received. Triggering event...");
-            // Trigger your desired event here
+            // Get id, imageURL, and desc from the database
+            Long id = status.getId();
+            String imageURL = status.getImageURL();
+            String desc = status.getDesc();
+
+            System.out.println("ID: " + id);
+            System.out.println("Image URL: " + imageURL);
+            System.out.println("Description: " + desc);
+
+            // Call the generateProps method in CardGenerator
+            CardGenerator cardGenerator = new CardGenerator();
+            cardGenerator.generateProps(id, imageURL, desc);
         }
     }
 }

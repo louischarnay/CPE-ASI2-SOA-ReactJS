@@ -8,16 +8,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 public class MessageStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Setter
+    private String imageURL;
+    private String desc;
     private boolean imageReceived;
-    @Setter
     private boolean descReceived;
 
 

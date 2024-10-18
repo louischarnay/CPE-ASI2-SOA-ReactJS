@@ -39,4 +39,10 @@ public class CardGenerator {
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateDesc", descPromptJson, "id", id);
                 return "Card generation initiated with ID: " + id;
         }
+
+        public String generateProps(Long id, String imageURL, String desc) {
+                String json = "{\"imageURL\":\"" + imageURL + "\",\"desc\":\"" + desc + "\"}";
+                producerTemplate.sendBodyAndHeader("direct:sendToGenerateProp", json, "id", id);
+                return "Card properties generation initiated with ID: " + id;
+        }
 }
