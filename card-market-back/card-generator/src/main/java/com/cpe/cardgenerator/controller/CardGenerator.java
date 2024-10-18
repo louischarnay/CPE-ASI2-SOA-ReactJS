@@ -33,8 +33,8 @@ public class CardGenerator {
         @PostMapping("/generateCard")
         public String generateCard(@RequestBody CardGenerationRequest request) throws JsonProcessingException {
                 Long id = messageService.createNewMessageEntry();
-                String imagePromptJson = objectMapper.writeValueAsString(request.getImagePrompt());
-                String descPromptJson = objectMapper.writeValueAsString(request.getDescPrompt());
+                String imagePromptJson = objectMapper.writeValueAsString(request.getImagePrompt()).replace("\"", "");
+                String descPromptJson = objectMapper.writeValueAsString(request.getDescPrompt()).replace("\"", "");
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateImage", imagePromptJson, "id", id);
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateDesc", descPromptJson, "id", id);
                 return "Card generation initiated with ID: " + id;
