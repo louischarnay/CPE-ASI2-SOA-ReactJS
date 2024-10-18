@@ -4,7 +4,10 @@ WORKDIR /app
 
 COPY ./pom.xml .
 
+COPY ./src/main/resources/colorToproperties-1.1.2.jar /lib/colorToProperties-1.1.2.jar
 COPY ./src ./src
+
+RUN mvn install:install-file -Dfile="/lib/colorToProperties-1.1.2.jar" -DgroupId="tp.cpe" -DartifactId=colorToProperties -Dversion="1.1.2" -Dpackaging=jar
 
 RUN mvn clean install
 

@@ -3,6 +3,7 @@
 *.ipr
 *.iws
 *.jar
+!colorToProperties-1.1.2.jar
 *.sw?
 *~
 .#*
