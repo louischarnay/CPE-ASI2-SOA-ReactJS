@@ -12,8 +12,8 @@ public class MessageService {
     @Autowired
     private MessageStatusRepository repository;
 
-    @Autowired
-    private CardGenerator cardGenerator;
+    //@Autowired
+    //private CardGenerator cardGenerator;
 
     public Long createNewMessageEntry() {
         MessageStatus status = new MessageStatus();
