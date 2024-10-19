@@ -44,6 +44,7 @@ public class MessageService {
         status.setProps(message);
         status.setPropsReceived(true);
         repository.save(status);
+        System.out.println("Message is complete: " + id);
     }
 
     private void checkAndTriggerEvent(MessageStatus status) {

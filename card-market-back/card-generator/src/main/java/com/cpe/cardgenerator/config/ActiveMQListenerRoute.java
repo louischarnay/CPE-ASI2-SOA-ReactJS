@@ -18,8 +18,8 @@ public class ActiveMQListenerRoute extends RouteBuilder {
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
                     Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
-                    messageService.processImageMessage(id, message);  // Process the image message
                     System.out.println("Processing image message for ID: " + id);
+                    messageService.processImageMessage(id, message);  // Process the image message
                 });
 
         // Listen on the 'desc-generated' topic
@@ -28,8 +28,8 @@ public class ActiveMQListenerRoute extends RouteBuilder {
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
                     Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
-                    messageService.processDescMessage(id, message);  // Process the description message
                     System.out.println("Processing description message for ID: " + id);
+                    messageService.processDescMessage(id, message);  // Process the description message
                 });
 
         // Listen on the 'prop-generated' topic (optional if needed)
@@ -38,8 +38,8 @@ public class ActiveMQListenerRoute extends RouteBuilder {
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
                     Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
-                    messageService.processPropsMessage(id, message);  // Process the property message
                     System.out.println("Processing property message for ID: " + id);
+                    messageService.processPropsMessage(id, message);  // Process the property message
                 });
     }
 }
