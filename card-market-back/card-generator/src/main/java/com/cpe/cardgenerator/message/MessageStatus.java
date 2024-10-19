@@ -17,8 +17,12 @@ public class MessageStatus {
     private Long id;
     private String imageURL;
     private String desc;
+    private String props;
     private boolean imageReceived;
     private boolean descReceived;
+    private boolean propsReceived;
 
-
+    public boolean isMessageComplete() {
+        return imageReceived && descReceived && propsReceived;
+    }
 }

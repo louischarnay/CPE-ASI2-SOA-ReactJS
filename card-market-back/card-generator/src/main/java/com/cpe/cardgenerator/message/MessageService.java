@@ -4,11 +4,16 @@ import com.cpe.cardgenerator.controller.CardGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class MessageService {
 
     @Autowired
     private MessageStatusRepository repository;
+
+    @Autowired
+    private CardGenerator cardGenerator;
 
     public Long createNewMessageEntry() {
         MessageStatus status = new MessageStatus();
@@ -34,6 +39,13 @@ public class MessageService {
         checkAndTriggerEvent(status);
     }
 
+    public void processPropsMessage(Long id, String message) {
+        MessageStatus status = repository.findById(id).orElse(new MessageStatus());
+        status.setProps(message);
+        status.setPropsReceived(true);
+        repository.save(status);
+    }
+
     private void checkAndTriggerEvent(MessageStatus status) {
         if (status.isImageReceived() && status.isDescReceived()) {
             // Both messages are received, trigger an event
@@ -43,13 +55,11 @@ public class MessageService {
             String imageURL = status.getImageURL();
             String desc = status.getDesc();
 
-            System.out.println("ID: " + id);
-            System.out.println("Image URL: " + imageURL);
-            System.out.println("Description: " + desc);
+            // Generate props
+            //cardGenerator.generateProps(id, imageURL, desc);
 
-            // Call the generateProps method in CardGenerator
-            CardGenerator cardGenerator = new CardGenerator();
-            cardGenerator.generateProps(id, imageURL, desc);
+            // TEMPORARY: Generate props
+            processPropsMessage(id, "props");
         }
     }
 }

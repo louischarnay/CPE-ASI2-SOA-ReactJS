@@ -38,7 +38,7 @@ public class ActiveMQListenerRoute extends RouteBuilder {
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
                     Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
-                    // Handle the property message logic (if required)
+                    messageService.processPropsMessage(id, message);  // Process the property message
                     System.out.println("Processing property message for ID: " + id);
                 });
     }

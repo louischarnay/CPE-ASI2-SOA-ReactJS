@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executors;
 
 @RestController
 public class CardGenerator {
@@ -37,12 +40,11 @@ public class CardGenerator {
                 String descPromptJson = objectMapper.writeValueAsString(request.getDescPrompt()).replace("\"", "");
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateImage", imagePromptJson, "id", id);
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateDesc", descPromptJson, "id", id);
-                return "Card generation initiated with ID: " + id;
+                return id.toString();
         }
 
-        public String generateProps(Long id, String imageURL, String desc) {
+        public void generateProps(Long id, String imageURL, String desc) {
                 String json = "{\"imageURL\":\"" + imageURL + "\",\"desc\":\"" + desc + "\"}";
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateProp", json, "id", id);
-                return "Card properties generation initiated with ID: " + id;
         }
 }
