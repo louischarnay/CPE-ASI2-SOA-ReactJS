@@ -34,11 +34,17 @@ public class SseController {
                 // Get the imageURL and desc from the database
                 String imageURL = repository.findById(id).orElseThrow().getImageURL();
                 String desc = repository.findById(id).orElseThrow().getDesc();
-                String props = repository.findById(id).orElseThrow().getProps();
+                String propsString = repository.findById(id).orElseThrow().getProps();
+
+                // Parse the props string into a Map
+                Map<String, Double> props = parseProps(propsString);
+
                 // Create a JSON-like structure with a Map
                 String jsonString = getString(imageURL, desc, props);
+
                 // Send the JSON string
                 emitter.send(jsonString);
+
                 // Complete the emitter
                 emitter.complete();
             } catch (Exception e) {
@@ -48,14 +54,31 @@ public class SseController {
         return emitter;
     }
 
-    private static String getString(String imageURL, String desc, String props) throws JsonProcessingException {
-        Map<String, String> messageMap = new HashMap<>();
+    private static String getString(String imageURL, String desc, Map<String, Double> props) throws JsonProcessingException {
+        Map<String, Object> messageMap = new HashMap<>();
         messageMap.put("imageURL", imageURL);
         messageMap.put("desc", desc);
         messageMap.put("props", props);
 
-        // Convert the map to a JSON string using a simple utility like Jackson's ObjectMapper
+        // Convert the map to a JSON string using Jackson's ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(messageMap);
+    }
+
+    // Helper method to parse the props string into a Map<String, Double>
+    private static Map<String, Double> parseProps(String propsString) {
+        Map<String, Double> propsMap = new HashMap<>();
+        // Remove the curly braces
+        propsString = propsString.substring(1, propsString.length() - 1);
+        // Split the string by commas to get each key-value pair
+        String[] keyValuePairs = propsString.split(", ");
+        for (String pair : keyValuePairs) {
+            // Split each pair by '=' to separate the key and value
+            String[] entry = pair.split("=");
+            String key = entry[0];
+            Double value = Double.parseDouble(entry[1]);
+            propsMap.put(key, value);
+        }
+        return propsMap;
     }
 }

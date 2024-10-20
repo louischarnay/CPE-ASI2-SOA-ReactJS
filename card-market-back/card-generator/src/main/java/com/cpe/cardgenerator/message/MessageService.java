@@ -12,16 +12,8 @@ public class MessageService {
     @Autowired
     private MessageStatusRepository repository;
 
-    //@Autowired
-    //private CardGenerator cardGenerator;
-
-    public Long createNewMessageEntry() {
-        MessageStatus status = new MessageStatus();
-        status.setImageReceived(false);
-        status.setDescReceived(false);
-        repository.save(status);
-        return status.getId();
-    }
+    @Autowired
+    private CardGenerator cardGenerator;
 
     public void processImageMessage(Long id, String message) {
         MessageStatus status = repository.findById(id).orElse(new MessageStatus());
@@ -57,10 +49,7 @@ public class MessageService {
             String desc = status.getDesc();
 
             // Generate props
-            //cardGenerator.generateProps(id, imageURL, desc);
-
-            // TEMPORARY: Generate props
-            processPropsMessage(id, "props");
+            cardGenerator.generateProps(id, imageURL, desc);
         }
     }
 }
