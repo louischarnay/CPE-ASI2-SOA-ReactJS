@@ -14,8 +14,6 @@ public class MessageService {
     private PropertiesGeneratorService propertiesGeneratorService;
 
     @Autowired
-    private ProducerTemplate prroducerTemplate;
-    @Autowired
     private ProducerTemplate producerTemplate;
 
     // Method to process the image message

@@ -56,13 +56,13 @@ services:
     depends_on:
       - prompt-generator-lib
 
-  # properties-generator:
-  #   build: ./card-market-back/properties-generator
-  #   container_name: card-market-properties-generator
-  #   networks:
-  #     - back-network
-  #   ports:
-  #     - "8084:8084"
+  properties-generator:
+    build: ./card-market-back/properties-generator
+    container_name: card-market-properties-generator
+    networks:
+      - back-network
+    ports:
+      - "8084:8084"
 
   image-generator-lib:
     image: registry.gitlab.com/js-asi2/asi2-resources/img-gene-neural-love-api:v1.1

@@ -1,17 +1,14 @@
 package com.cpe.cardgenerator.controller;
 
 import com.cpe.cardgenerator.message.MessageService;
+import com.cpe.cardgenerator.message.MessageStatus;
+import com.cpe.cardgenerator.message.MessageStatusRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Executors;
 
 @RestController
 public class CardGenerator {
@@ -20,7 +17,7 @@ public class CardGenerator {
         private ProducerTemplate producerTemplate;
 
         @Autowired
-        private MessageService messageService;
+        private MessageStatusRepository repository;
 
         @Autowired
         private ObjectMapper objectMapper;
@@ -28,14 +25,21 @@ public class CardGenerator {
         // Request class to hold both prompts
         @Getter
         public static class CardGenerationRequest {
-            // Getters and Setters
             private String imagePrompt;
             private String descPrompt;
         }
 
+        public Long createNewMessageEntry() {
+                MessageStatus status = new MessageStatus();
+                status.setImageReceived(false);
+                status.setDescReceived(false);
+                repository.save(status);
+                return status.getId();
+        }
+
         @PostMapping("/generateCard")
         public String generateCard(@RequestBody CardGenerationRequest request) throws JsonProcessingException {
-                Long id = messageService.createNewMessageEntry();
+                Long id = createNewMessageEntry();
                 String imagePromptJson = objectMapper.writeValueAsString(request.getImagePrompt()).replace("\"", "");
                 String descPromptJson = objectMapper.writeValueAsString(request.getDescPrompt()).replace("\"", "");
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateImage", imagePromptJson, "id", id);
@@ -44,7 +48,6 @@ public class CardGenerator {
         }
 
         public void generateProps(Long id, String imageURL, String desc) {
-                String json = "{\"imageURL\":\"" + imageURL + "\",\"desc\":\"" + desc + "\"}";
-                producerTemplate.sendBodyAndHeader("direct:sendToGenerateProp", json, "id", id);
+                producerTemplate.sendBodyAndHeader("direct:sendToGenerateProp", imageURL, "id", id);
         }
 }
