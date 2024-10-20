@@ -2,8 +2,9 @@ import config from "../config/config.json"
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-export async function apiFetch(endpoint: string, method: HttpMethod = 'GET', body?: object, headers = {}) {
-    const url = `${config.url}${endpoint}`;
+export async function apiFetch(endpoint: string, method: HttpMethod = 'GET', body?: object, headers = {}, uri?: string) {
+
+    const url = uri ? `${uri}${endpoint}` : `${config.url}${endpoint}`;
 
     const options: RequestInit = {
         method,

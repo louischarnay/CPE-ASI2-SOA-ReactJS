@@ -1,7 +1,6 @@
 import { Box, Button, Checkbox, FormControlLabel, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { CardService } from "../../services/card.service";
-import useSse from "../../hooks/useSse";
 import config from "../../config/config.json"
 
 const CreateForm = () => {
@@ -12,14 +11,19 @@ const CreateForm = () => {
     });
 
     const generateCard = async () => {
-        await CardService.generateCard(formData.imagePrompt, formData.descriptionPrompt);
+        const id = await CardService.generateCard(formData.imagePrompt, formData.descriptionPrompt);
+        if (id) {
+            startSse(id);
+        }
+            
     }
 
-    useSse(`${config.url}/sse-endpoint`, (data) => {
-        console.log(data); 
-    }, (error) => {
-        console.error("SSE Error: ", error);
-    });
+    const startSse = (id: number) => {
+        const evtSource = new EventSource(config.generateUrl + "/sse?id="+id);
+        evtSource.onmessage = (event) => {
+            console.log(event)
+        }
+    }
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

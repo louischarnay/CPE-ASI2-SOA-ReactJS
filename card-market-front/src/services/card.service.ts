@@ -1,4 +1,5 @@
 import { apiFetch } from "../utils/apiFetch";
+import config from "../config/config.json"
 
 export class CardService {
     static async getAllCards() {
@@ -10,7 +11,7 @@ export class CardService {
         return result.filter((card: any) => card.userId === userId);
     }
 
-    static async generateCard(imagePrompt: string, descriptionPrompt: string) {
-        return await apiFetch(`/generateCard`, 'POST', {imagePrompt, descriptionPrompt});
+    static async generateCard(imagePrompt: string, descPrompt: string) {
+        return await apiFetch(`/generateCard`, 'POST', {imagePrompt, descPrompt}, undefined, config.generateUrl);
     }
 }
