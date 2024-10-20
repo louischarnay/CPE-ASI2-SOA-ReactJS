@@ -1,5 +1,6 @@
 package com.cpe.propertiesgenerator.service;
 
+import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,9 @@ public class MessageService {
     private PropertiesGeneratorService propertiesGeneratorService;
 
     @Autowired
-    private JmsTemplate jmsTemplate;
+    private ProducerTemplate prroducerTemplate;
+    @Autowired
+    private ProducerTemplate producerTemplate;
 
     // Method to process the image message
     public void processPropMessage(Long id, String imageUrl) {
@@ -22,10 +25,8 @@ public class MessageService {
         // Generate properties from the image
         Map<String, Float> properties = propertiesGeneratorService.generateProperties(imageUrl);
 
-        // Send the properties to the 'prop-generated' topic
-        jmsTemplate.convertAndSend("prop-generated", properties, message -> {
-            message.setLongProperty("id", id);
-            return message;
-        });
+        // Send the properties to the orchestrator
+        producerTemplate.sendBodyAndHeader("direct:sendToOrchestrator", properties, "id", id);
+        System.out.println("Properties sent to 'prop-generated' topic.");
     }
 }

@@ -16,8 +16,6 @@ public class MessageService {
 
     // Method to process the image message
     public void processDescMessage(Long id, String promptText) {
-        // Here, you would add logic to handle the image-related message.
-        // For example, you could store it in the database, log it, or trigger some other logic.
         System.out.println("Processing image for ID: " + id + " with details: " + promptText);
 
         String description = descriptionGeneratorService.generateDescription(promptText);
