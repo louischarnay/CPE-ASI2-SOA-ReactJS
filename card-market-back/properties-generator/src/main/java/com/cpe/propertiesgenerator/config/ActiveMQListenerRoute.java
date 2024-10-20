@@ -15,13 +15,13 @@ public class ActiveMQListenerRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        // Listen on the 'generate-image' topic
+        // Listen on the 'generate-prop' topic
         from("jms:topic:generate-prop")
             .log("Received message from generate-prop topic: ${body}")
             .process(exchange -> {
-                String message = exchange.getIn().getBody(String.class);
+                String imageUrl = exchange.getIn().getBody(String.class);
                 Long id = exchange.getIn().getHeader("id", Long.class);
-                messageService.processPropMessage(id, message);
+                messageService.processPropMessage(id, imageUrl);
             });
     }
 }

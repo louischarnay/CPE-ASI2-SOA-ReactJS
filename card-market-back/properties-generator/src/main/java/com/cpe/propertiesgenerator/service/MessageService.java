@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class MessageService {
 
@@ -14,9 +16,16 @@ public class MessageService {
     private JmsTemplate jmsTemplate;
 
     // Method to process the image message
-    public void processPropMessage(Long id, String promptText) {
-        // Here, you would add logic to handle the image-related message.
-        // For example, you could store it in the database, log it, or trigger some other logic.
-        System.out.println("Processing properties for ID: " + id + " with details: " + promptText);
+    public void processPropMessage(Long id, String imageUrl) {
+        System.out.println("Processiong properties for image: " + id + " with image : " + imageUrl);
+
+        // Generate properties from the image
+        Map<String, Float> properties = propertiesGeneratorService.generateProperties(imageUrl);
+
+        // Send the properties to the 'prop-generated' topic
+        jmsTemplate.convertAndSend("prop-generated", properties, message -> {
+            message.setLongProperty("id", id);
+            return message;
+        });
     }
 }
