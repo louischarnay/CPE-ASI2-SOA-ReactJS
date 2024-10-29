@@ -36,7 +36,8 @@ public class ImageGeneratorService {
             System.out.println("Image generated successfully: " + fullUrl);
             return fullUrl;
         } else {
-            throw new RuntimeException("Failed to generate image: " + response.getStatusCode());
+            System.out.println("Failed to generate image: " + response.getStatusCode());
+            return "https://i.sstatic.net/l60Hf.png"; // Default image
         }
     }
 }

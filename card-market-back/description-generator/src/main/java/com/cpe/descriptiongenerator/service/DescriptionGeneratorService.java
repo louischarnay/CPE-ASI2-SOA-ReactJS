@@ -54,7 +54,8 @@ public class DescriptionGeneratorService {
             System.out.println("Description generated successfully: " + data.getResponse());
             return data.getResponse();
         } else {
-            throw new RuntimeException("Failed to generate description: " + response.getStatusCode());
+            System.out.println("Failed to generate description: " + response.getStatusCode());
+            return "No description available.";
         }
     }
 }
