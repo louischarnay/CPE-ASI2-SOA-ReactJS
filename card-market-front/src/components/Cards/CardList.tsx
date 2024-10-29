@@ -11,7 +11,7 @@ interface CardListProps {
 }
 
 const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, cards }) => {
-    const [error, setError] = useState<string | null>(null);
+    const [error] = useState<string | null>(null);
     const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // State for storing selected card
     const [loading, setLoading] = useState(true); // Loading state
 

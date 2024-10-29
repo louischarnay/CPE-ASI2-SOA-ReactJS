@@ -1,17 +1,25 @@
+import { useSelector } from "react-redux";
 import CardPreview from "../../components/Cards/CardPreview";
 import CreateForm from "../../components/CreateForm/CreateForm";
+import CardProps from "../../models/CardProps";
 import './Create.css'
 
 const Create = () => {
-    const handleCLick = (e:any) => {
-        console.log('selling card')
+
+    const generatedCard: CardProps = useSelector((state: any) => state.cardReducer.generatedCard)
+
+    const handleCLick = (e: any) => {
+        console.log('creating card')
     }
 
     return (<div className="create-container">
         <CreateForm></CreateForm>
         <div className="center-card">
             <div className="width-card">
-            <CardPreview name={""} description={""} family={""} affinity={""} imgUrl={""} smallImgUrl={""} id={0} hp={0} energy={0} defense={0} attack={0} price={0} handleCLick={handleCLick}></CardPreview>
+                {
+                    generatedCard && generatedCard.id && 
+                        <CardPreview name={generatedCard.name} description={generatedCard.description} family={generatedCard.family} affinity={generatedCard.affinity} imgUrl={generatedCard.imgUrl} smallImgUrl={generatedCard.smallImgUrl} id={generatedCard.id} hp={generatedCard.hp} energy={generatedCard.energy} defense={generatedCard.defense} attack={generatedCard.attack} price={generatedCard.price} handleCLick={handleCLick}></CardPreview>
+                }
             </div>
         </div>
     </div>)

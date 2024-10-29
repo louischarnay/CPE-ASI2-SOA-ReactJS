@@ -11,8 +11,8 @@ import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
 
 const Sell = () => {
-    const currentUser : User = useSelector((state: any) => state.userReducer.currentUser)
-    const cards : CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
+    const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
+    const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
@@ -32,15 +32,14 @@ const Sell = () => {
     const handleClose = (
         event: React.SyntheticEvent | Event,
         reason?: SnackbarCloseReason,
-        ) => {
-            if (reason === 'clickaway') {
+    ) => {
+        if (reason === 'clickaway') {
             return;
-            }
-    
-            setOpen(false);
-        };
+        }
+        setOpen(false);
+    };
 
-        
+
     const updateData = async (userId: number) => {
         const user = await UserService.getUserById(userId)
         dispatch({
@@ -73,10 +72,10 @@ const Sell = () => {
             </IconButton>
         </Fragment>
     );
-    
+
     return (
         <div>
-            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards}/>
+            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards} />
             <Snackbar
                 open={open}
                 autoHideDuration={6000}

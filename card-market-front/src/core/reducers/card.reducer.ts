@@ -1,6 +1,9 @@
+import CardProps from "../../models/CardProps";
+
 const initialState = {
     userCards: [],
-    buyCards: []
+    buyCards: [],
+    generatedCard: {} as CardProps
 };
 
 export const cardReducer = (state = initialState, action: any) => {
@@ -14,6 +17,11 @@ export const cardReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 buyCards: action.payload,
+            };
+        case 'UPDATE_GENERATED_CARD':
+            return {
+                ...state,
+                generatedCard: action.payload,
             };
         default:
             return state;
