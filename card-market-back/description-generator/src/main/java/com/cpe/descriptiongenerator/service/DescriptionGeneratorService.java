@@ -40,22 +40,27 @@ public class DescriptionGeneratorService {
         loadModel();
 
         String url = BASE_URL + "/api/generate";
-
         String jsonBody = String.format("{ \"model\": \"%s\", \"prompt\": \"%s\", \"stream\": false }", MODEL, promptTxt);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-
         HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+        System.out.println("Generating description...");
 
-        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            DescriptionResponse data = new Gson().fromJson(response.getBody(), DescriptionResponse.class);
-            System.out.println("Description generated successfully: " + data.getResponse());
-            return data.getResponse();
-        } else {
-            System.out.println("Failed to generate description: " + response.getStatusCode());
-            return "No description available.";
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                DescriptionResponse data = new Gson().fromJson(response.getBody(), DescriptionResponse.class);
+                System.out.println("Description generated successfully: " + data.getResponse());
+                return data.getResponse();
+            } else {
+                System.out.println("Failed to generate description: " + response.getStatusCode());
+                return "No description available."; // Default description
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Failed to generate description");
+            return "No description available."; // Default description
         }
     }
 }
