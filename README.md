@@ -14,7 +14,13 @@
 ## 🚀 Activités Réalisées
 
 ### 📌 Louis Charnay
-*(Ajouter ici les tâches réalisées par Louis)*
+#### Back-End
+- Mise en place des conteneurs Docker
+- Développement du **CardGenerator**
+- Intégration de l'**ESB** dans **imageGenerator**
+- Intégration de l'**ESB** dans **descriptionGenerator**
+- Intégration de l'**ESB** dans **propsGenerator**
+- Développement du **SSE**
 
 ### 📌 Léon Dumestre
 *(Ajouter ici les tâches réalisées par Léon)*
@@ -30,7 +36,7 @@
 - Développement du **component Card Preview**
 - Mise en place de la **navigation sécurisée nécessitant une authentification**
 - Animation de **chargement des listes** et affichage des **messages d’erreurs**
-- Ajout d’une **Snackbar** pour afficher les actions d’achat et de vente
+- Ajout d’une **Snackbar** pour confirmer les actions d’achat et de vente
 
 #### Back-End
 - Implémentation du **Card Properties Generator** pour la génération dynamique des propriétés de carte
@@ -46,9 +52,7 @@
 ---
 
 ## ❌ Fonctionnalités Non Réalisées
-
-- **Division du Backend** : Prévue pour être décomposée en microservices
-- **Service Discovery** : Mise en place d’un mécanisme de découverte de services
+(vide)
 
 ---
 
