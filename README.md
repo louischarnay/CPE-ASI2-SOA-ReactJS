@@ -48,7 +48,7 @@
 ## ❌ Fonctionnalités Non Réalisées
 
 - **Division du Backend** : Prévue pour être décomposée en microservices
-- **Service Discovery** : Mise en place d’un mécanisme de découverte de services (non implémenté)
+- **Service Discovery** : Mise en place d’un mécanisme de découverte de services
 
 ---
 
