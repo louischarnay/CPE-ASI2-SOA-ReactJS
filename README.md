@@ -30,7 +30,7 @@
 - Développement du **component Card Preview**
 - Mise en place de la **navigation sécurisée nécessitant une authentification**
 - Animation de **chargement des listes** et affichage des **messages d’erreurs**
-- Ajout d’une **Snackbar** pour confirmer les actions d’achat et de vente
+- Ajout d’une **Snackbar** pour afficher les actions d’achat et de vente
 
 #### Back-End
 - Implémentation du **Card Properties Generator** pour la génération dynamique des propriétés de carte
