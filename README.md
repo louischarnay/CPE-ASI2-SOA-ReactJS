@@ -32,7 +32,7 @@ docker-compose up --build
 - Intégration de l'**ESB** dans **imageGenerator**
 - Intégration de l'**ESB** dans **descriptionGenerator**
 - Intégration de l'**ESB** dans **propsGenerator**
-- Développement du **SSE**
+- Développement du **SSE** côté back
 
 ### 📌 Léon Dumestre
 #### Front-End
@@ -48,7 +48,18 @@ docker-compose up --build
 - Implémentation du container **Ollama** pour générer des descriptions
 
 ### 📌 Nathan Guillemette
-*(Ajouter ici les tâches réalisées par Nathan)*
+
+#### Front-End
+- Travail préliminaire de découpage des pages en **composants**  
+- Instanciation des différentes **pages** de l'application
+- Mise en place de **react-router**
+- Mise en place de **Redux**
+- Mise en place de **Material UI**
+- Développement de la **page d'Authentification**
+- Développement de la **page d'Accueil**
+- Développement de la **page de génération d'image**
+- Développement de tous les **services** appellant le **Back-End**
+- Développement du **SSE** côté front (dont gestion d'erreur ou de réussite de la génération de carte)
 
 ### 📌 Dorian Gorse
 
