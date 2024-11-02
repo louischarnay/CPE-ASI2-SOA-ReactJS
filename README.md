@@ -19,7 +19,6 @@ Ensuite, créer un fichier `.env` à la racine du projet. Le contenu du fichier 
 Pour lancer les containers Docker, executez la commande suivante :
 ```
 docker-compose up --build
-docker-compose up --build
 ```
 
 ---
