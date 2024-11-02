@@ -54,6 +54,7 @@ docker-compose up --build
 - Instanciation des différentes **pages** de l'application
 - Mise en place de **react-router**
 - Mise en place de **Redux**
+- Mise en place de **Material UI**
 - Développement de la **page d'Authentification**
 - Développement de la **page d'Accueil**
 - Développement de la **page de génération d'image**
