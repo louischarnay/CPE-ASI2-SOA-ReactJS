@@ -26,27 +26,30 @@ public class SseController {
         SseEmitter emitter = new SseEmitter();
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                if (!repository.findById(id).orElseThrow().isMessageComplete()) {
-                    // If the message is not complete, return an error
-                    emitter.completeWithError(new Exception("Message is not complete"));
-                    return;
+
+                while (true) {
+                    //Get the message status from the database
+                    boolean isComplete = repository.findById(id).orElseThrow().isMessageComplete();
+
+                    if (isComplete) {
+                        // Get the imageURL and desc from the database
+                        String imageURL = repository.findById(id).orElseThrow().getImageURL();
+                        String desc = repository.findById(id).orElseThrow().getDesc();
+                        String propsString = repository.findById(id).orElseThrow().getProps();
+
+                        // Parse the props string into a Map
+                        Map<String, Double> props = parseProps(propsString);
+
+                        // Create a JSON-like structure with a Map
+                        String jsonString = getString(imageURL, desc, props);
+
+                        // Send the JSON string
+                        emitter.send(jsonString);
+
+                        // Complete the emitter
+                        emitter.complete();
+                    }
                 }
-                // Get the imageURL and desc from the database
-                String imageURL = repository.findById(id).orElseThrow().getImageURL();
-                String desc = repository.findById(id).orElseThrow().getDesc();
-                String propsString = repository.findById(id).orElseThrow().getProps();
-
-                // Parse the props string into a Map
-                Map<String, Double> props = parseProps(propsString);
-
-                // Create a JSON-like structure with a Map
-                String jsonString = getString(imageURL, desc, props);
-
-                // Send the JSON string
-                emitter.send(jsonString);
-
-                // Complete the emitter
-                emitter.complete();
             } catch (Exception e) {
                 emitter.completeWithError(e);
             }
