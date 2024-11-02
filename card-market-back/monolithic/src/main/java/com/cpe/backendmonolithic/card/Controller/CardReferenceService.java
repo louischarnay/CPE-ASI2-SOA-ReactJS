@@ -35,7 +35,7 @@ public class CardReferenceService {
 
 	public CardReference getRandCardRef() {
 		List<CardReference> cardRefList=getAllCardRef();
-		if( cardRefList.size()>0) {
+		if (!cardRefList.isEmpty()) {
 			Random rand=new Random();
 			int rindex=rand.nextInt(cardRefList.size()-1);
 			return cardRefList.get(rindex);

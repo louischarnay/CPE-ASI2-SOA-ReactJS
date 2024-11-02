@@ -62,7 +62,7 @@ public class CardRestController {
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE,value="/card/{id}")
-	public void deleteUser(@PathVariable String id) {
+	public void deleteCard(@PathVariable String id) {
 		cardModelService.deleteCardModel(Integer.valueOf(id));
 	}
 
