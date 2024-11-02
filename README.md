@@ -82,9 +82,3 @@ docker-compose up --build
 
 - **GitHub Repository** : [CPE-ASI2-SOA-ReactJS](https://github.com/louischarnay/CPE-ASI2-SOA-ReactJS)
 
----
-
-## 📊 Diagramme d'Architecture
-
-![Diagramme d'architecture](docs/diagram.png)
-
