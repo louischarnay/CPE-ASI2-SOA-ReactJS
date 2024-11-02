@@ -11,6 +11,18 @@
 
 ---
 
+## ▶️ Lancement du projet
+
+Avant de commencer, il est nécessaire de créer une clé API pour générer des images. Pour cela, rendez vous sur le site de [Neural Love](https://docs.neural.love/docs/getting-started).
+Ensuite, créer un fichier `.env` à la racine du projet. Le contenu du fichier doit être semblable à celui de `.env.example` mais avec votre clé API générée au préalable.
+
+Pour lancer les containers Docker, executez la commande suivante :
+```
+docker-compose up --build
+```
+
+---
+
 ## 🚀 Activités Réalisées
 
 ### 📌 Louis Charnay
@@ -23,7 +35,17 @@
 - Développement du **SSE**
 
 ### 📌 Léon Dumestre
-*(Ajouter ici les tâches réalisées par Léon)*
+#### Front-End
+- Initialisation du projet React en typescript
+
+#### Back-End
+- Mise en place des conteneurs Docker
+- Développement du **Card Image Generator**
+- Développement du **Card Description Generator**
+- Création du **Card Properties Generator** et implémentation de la librairie
+- Modification de la partie monolithique pour l'adapter à notre architecture
+- Implémentation du container **Neural Love** pour générer des cartes
+- Implémentation du container **Ollama** pour générer des descriptions
 
 ### 📌 Nathan Guillemette
 *(Ajouter ici les tâches réalisées par Nathan)*
