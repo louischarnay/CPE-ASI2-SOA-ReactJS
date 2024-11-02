@@ -1,9 +1,9 @@
-import CardProps from "../../models/CardProps";
+import Card from "../../models/card.model";
 
 const initialState = {
     userCards: [],
     buyCards: [],
-    generatedCard: {} as CardProps
+    generatedCard: {} as Card
 };
 
 export const cardReducer = (state = initialState, action: any) => {

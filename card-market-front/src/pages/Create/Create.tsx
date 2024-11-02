@@ -12,13 +12,21 @@ const Create = () => {
         console.log('creating card')
     }
 
+    const isRed = () => {
+        if (generatedCard && generatedCard.id) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     return (<div className="create-container">
         <CreateForm></CreateForm>
         <div className="center-card">
             <div className="width-card">
                 {
-                    generatedCard && generatedCard.id && 
-                        <CardPreview name={generatedCard.name} description={generatedCard.description} family={generatedCard.family} affinity={generatedCard.affinity} imgUrl={generatedCard.imgUrl} smallImgUrl={generatedCard.smallImgUrl} id={generatedCard.id} hp={generatedCard.hp} energy={generatedCard.energy} defense={generatedCard.defense} attack={generatedCard.attack} price={generatedCard.price} handleCLick={handleCLick}></CardPreview>
+                    isRed() && 
+                        <CardPreview name={generatedCard.name} description={generatedCard.description} family={generatedCard.family} affinity={generatedCard.affinity} imgUrl={generatedCard.imgUrl} smallImgUrl={generatedCard.smallImgUrl} id={generatedCard.id} hp={generatedCard.hp} energy={generatedCard.energy} defense={generatedCard.defense} attack={generatedCard.attack} price={generatedCard.price} handleCLick={handleCLick} isClickable={false}></CardPreview>
                 }
             </div>
         </div>

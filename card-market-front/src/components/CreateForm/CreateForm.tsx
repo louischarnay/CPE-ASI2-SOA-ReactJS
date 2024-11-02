@@ -1,12 +1,13 @@
-import { Box, Button, Checkbox, FormControlLabel, TextField, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { CardService } from "../../services/card.service";
 import config from "../../config/config.json"
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import CardProps from "../../models/CardProps";
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useDispatch, useSelector } from "react-redux";
 import User from "../../models/user.model";
+import Card from "../../models/card.model";
 
 const CreateForm = () => {
     const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const CreateForm = () => {
         acceptedTerms: false,
     });
 
+    const [loading, setLoading] = useState(false);
     const [openError, setOpenError] = useState(false);
     const [openSuccess, setOpenSuccess] = useState(false);
     const dispatch = useDispatch();
@@ -27,14 +29,29 @@ const CreateForm = () => {
         if (reason === 'clickaway') {
             return;
         }
-
+        setLoading(false);
         setOpenError(false);
     };
 
-    const updateGeneratedCard = (cardProps: CardProps) => {
+    const updateGeneratedCard = (cardProps: any) => {
+        const card : Card = {
+            name: "",
+            description: cardProps.desc,
+            family: "",
+            affinity: "",
+            imgUrl: cardProps.imageURL,
+            id: 1,
+            hp: cardProps.props.HP,
+            energy: cardProps.props.ENERGY,
+            defense: cardProps.props.DEFENSE,
+            attack: cardProps.props.ATTACK,
+            price: 0
+        } 
+
+
         dispatch({
             type: 'UPDATE_GENERATED_CARD',
-            payload: cardProps
+            payload: card
         })
         updateData(currentUser.id)
     }
@@ -61,6 +78,7 @@ const CreateForm = () => {
             return;
         }
 
+        setLoading(false);
         setOpenSuccess(false);
     };
 
@@ -75,13 +93,15 @@ const CreateForm = () => {
 
         evtSource.onmessage = (event) => {
             setOpenSuccess(true)
-            updateGeneratedCard(event.data)
+            setLoading(false);
+            updateGeneratedCard(JSON.parse(event.data))
             evtSource.close();
         };
 
         evtSource.onerror = (error) => {
             console.error("SSE error:", error); // Log de l'erreur dans la console pour debugging
             setOpenError(true); // Affiche la snackbar en cas d'erreur
+            setLoading(false);
             evtSource.close(); // Ferme la connexion SSE pour éviter les erreurs continues
         };
     };
@@ -109,6 +129,7 @@ const CreateForm = () => {
             return;
         }
 
+        setLoading(true);
         generateCard()
     };
 
@@ -157,9 +178,10 @@ const CreateForm = () => {
                     }
                     label="I agree to the Terms and Conditions"
                 />
-                <Button
+                <LoadingButton
                     type="submit"
                     variant="contained"
+                    loading={loading}
                     fullWidth
                     sx={{
                         padding: '10px 0',
@@ -171,7 +193,7 @@ const CreateForm = () => {
                     }}
                 >
                     Generate
-                </Button>
+                </LoadingButton>
             </Box>
             <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
                 <Alert

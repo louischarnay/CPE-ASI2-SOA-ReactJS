@@ -7,6 +7,8 @@ import { UserService } from "../../services/user.service";
 import User from "../../models/user.model";
 import CardProps from "../../models/CardProps";
 import { CardService } from "../../services/card.service";
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -15,6 +17,17 @@ const Login = () => {
         firstName: '',
         password: '',
     });
+    const [openError, setOpenError] = useState(false);
+
+    const handleCloseError = (
+        event?: React.SyntheticEvent | Event,
+        reason?: SnackbarCloseReason,
+    ) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenError(false);
+    };
 
     // Handle changes in input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +45,7 @@ const Login = () => {
 
         // Validate password and terms acceptance
         if (!formData.firstName || !formData.password) {
-            alert('All fields are required');
+            setOpenError(true)
             return;
         }
 
@@ -128,6 +141,16 @@ const Login = () => {
                 </Button>
             </Box>
             <Link component="button" onClick={() => navigate("/register")}>create a new user</Link>
+            <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+                <Alert
+                    onClose={handleCloseError}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    All fields are required
+                </Alert>
+            </Snackbar>
         </>
     );
 };

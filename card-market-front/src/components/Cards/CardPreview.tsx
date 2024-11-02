@@ -3,7 +3,7 @@ import { Card, CardContent, CardMedia, Typography, CardActions, Button } from '@
 import PaymentsIcon from '@mui/icons-material/Payments';
 import './CardPreview.css'
 
-const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, id, hp, energy, defense, attack, price, userId, handleCLick} : CardProps) => {
+const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, id, hp, energy, defense, attack, price, userId, handleCLick, isClickable} : CardProps) => {
     return (
         <>
         <Card style={{ maxWidth: 345, margin: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
@@ -44,11 +44,14 @@ const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, 
             </CardContent>
 
             {/* Bouton au centre en bas */}
-            <CardActions style={{ justifyContent: 'center' }}>
+            {
+                isClickable && 
+                <CardActions style={{ justifyContent: 'center' }}>
                 <Button variant="contained" color="primary" onClick={() => handleCLick(id)}> 
                    <PaymentsIcon className='pr'/> {price}€
                 </Button>
             </CardActions>
+            }
         </Card>
         </>
     );

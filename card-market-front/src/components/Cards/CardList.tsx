@@ -109,6 +109,7 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, c
                             price={selectedCard.price}
                             smallImgUrl={selectedCard.smallImgUrl}
                             userId={selectedCard.userId}
+                            isClickable={true}
                         />
                     </Box>
                 ) : (

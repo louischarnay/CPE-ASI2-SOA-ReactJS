@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CardProps from '../../models/CardProps';
 import { CardService } from '../../services/card.service';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const UserForm = () => {
     const navigate = useNavigate();
@@ -17,6 +19,18 @@ const UserForm = () => {
         rePassword: '',
         acceptedTerms: false
     });
+    const [openError, setOpenError] = useState(false);
+    const [messageError, setMessageError] = useState("");
+
+    const handleCloseError = (
+        event?: React.SyntheticEvent | Event,
+        reason?: SnackbarCloseReason,
+    ) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenError(false);
+    };
 
     // Handle changes in input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,15 +48,18 @@ const UserForm = () => {
 
         // Validate password and terms acceptance
         if ( !formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.rePassword ) {
-            alert('All fields are required');
+            setMessageError('All fields are required');
+            setOpenError(true)
             return;
         }
         if (formData.password !== formData.rePassword) {
-            alert('Passwords do not match');
+            setMessageError('Passwords do not match');
+            setOpenError(true)
             return;
         }
         if (!formData.acceptedTerms) {
-            alert('You must accept the terms and conditions');
+            setMessageError('You must accept the terms and conditions');
+            setOpenError(true)
             return;
         }
 
@@ -82,6 +99,7 @@ const UserForm = () => {
     };
 
     return (
+        <>
         <Box 
             component="form" 
             onSubmit={handleSubmit}
@@ -96,7 +114,7 @@ const UserForm = () => {
                 flexDirection: 'column',
                 gap: 2,
             }}
-        >
+            >
             <Typography variant="h5" gutterBottom>
                 Register
             </Typography>
@@ -107,7 +125,7 @@ const UserForm = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-            />
+                />
             <TextField
                 label="Last Name"
                 variant="outlined"
@@ -115,7 +133,7 @@ const UserForm = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-            />
+                />
             <TextField
                 label="Email"
                 variant="outlined"
@@ -124,7 +142,7 @@ const UserForm = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-            />
+                />
             <TextField
                 label="Password"
                 variant="outlined"
@@ -133,7 +151,7 @@ const UserForm = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-            />
+                />
             <TextField
                 label="Re-Password"
                 variant="outlined"
@@ -142,17 +160,17 @@ const UserForm = () => {
                 name="rePassword"
                 value={formData.rePassword}
                 onChange={handleChange}
-            />
+                />
             <FormControlLabel
                 control={
                     <Checkbox
-                        name="acceptedTerms"
-                        checked={formData.acceptedTerms}
-                        onChange={handleChange}
+                    name="acceptedTerms"
+                    checked={formData.acceptedTerms}
+                    onChange={handleChange}
                     />
                 }
                 label="I agree to the Terms and Conditions"
-            />
+                />
             <Button
                 type="submit"
                 variant="contained"
@@ -165,10 +183,21 @@ const UserForm = () => {
                         backgroundColor: '#45a049',
                     },
                 }}
-            >
+                >
                 Submit
             </Button>
         </Box>
+        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+                <Alert
+                    onClose={handleCloseError}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {messageError}
+                </Alert>
+            </Snackbar>
+                </>
     );
 };
 

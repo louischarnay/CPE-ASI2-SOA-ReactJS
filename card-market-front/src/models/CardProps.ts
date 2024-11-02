@@ -12,6 +12,7 @@ type CardProps = {
     attack: number;
     price: number;
     userId?: number;
+    isClickable: boolean;
     handleCLick: (e : any) => void;
 }
 
