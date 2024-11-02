@@ -1,7 +1,5 @@
 # 🌐 Projet de Groupe ASI2 - CPE Lyon
 
----
-
 ## 👥 Membres du Groupe 
 
 | Nom                |
