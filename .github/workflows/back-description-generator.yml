@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Back Card Generator Maven CI
+name: Back Card Image Generator Maven CI
 
 on:
   push:
@@ -29,16 +29,16 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B package --file ./card-market-back/card-generator/pom.xml
+        run: mvn -B package --file ./card-market-back/description-generator/pom.xml
 
       - name: Run Tests
         run: |
-          if [ -d "./card-market-back/card-generator/src/test" ]; then
+          if [ -d "./card-market-back/description-generator/src/test" ]; then
             echo "Test directory exists, running tests..."
-            mvn test --file ./card-market-back/card-generator/pom.xml
+            mvn test --file ./card-market-back/description-generator/pom.xml
           else
             echo "No tests found, skipping test step."
           fi
 
       - name: Update dependency graph
-        run: mvn com.github.ferstl:depgraph-maven-plugin:4.0.1:graph --file ./card-market-back/card-generator/pom.xml
+        run: mvn com.github.ferstl:depgraph-maven-plugin:4.0.1:graph --file ./card-market-back/description-generator/pom.xml
