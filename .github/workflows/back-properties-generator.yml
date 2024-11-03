@@ -1,4 +1,4 @@
-name: Back Card Image Generator Maven CI
+name: Back Card Properties Generator Maven CI
 
 on:
   push:
