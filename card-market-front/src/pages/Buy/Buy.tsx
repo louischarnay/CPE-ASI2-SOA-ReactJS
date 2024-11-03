@@ -7,9 +7,11 @@ import { StoreService } from "../../services/store.service";
 import { UserService } from "../../services/user.service";
 import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
+import Alert from '@mui/material/Alert';
 
 const Buy = () => {
     const [open, setOpen] = useState(false);
+    const [openError, setOpenError] = useState(false);
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
     const cards : CardProps[] = useSelector((state: any) => state.cardReducer.buyCards)
 
@@ -20,6 +22,8 @@ const Buy = () => {
         if (response) {
             setOpen(true)
             updateData(currentUser.id)
+        } else {
+            setOpenError(true)
         }
     }
 
@@ -32,6 +36,16 @@ const Buy = () => {
         }
 
         setOpen(false);
+    };
+
+    const handleCloseError = (
+        event?: React.SyntheticEvent | Event,
+        reason?: SnackbarCloseReason,
+    ) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenError(false);
     };
 
     const updateData = async (userId: number) => {
@@ -63,6 +77,16 @@ const Buy = () => {
                 message="You just bought a card"
                 onClose={handleClose}
             />
+            <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+                <Alert
+                    onClose={handleCloseError}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    Not enough money on the account
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

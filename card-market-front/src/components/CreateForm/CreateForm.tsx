@@ -35,20 +35,9 @@ const CreateForm = () => {
     };
 
     const updateGeneratedCard = (cardProps: any) => {
-        const card : Card = {
-            name: "",
-            description: cardProps.desc,
-            family: "",
-            affinity: "",
-            imgUrl: cardProps.imageURL,
-            id: 1,
-            hp: cardProps.props.HP,
-            energy: cardProps.props.ENERGY,
-            defense: cardProps.props.DEFENSE,
-            attack: cardProps.props.ATTACK,
-            price: 0
-        } 
+        console.log(cardProps)
 
+        const card : Card = cardProps;
 
         dispatch({
             type: 'UPDATE_GENERATED_CARD',

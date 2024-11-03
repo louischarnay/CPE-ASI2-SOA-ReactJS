@@ -14,7 +14,7 @@ const Card: FC<CardComponentProps> = (props) => {
             <TableCell>{props.family}</TableCell>
             <TableCell>{props.hp}</TableCell>
             <TableCell>{props.energy}</TableCell>
-            <TableCell>{props.defense}</TableCell>
+            <TableCell>{props.defence}</TableCell>
             <TableCell>{props.attack}</TableCell>
             <TableCell>{props.price}</TableCell>
         </TableRow>

@@ -26,7 +26,7 @@ const Create = () => {
             <div className="width-card">
                 {
                     isRed() && 
-                        <CardPreview name={generatedCard.name} description={generatedCard.description} family={generatedCard.family} affinity={generatedCard.affinity} imgUrl={generatedCard.imgUrl} smallImgUrl={generatedCard.smallImgUrl} id={generatedCard.id} hp={generatedCard.hp} energy={generatedCard.energy} defense={generatedCard.defense} attack={generatedCard.attack} price={generatedCard.price} handleCLick={handleCLick} isClickable={false}></CardPreview>
+                        <CardPreview name={generatedCard.name} description={generatedCard.description} family={generatedCard.family} affinity={generatedCard.affinity} imgUrl={generatedCard.imgUrl} smallImgUrl={generatedCard.smallImgUrl} id={generatedCard.id} hp={generatedCard.hp} energy={generatedCard.energy} defence={generatedCard.defence} attack={generatedCard.attack} price={generatedCard.price} handleCLick={handleCLick} isClickable={false}></CardPreview>
                 }
             </div>
         </div>

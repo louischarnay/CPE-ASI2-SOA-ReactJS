@@ -98,7 +98,7 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, c
                             handleCLick={handleClick}
                             affinity={selectedCard.affinity}
                             attack={selectedCard.attack}
-                            defense={selectedCard.defense}
+                            defence={selectedCard.defence}
                             description={selectedCard.description}
                             energy={selectedCard.energy}
                             family={selectedCard.family}

@@ -3,7 +3,7 @@ import { Card, CardContent, CardMedia, Typography, CardActions, Button } from '@
 import PaymentsIcon from '@mui/icons-material/Payments';
 import './CardPreview.css'
 
-const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, id, hp, energy, defense, attack, price, userId, handleCLick, isClickable} : CardProps) => {
+const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, id, hp, energy, defence, attack, price, userId, handleCLick, isClickable} : CardProps) => {
     return (
         <>
         <Card style={{ maxWidth: 345, margin: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
@@ -16,7 +16,7 @@ const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, 
                 />
 
             {/* Contenu de la carte */}
-            <CardContent>
+            <CardContent style={{maxHeight: '35vh', overflowY : 'scroll'}}>
                 <Typography gutterBottom variant="h5" component="div">
                     {name}
                 </Typography>
@@ -33,7 +33,7 @@ const CardPreview = ({name, description, family, affinity, imgUrl, smallImgUrl, 
                     <strong>Énergie : </strong>{energy}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    <strong>Défense : </strong>{defense}
+                    <strong>Défense : </strong>{defence}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     <strong>Attaque : </strong>{attack}

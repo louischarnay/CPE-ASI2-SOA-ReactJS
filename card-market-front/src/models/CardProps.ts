@@ -8,7 +8,7 @@ type CardProps = {
     id: number;
     hp: number;
     energy: number;
-    defense: number;
+    defence: number;
     attack: number;
     price: number;
     userId?: number;
