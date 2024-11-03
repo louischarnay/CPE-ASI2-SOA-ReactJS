@@ -11,6 +11,7 @@ import Card from "../../models/card.model";
 
 const CreateForm = () => {
     const [formData, setFormData] = useState({
+        name: '',
         imagePrompt: '',
         descriptionPrompt: '',
         acceptedTerms: false,
@@ -83,7 +84,7 @@ const CreateForm = () => {
     };
 
     const generateCard = async () => {
-        const id = await CardService.generateCard(formData.imagePrompt, formData.descriptionPrompt);
+        const id = await CardService.generateCard(formData.imagePrompt, formData.descriptionPrompt, formData.name, currentUser.id);
         startSse(id);
 
     }
@@ -152,6 +153,14 @@ const CreateForm = () => {
                 <Typography variant="h5" gutterBottom>
                     Generate a card
                 </Typography>
+                <TextField
+                    label="Name"
+                    variant="outlined"
+                    fullWidth
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                />
                 <TextField
                     label="Image Prompt"
                     variant="outlined"

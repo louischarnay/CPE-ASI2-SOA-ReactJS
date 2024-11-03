@@ -18,6 +18,7 @@ const Login = () => {
         password: '',
     });
     const [openError, setOpenError] = useState(false);
+    const [messageError, setMessageError] = useState('');
 
     const handleCloseError = (
         event?: React.SyntheticEvent | Event,
@@ -45,6 +46,7 @@ const Login = () => {
 
         // Validate password and terms acceptance
         if (!formData.firstName || !formData.password) {
+            setMessageError("All fields are required")
             setOpenError(true)
             return;
         }
@@ -76,7 +78,8 @@ const Login = () => {
             navigate("/")
         }
         catch (err) {
-            alert("Error, wrong first name or password")
+            setMessageError("Error, wrong first name or password")
+            setOpenError(true)
             setFormData({
                 firstName: formData.firstName,
                 password: '',
@@ -148,7 +151,7 @@ const Login = () => {
                     variant="filled"
                     sx={{ width: '100%' }}
                 >
-                    All fields are required
+                    {messageError}
                 </Alert>
             </Snackbar>
         </>

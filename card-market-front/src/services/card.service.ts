@@ -11,7 +11,7 @@ export class CardService {
         return result.filter((card: any) => card.userId === userId);
     }
 
-    static async generateCard(imagePrompt: string, descPrompt: string) {
-        return await apiFetch(`/generateCard`, 'POST', {imagePrompt, descPrompt}, undefined, config.generateUrl);
+    static async generateCard(imagePrompt: string, descPrompt: string, name: string, userId: number) {
+        return await apiFetch(`/generateCard`, 'POST', {imagePrompt, descPrompt, userId, name}, undefined, config.generateUrl);
     }
 }
