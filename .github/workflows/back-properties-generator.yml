@@ -1,18 +1,10 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Back Card Image Generator Maven CI
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ["**"]
   pull_request:
-    branches: [ "**" ]
+    branches: ["**"]
 
 jobs:
   build:
@@ -27,6 +19,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+
+      # Step to add the local JAR file to the Maven repository
+      - name: Install Local Library (colorToproperties-1.1.2.jar)
+        run: |
+          mvn install:install-file \
+            -Dfile=./card-market-back/properties-generator/src/main/resources/colorToproperties-1.1.2.jar \
+            -DgroupId=com.example \
+            -DartifactId=colorToproperties \
+            -Dversion=1.1.2 \
+            -Dpackaging=jar
 
       - name: Build with Maven
         run: mvn -B package --file ./card-market-back/properties-generator/pom.xml
