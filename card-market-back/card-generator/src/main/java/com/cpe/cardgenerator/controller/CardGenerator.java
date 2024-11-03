@@ -27,12 +27,15 @@ public class CardGenerator {
         // Request class to hold both prompts
         @Getter
         public static class CardGenerationRequest {
-            private String imagePrompt;
-            private String descPrompt;
+                private String name;
+                private String imagePrompt;
+                private String descPrompt;
+                private Long userId;
         }
 
-        public Long createNewMessageEntry() {
+        public Long createNewMessageEntry(int cardId) {
                 MessageStatus status = new MessageStatus();
+                status.setCardId(cardId);
                 status.setImageReceived(false);
                 status.setDescReceived(false);
                 repository.save(status);
@@ -41,11 +44,14 @@ public class CardGenerator {
 
         @PostMapping("/generateCard")
         public String generateCard(@RequestBody CardGenerationRequest request) throws JsonProcessingException {
-                Long id = createNewMessageEntry();
+                // TODO: SEND REQUEST TO CREATE A CARD (and get cardId)
+
+                Long id = createNewMessageEntry(cardId);
                 String imagePromptJson = objectMapper.writeValueAsString(request.getImagePrompt()).replace("\"", "");
                 String descPromptJson = objectMapper.writeValueAsString(request.getDescPrompt()).replace("\"", "");
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateImage", imagePromptJson, "id", id);
                 producerTemplate.sendBodyAndHeader("direct:sendToGenerateDesc", descPromptJson, "id", id);
+
                 return id.toString();
         }
 
