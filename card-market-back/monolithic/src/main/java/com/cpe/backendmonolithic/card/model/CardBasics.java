@@ -1,10 +1,11 @@
 package com.cpe.backendmonolithic.card.model;
 
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 @MappedSuperclass
 public class CardBasics {
 	private String name;
+	@Column(length = 5000)
 	private String description;
 	private String imgUrl;
 

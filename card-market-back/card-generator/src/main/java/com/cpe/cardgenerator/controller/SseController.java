@@ -1,13 +1,16 @@
 package com.cpe.cardgenerator.controller;
 
 import com.cpe.cardgenerator.message.MessageStatusRepository;
+import com.cpe.cardgenerator.model.CardDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.HashMap;
@@ -20,6 +23,8 @@ public class SseController {
 
     @Autowired
     private MessageStatusRepository repository;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping("/sse")
     public SseEmitter streamSse(@RequestParam Long id) {
@@ -37,18 +42,36 @@ public class SseController {
                         String desc = repository.findById(id).orElseThrow().getDesc();
                         String propsString = repository.findById(id).orElseThrow().getProps();
 
-                        // Parse the props string into a Map
-                        Map<String, Double> props = parseProps(propsString);
+                        String name = repository.findById(id).orElseThrow().getName();
+                        int userId = repository.findById(id).orElseThrow().getUserId();
+                        float price = (float) (Math.random() * 100);
 
-                        // Create a JSON-like structure with a Map
-                        String jsonString = getString(imageURL, desc, props);
+                        // Parse the props string into a Map
+                        Map<String, Float> props = parseProps(propsString);
+
+                        CardDTO card = new CardDTO();
+                        card.setName(name);
+                        card.setUserId(userId);
+                        card.setPrice(price);
+                        card.setImgUrl(imageURL);
+                        card.setDescription(desc);
+                        card.setDefence(props.get("DEFENSE"));
+                        card.setEnergy(props.get("ENERGY"));
+                        card.setAttack(props.get("ATTACK"));
+                        card.setHp(props.get("HP"));
+
+                        ResponseEntity<String> response = restTemplate.postForEntity("http://backend-monolithic:8080/api/card", card, String.class);
+
+                        System.out.println("Response: " + response.getBody());
 
                         // Send the JSON string
-                        // TODO: CREATE AND RETURN COMPLETE CARD (get to monolithic)
-                        emitter.send(jsonString);
+                        emitter.send(response.getBody());
 
                         // Complete the emitter
                         emitter.complete();
+
+                        // Delete the message status from the database
+                        repository.deleteById(id);
                     }
                 }
             } catch (Exception e) {
@@ -58,7 +81,7 @@ public class SseController {
         return emitter;
     }
 
-    private static String getString(String imageURL, String desc, Map<String, Double> props) throws JsonProcessingException {
+    private static String getString(String imageURL, String desc, Map<String, Float> props) throws JsonProcessingException {
         Map<String, Object> messageMap = new HashMap<>();
         messageMap.put("imageURL", imageURL);
         messageMap.put("desc", desc);
@@ -70,8 +93,8 @@ public class SseController {
     }
 
     // Helper method to parse the props string into a Map<String, Double>
-    private static Map<String, Double> parseProps(String propsString) {
-        Map<String, Double> propsMap = new HashMap<>();
+    private static Map<String, Float> parseProps(String propsString) {
+        Map<String, Float> propsMap = new HashMap<>();
         // Remove the curly braces
         propsString = propsString.substring(1, propsString.length() - 1);
         // Split the string by commas to get each key-value pair
@@ -80,7 +103,7 @@ public class SseController {
             // Split each pair by '=' to separate the key and value
             String[] entry = pair.split("=");
             String key = entry[0];
-            Double value = Double.parseDouble(entry[1]);
+            Float value = Float.parseFloat(entry[1]);
             propsMap.put(key, value);
         }
         return propsMap;
