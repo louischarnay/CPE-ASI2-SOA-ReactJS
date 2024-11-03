@@ -21,8 +21,8 @@ public class CardReference extends CardBasics implements Serializable {
 		super(c);
 	}
 
-	public CardReference(String name, String description, String family, String affinity,String imgUrl,String smallImgUrl) {
-		super(name, description, family,affinity,imgUrl,smallImgUrl);
+	public CardReference(String name, String description, String imgUrl) {
+		super(name, description,imgUrl);
 	}
 
 	public Integer getId() {

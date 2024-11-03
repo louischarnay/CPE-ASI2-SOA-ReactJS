@@ -44,7 +44,7 @@ public class SseController {
                         String jsonString = getString(imageURL, desc, props);
 
                         // Send the JSON string
-                        // TODO: RETURN COMPLETE CARD (get to monolithic)
+                        // TODO: CREATE AND RETURN COMPLETE CARD (get to monolithic)
                         emitter.send(jsonString);
 
                         // Complete the emitter

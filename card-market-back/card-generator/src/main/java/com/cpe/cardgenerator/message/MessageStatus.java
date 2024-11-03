@@ -19,7 +19,8 @@ public class MessageStatus {
     private boolean imageReceived;
     private boolean descReceived;
     private boolean propsReceived;
-    private int cardId;
+    private int userId;
+    private String name;
 
     public boolean isMessageComplete() {
         return imageReceived && descReceived && propsReceived;

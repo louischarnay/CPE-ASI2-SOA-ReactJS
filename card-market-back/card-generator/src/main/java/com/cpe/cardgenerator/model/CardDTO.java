@@ -26,7 +26,7 @@ public class CardDTO {
 		this.attack = card.getAttack();
 		this.price = card.getPrice();
 		this.userId = card.getUserId();
-		this.imgUrl = card.getImgURL();
+		this.imgUrl = card.getImgUrl();
 	}
 
 	public Integer getId() {

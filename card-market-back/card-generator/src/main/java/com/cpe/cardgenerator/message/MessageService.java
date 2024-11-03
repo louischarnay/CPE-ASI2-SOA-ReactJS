@@ -20,9 +20,6 @@ public class MessageService {
         status.setImageURL(message);
         status.setImageReceived(true);
         repository.save(status);
-
-        // TODO: SEND REQUEST TO UPDATE CARD IN MONOLITHIC (status.getCardId())
-
         checkAndTriggerEvent(status);
     }
 
@@ -31,9 +28,6 @@ public class MessageService {
         status.setDesc(message);
         status.setDescReceived(true);
         repository.save(status);
-
-        // TODO: SEND REQUEST TO UPDATE CARD IN MONOLITHIC (status.getCardId())
-
         checkAndTriggerEvent(status);
     }
 
