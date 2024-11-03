@@ -25,8 +25,8 @@ jobs:
         run: |
           mvn install:install-file \
             -Dfile=./card-market-back/properties-generator/src/main/resources/colorToproperties-1.1.2.jar \
-            -DgroupId=com.example \
-            -DartifactId=colorToproperties \
+            -DgroupId=tp.cpe \
+            -DartifactId=colorToProperties \
             -Dversion=1.1.2 \
             -Dpackaging=jar
 
