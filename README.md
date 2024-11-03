@@ -47,6 +47,10 @@ docker-compose up --build
 - Implémentation du container **Neural Love** pour générer des cartes
 - Implémentation du container **Ollama** pour générer des descriptions
 
+#### CI/CD
+- Mise en place des **pipelines Front**
+- Mise en place des **pipelines Back**
+
 ### 📌 Nathan Guillemette
 
 #### Front-End
@@ -67,6 +71,8 @@ docker-compose up --build
 - Développement du **component Card**
 - Développement du **component Card List**
 - Développement du **component Card Preview**
+- Développement de la **page d'achat**
+- Développement de la **page de vente**
 - Mise en place de la **navigation sécurisée nécessitant une authentification**
 - Animation de **chargement des listes** et affichage des **messages d’erreurs**
 - Ajout d’une **Snackbar** pour confirmer les actions d’achat et de vente
