@@ -80,7 +80,7 @@ docker-compose up --build
 #### Back-End
 - Implémentation du **Card Properties Generator** pour la génération dynamique des propriétés de carte
 
-- #### CI/CD
+#### CI/CD
 - Mise en place des **pipelines Back Generator**
 
 ---
