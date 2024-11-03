@@ -49,7 +49,7 @@ docker-compose up --build
 
 #### CI/CD
 - Mise en place des **pipelines Front**
-- Mise en place des **pipelines Back**
+- Mise en place des **pipelines Back Monolithique**
 
 ### 📌 Nathan Guillemette
 
@@ -79,6 +79,9 @@ docker-compose up --build
 
 #### Back-End
 - Implémentation du **Card Properties Generator** pour la génération dynamique des propriétés de carte
+
+- #### CI/CD
+- Mise en place des **pipelines Back Generator**
 
 ---
 
