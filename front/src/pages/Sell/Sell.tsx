@@ -10,7 +10,7 @@ import { UserService } from "../../services/user.service";
 import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
 import CardPreview from "../../components/Cards/CardPreview";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Grid, Box } from '@mui/material';
+import { Typography, Grid, Box } from '@mui/material';
 
 const Sell = () => {
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
@@ -24,6 +24,7 @@ const Sell = () => {
             const response = await StoreService.sell(cardId, currentUser.id)
             if (response) {
                 setOpen(true)
+                setSelectedCard(null)
                 updateData(currentUser.id)
 
             }
@@ -137,6 +138,12 @@ const Sell = () => {
                     )}
                 </Grid>
             </Grid>
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                message="You just sold a card"
+                onClose={handleClose}
+            />
         </div>
     );
 }

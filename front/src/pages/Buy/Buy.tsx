@@ -24,6 +24,7 @@ const Buy = () => {
         const response = await StoreService.buy(cardId, currentUser.id)
         if (response) {
             setOpen(true)
+            setSelectedCard(null)
             updateData(currentUser.id)
         } else {
             setOpenError(true)
