@@ -32,7 +32,7 @@ const GamePrep = () => {
 
     const updateData = async (userId: number) => {
         // Update between stock and game inventory
-        
+
     }
 
     const action = (
@@ -49,8 +49,9 @@ const GamePrep = () => {
     );
 
     return (
-        <div>
-            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards} />
+        <div style={{ display: 'flex', gap: '20px' }}>
+            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards} preview = {false} />
+            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards} preview = {false} />
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
