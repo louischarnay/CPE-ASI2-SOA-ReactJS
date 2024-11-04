@@ -9,8 +9,7 @@ const PORT = 4000;
 
 const server = createServer(app);
 
-// Configure connection to ActiveMQ broker
-const connectOptions = {
+const esb = {
   host: 'localhost',
   port: 61613,
   connectHeaders: {
@@ -20,26 +19,6 @@ const connectOptions = {
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Backend Node");
-
-  stompit.connect(connectOptions, (error, client) => {
-    if (error) {
-      console.error('Connection error:', error.message);
-      return;
-    }
-
-    console.log('Connected to ActiveMQ broker');
-
-    // Send a message
-    const sendHeaders = {
-      'destination': '/queue/test',
-      'content-type': 'text/plain'
-    };
-
-    const frame = client.send(sendHeaders);
-    frame.write('Hello, ActiveMQ!');
-    frame.end();
-  });
-});
 
 const ioServer = new Server(server, {
   cors: {
@@ -54,13 +33,33 @@ ioServer.on('connection', (socket) => {
   socket.on('message-send', (data: MessageSentByClient) => {
     // IF USER NOT EXISTS, GET USER
     console.log('Data received from client:', data);
+
+    stompit.connect(esb, (error: Error | null, client: stompit.Client) => {
+      
+      if (error) {
+        console.error('Connection error:', error.message);
+        return;
+      }
+  
+      const sendHeaders = {
+        'destination': '/queue/test',
+        'content-type': 'application/json',
+      };
+  
+      const frame = client.send(sendHeaders);
+      frame.write(JSON.stringify(data));
+      frame.end();
+    });
+
     const messageReceived = {
       userId: data.userId,
       userName: 'Toto',
       content: data.content,
       date: new Date(),
     };
+    
     socket.emit('message-receive', messageReceived);
+    });
   });
 });
 
