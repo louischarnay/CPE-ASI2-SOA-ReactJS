@@ -37,6 +37,12 @@ ioServer.on('connection', (socket) => {
   socket.on('message-send', async (data: MessageSentByClient) => {
     console.log('Data received from client:', data);
 
+    const userName = await userService.getUserName(data.userId);
+    if (!userName) {
+      console.error(`User with ID ${data.userId} not found`);
+      return;
+    }
+
     stompit.connect(esb, (error: Error | null, client: stompit.Client) => {
       
       if (error) {
@@ -54,12 +60,6 @@ ioServer.on('connection', (socket) => {
       frame.end();
     });
 
-    const userName = await userService.getUserName(data.userId);
-    if (!userName) {
-      console.error(`User with ID ${data.userId} not found`);
-      return;
-    }
-    
     const messageReceived = {
       userId: data.userId,
       userName,
