@@ -8,19 +8,19 @@ interface CardListProps {
     fetchMethod: 'all' | 'user';
     handleClick: (e: any) => void;
     cards: CardProps[];
+    preview?: boolean;
 }
 
-const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, cards }) => {
+const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, cards, preview = true }) => {
     const [error] = useState<string | null>(null);
     const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // State for storing selected card
     const [loading, setLoading] = useState(true); // Loading state
 
     useEffect(() => {
-        // Simulate data fetching
         if (cards && cards.length > 0) {
-            setLoading(false); // Stop loading once cards are available
+            setLoading(false);
         } else {
-            setLoading(false); // Stop loading even if cards array is empty
+            setLoading(false);
         }
     }, [cards]);
 
@@ -47,15 +47,15 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, c
                     <Typography variant="h4" align="center" style={{ marginBottom: '20px' }}>
                         Liste des Cartes
                     </Typography>
-                    {loading ? ( // Show spinner while loading
+                    {loading ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
                             <CircularProgress />
                         </Box>
-                    ) : cards.length === 0 ? ( // Show "No cards available" when cards array is empty
+                    ) : cards.length === 0 ? (
                         <Typography variant="h6" align="center" style={{ padding: '20px' }}>
                             No cards available
                         </Typography>
-                    ) : ( // Display the cards table when data is available
+                    ) : (
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -78,59 +78,61 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, c
                     )}
                 </TableContainer>
             </Grid>
-
-            {/* Right side card preview */}
-            <Grid item xs={12} md={3} style={{ width: '30%', position: 'relative' }}>
-                {selectedCard ? (
-                    <Box
-                        sx={{
-                            position: 'fixed',
-                            top: '50%',
-                            right: '5%',
-                            transform: 'translateY(-50%)',
-                            width: 'calc(20% - 40px)',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <CardPreview
-                            handleCLick={handleClick}
-                            affinity={selectedCard.affinity}
-                            attack={selectedCard.attack}
-                            defence={selectedCard.defence}
-                            description={selectedCard.description}
-                            energy={selectedCard.energy}
-                            family={selectedCard.family}
-                            hp={selectedCard.hp}
-                            id={selectedCard.id}
-                            imgUrl={selectedCard.imgUrl}
-                            name={selectedCard.name}
-                            price={selectedCard.price}
-                            smallImgUrl={selectedCard.smallImgUrl}
-                            userId={selectedCard.userId}
-                            isClickable={true}
-                        />
-                    </Box>
-                ) : (
-                    <Box
-                        sx={{
-                            position: 'fixed',
-                            top: '50%',
-                            right: '5%',
-                            transform: 'translateY(-50%)',
-                            width: 'calc(20% - 40px)',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Typography variant="h6" align="center">
-                            Cliquez sur une carte pour voir les détails
-                        </Typography>
-                    </Box>
-                )}
-            </Grid>
+            
+            {/* Right side card preview, shown only if preview is true */}
+            {preview && (
+                <Grid item xs={12} md={3} style={{ width: '30%', position: 'relative' }}>
+                    {selectedCard ? (
+                        <Box
+                            sx={{
+                                position: 'fixed',
+                                top: '50%',
+                                right: '5%',
+                                transform: 'translateY(-50%)',
+                                width: 'calc(20% - 40px)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <CardPreview
+                                handleCLick={handleClick}
+                                affinity={selectedCard.affinity}
+                                attack={selectedCard.attack}
+                                defence={selectedCard.defence}
+                                description={selectedCard.description}
+                                energy={selectedCard.energy}
+                                family={selectedCard.family}
+                                hp={selectedCard.hp}
+                                id={selectedCard.id}
+                                imgUrl={selectedCard.imgUrl}
+                                name={selectedCard.name}
+                                price={selectedCard.price}
+                                smallImgUrl={selectedCard.smallImgUrl}
+                                userId={selectedCard.userId}
+                                isClickable={true}
+                            />
+                        </Box>
+                    ) : (
+                        <Box
+                            sx={{
+                                position: 'fixed',
+                                top: '50%',
+                                right: '5%',
+                                transform: 'translateY(-50%)',
+                                width: 'calc(20% - 40px)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Typography variant="h6" align="center">
+                                Cliquez sur une carte pour voir les détails
+                            </Typography>
+                        </Box>
+                    )}
+                </Grid>
+            )}
         </Grid>
     );
 };

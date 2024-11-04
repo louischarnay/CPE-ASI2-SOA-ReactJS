@@ -12,6 +12,7 @@ const Home = () => {
             <HomeItem icon={<AttachMoneyIcon/>} description="Sell" redirection="/sell/"/>
             <HomeItem icon={<ShoppingCartIcon/>} description="Buy" redirection="/buy/"/>
             <HomeItem icon={<ScienceIcon/>} description="Create" redirection="/create/"/>
+            <HomeItem icon={<ScienceIcon/>} description="Game" redirection="/game-prep/"/>
         </Stack>
         </div>
     )
