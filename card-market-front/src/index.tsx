@@ -14,6 +14,7 @@ import globalReducer from './core/reducers';
 import { Provider } from 'react-redux';
 import Create from './pages/Create/Create';
 import ProtectedRoute from './routes/ProtectedRoot';
+import Match from './pages/Match/Match';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "match",
+        element: <Match />
       },
       // Les routes protégées
       {
