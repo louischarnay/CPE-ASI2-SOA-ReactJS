@@ -9,6 +9,8 @@ import UserForm from './pages/UserForm/UserForm';
 import Login from './pages/Login/Login';
 import Buy from './pages/Buy/Buy';
 import Sell from './pages/Sell/Sell';
+import Game from './pages/Game/Game';
+import GamePrep from './pages/GamePrep/GamePrep';
 import { configureStore } from '@reduxjs/toolkit';
 import globalReducer from './core/reducers';
 import { Provider } from 'react-redux';
@@ -40,6 +42,13 @@ const router = createBrowserRouter([
       {
         path: "match",
         element: <Match />
+      },{
+        path: "game",
+        element : <Game />,
+      },
+      {
+        path: "game-prep",
+        element : <GamePrep />,
       },
       // Les routes protégées
       {

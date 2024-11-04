@@ -1,3 +1,5 @@
 .env
 .idea
 ollama
+node_modules
+dist
