@@ -1,8 +1,13 @@
 import express, { Express, Request, Response } from "express";
 import stompit from "stompit";
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import { MessageSentByClient } from "./models/message.model";
 
 const app: Express = express();
-const port = 4000;
+const PORT = 4000;
+
+const server = createServer(app);
 
 // Configure connection to ActiveMQ broker
 const connectOptions = {
@@ -14,8 +19,8 @@ const connectOptions = {
 };
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-  
+  res.send("Backend Node");
+
   stompit.connect(connectOptions, (error, client) => {
     if (error) {
       console.error('Connection error:', error.message);
@@ -36,6 +41,29 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+const ioServer = new Server(server, {
+  cors: {
+    origin: "*",  // Allow only React client
+    methods: ["GET", "POST"]
+  }
+});
+
+ioServer.on('connection', (socket) => {
+  console.log('a user connected');
+  // GET ALL USERS
+  socket.on('message-send', (data: MessageSentByClient) => {
+    // IF USER NOT EXISTS, GET USER
+    console.log('Data received from client:', data);
+    const messageReceived = {
+      userId: data.userId,
+      userName: 'Toto',
+      content: data.content,
+      date: new Date(),
+    };
+    socket.emit('message-receive', messageReceived);
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`[server]: Server is running at http://localhost:${PORT}`);
 });
