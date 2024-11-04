@@ -8,12 +8,15 @@ import { UserService } from "../../services/user.service";
 import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
 import Alert from '@mui/material/Alert';
+import CardPreview from "../../components/Cards/CardPreview";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Grid, Box } from '@mui/material';
 
 const Buy = () => {
     const [open, setOpen] = useState(false);
     const [openError, setOpenError] = useState(false);
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
     const cards : CardProps[] = useSelector((state: any) => state.cardReducer.buyCards)
+    const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // State for storing selected card
 
     const dispatch = useDispatch();
 
@@ -70,7 +73,65 @@ const Buy = () => {
 
     return (
         <div>
-            <CardList fetchMethod="all" handleClick={handleCLick} cards={cards}/>
+            <Grid container spacing={3} style={{ padding: '20px' }}>
+                {/* Left side card table */}
+                <Grid item xs={12} md={9} style={{ width: '70%' }}>
+                    <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard} />
+                </Grid>
+            
+                {/* Right side card preview */}
+                <Grid item xs={12} md={3} style={{ width: '30%', position: 'relative' }}>
+                    {selectedCard ? (
+                        <Box
+                            sx={{
+                                position: 'fixed',
+                                top: '50%',
+                                right: '5%',
+                                transform: 'translateY(-50%)',
+                                width: 'calc(20% - 40px)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <CardPreview
+                                handleCLick={handleCLick}
+                                affinity={selectedCard.affinity}
+                                attack={selectedCard.attack}
+                                defence={selectedCard.defence}
+                                description={selectedCard.description}
+                                energy={selectedCard.energy}
+                                family={selectedCard.family}
+                                hp={selectedCard.hp}
+                                id={selectedCard.id}
+                                imgUrl={selectedCard.imgUrl}
+                                name={selectedCard.name}
+                                price={selectedCard.price}
+                                smallImgUrl={selectedCard.smallImgUrl}
+                                userId={selectedCard.userId}
+                                isClickable={true}
+                            />
+                        </Box>
+                    ) : (
+                        <Box
+                            sx={{
+                                position: 'fixed',
+                                top: '50%',
+                                right: '5%',
+                                transform: 'translateY(-50%)',
+                                width: 'calc(20% - 40px)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Typography variant="h6" align="center">
+                                Cliquez sur une carte pour voir les détails
+                            </Typography>
+                        </Box>
+                    )}
+                </Grid>
+            </Grid>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}

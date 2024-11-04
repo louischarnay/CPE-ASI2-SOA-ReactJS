@@ -6,14 +6,12 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typog
 
 interface CardListProps {
     fetchMethod: 'all' | 'user';
-    handleClick: (e: any) => void;
     cards: CardProps[];
-    preview?: boolean;
+    setSelectedCard: (card: CardProps) => void;
 }
 
-const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, cards, preview = true }) => {
+const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', cards, setSelectedCard}) => {
     const [error] = useState<string | null>(null);
-    const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // State for storing selected card
     const [loading, setLoading] = useState(true); // Loading state
 
     useEffect(() => {
@@ -40,100 +38,41 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', handleClick, c
     };
 
     return (
-        <Grid container spacing={3} style={{ padding: '20px' }}>
-            {/* Left side card table */}
-            <Grid item xs={12} md={9} style={{ width: '70%' }}>
-                <TableContainer component={Paper} style={{ borderRadius: '10px' }}>
-                    <Typography variant="h4" align="center" style={{ marginBottom: '20px' }}>
-                        Liste des Cartes
-                    </Typography>
-                    {loading ? (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-                            <CircularProgress />
-                        </Box>
-                    ) : cards.length === 0 ? (
-                        <Typography variant="h6" align="center" style={{ padding: '20px' }}>
-                            No cards available
-                        </Typography>
-                    ) : (
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell><strong>Card Name</strong></TableCell>
-                                    <TableCell><strong>Description</strong></TableCell>
-                                    <TableCell><strong>Family</strong></TableCell>
-                                    <TableCell><strong>HP</strong></TableCell>
-                                    <TableCell><strong>Energy</strong></TableCell>
-                                    <TableCell><strong>Defense</strong></TableCell>
-                                    <TableCell><strong>Attack</strong></TableCell>
-                                    <TableCell><strong>Price</strong></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {cards.map((card: CardProps) => (
-                                    <Card key={card.id} {...card} onClick={() => handleCardClick(card)} />
-                                ))}
-                            </TableBody>
-                        </Table>
-                    )}
-                </TableContainer>
-            </Grid>
-            
-            {/* Right side card preview, shown only if preview is true */}
-            {preview && (
-                <Grid item xs={12} md={3} style={{ width: '30%', position: 'relative' }}>
-                    {selectedCard ? (
-                        <Box
-                            sx={{
-                                position: 'fixed',
-                                top: '50%',
-                                right: '5%',
-                                transform: 'translateY(-50%)',
-                                width: 'calc(20% - 40px)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <CardPreview
-                                handleCLick={handleClick}
-                                affinity={selectedCard.affinity}
-                                attack={selectedCard.attack}
-                                defence={selectedCard.defence}
-                                description={selectedCard.description}
-                                energy={selectedCard.energy}
-                                family={selectedCard.family}
-                                hp={selectedCard.hp}
-                                id={selectedCard.id}
-                                imgUrl={selectedCard.imgUrl}
-                                name={selectedCard.name}
-                                price={selectedCard.price}
-                                smallImgUrl={selectedCard.smallImgUrl}
-                                userId={selectedCard.userId}
-                                isClickable={true}
-                            />
-                        </Box>
-                    ) : (
-                        <Box
-                            sx={{
-                                position: 'fixed',
-                                top: '50%',
-                                right: '5%',
-                                transform: 'translateY(-50%)',
-                                width: 'calc(20% - 40px)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Typography variant="h6" align="center">
-                                Cliquez sur une carte pour voir les détails
-                            </Typography>
-                        </Box>
-                    )}
-                </Grid>
-            )}
-        </Grid>
+        <TableContainer component={Paper} style={{ borderRadius: '10px' }}>
+        <Typography variant="h4" align="center" style={{ marginBottom: '20px' }}>
+            Liste des Cartes
+        </Typography>
+        {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+                <CircularProgress />
+            </Box>
+        ) : cards.length === 0 ? (
+            <Typography variant="h6" align="center" style={{ padding: '20px' }}>
+                No cards available
+            </Typography>
+        ) : (
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell><strong>Card Name</strong></TableCell>
+                        <TableCell><strong>Description</strong></TableCell>
+                        <TableCell><strong>Family</strong></TableCell>
+                        <TableCell><strong>HP</strong></TableCell>
+                        <TableCell><strong>Energy</strong></TableCell>
+                        <TableCell><strong>Defense</strong></TableCell>
+                        <TableCell><strong>Attack</strong></TableCell>
+                        <TableCell><strong>Price</strong></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {cards.map((card: CardProps) => (
+                        <Card key={card.id} {...card} onClick={() => handleCardClick(card)} />
+                    ))}
+                </TableBody>
+            </Table>
+        )}
+        </TableContainer>
+        
     );
 };
 
