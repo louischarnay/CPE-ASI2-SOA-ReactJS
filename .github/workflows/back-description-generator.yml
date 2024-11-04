@@ -29,16 +29,16 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B package --file ./card-market-back/description-generator/pom.xml
+        run: mvn -B package --file ./back/card-market/description-generator/pom.xml
 
       - name: Run Tests
         run: |
-          if [ -d "./card-market-back/description-generator/src/test" ]; then
+          if [ -d "./back/card-market/description-generator/src/test" ]; then
             echo "Test directory exists, running tests..."
-            mvn test --file ./card-market-back/description-generator/pom.xml
+            mvn test --file ./back/card-market/description-generator/pom.xml
           else
             echo "No tests found, skipping test step."
           fi
 
       - name: Update dependency graph
-        run: mvn com.github.ferstl:depgraph-maven-plugin:4.0.1:graph --file ./card-market-back/description-generator/pom.xml
+        run: mvn com.github.ferstl:depgraph-maven-plugin:4.0.1:graph --file ./back/card-market/description-generator/pom.xml
