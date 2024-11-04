@@ -77,3 +77,4 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', cards, setSele
 };
 
 export default CardList;
+
