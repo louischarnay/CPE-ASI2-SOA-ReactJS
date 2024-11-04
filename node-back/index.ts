@@ -3,6 +3,7 @@ import stompit from "stompit";
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { MessageSentByClient } from "./models/message.model";
+import { UserService } from "./services/user.service";
 
 const app: Express = express();
 const PORT = 4000;
@@ -43,20 +44,28 @@ app.get("/", (req: Request, res: Response) => {
 
 const ioServer = new Server(server, {
   cors: {
-    origin: "*",  // Allow only React client
-    methods: ["GET", "POST"]
+    origin: "http://frontend:3000",
+    methods: ["GET"]
   }
 });
 
+const userService = new UserService();
+
 ioServer.on('connection', (socket) => {
+  userService.fetchAllUsers();
   console.log('a user connected');
-  // GET ALL USERS
-  socket.on('message-send', (data: MessageSentByClient) => {
-    // IF USER NOT EXISTS, GET USER
+
+  socket.on('message-send', async (data: MessageSentByClient) => {
     console.log('Data received from client:', data);
+
+    const userName = await userService.getUserName(data.userId);
+    if (!userName) {
+      console.error(`User with ID ${data.userId} not found`);
+      return;
+    }
     const messageReceived = {
       userId: data.userId,
-      userName: 'Toto',
+      userName,
       content: data.content,
       date: new Date(),
     };

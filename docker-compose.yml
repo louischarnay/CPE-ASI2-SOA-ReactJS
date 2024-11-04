@@ -9,6 +9,15 @@ services:
       - NODE_ENV=development
     networks:
       - public-network
+  
+  node-back:
+    build: ./node-back
+    container_name: node-back
+    ports:
+      - "4000:4000"
+    networks:
+      - public-network
+      - back-network
 
   backend-monolithic:
     build: ./card-market-back/monolithic
