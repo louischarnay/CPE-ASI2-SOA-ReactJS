@@ -12,6 +12,7 @@ import CardProps from "../../models/CardProps";
 const GamePrep = () => {
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
+    const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // State for storing selected card
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
@@ -49,9 +50,9 @@ const GamePrep = () => {
     );
 
     return (
-        <div style={{ display: 'flex', gap: '20px' }}>
-            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards} preview = {false} />
-            <CardList fetchMethod="user" handleClick={handleCLick} cards={cards} preview = {false} />
+        <div style={{ display: 'flex'}}>
+            <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard} />
+            <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard}/>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
