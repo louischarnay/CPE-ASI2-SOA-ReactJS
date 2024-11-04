@@ -1,7 +1,7 @@
 services:
   frontend:
-    build: ./card-market-front
-    container_name: card-market-front
+    build: ./front
+    container_name: front
     ports:
       - "3000:3000"
     environment:
@@ -11,8 +11,8 @@ services:
       - public-network
   
   node-back:
-    build: ./node-back
-    container_name: node-back
+    build: ./back/game
+    container_name: game-back
     ports:
       - "4000:4000"
     networks:
@@ -20,7 +20,7 @@ services:
       - back-network
 
   backend-monolithic:
-    build: ./card-market-back/monolithic
+    build: ./back/card-market/monolithic
     container_name: card-market-back-monolithic
     ports:
       - "8080:8080"
@@ -39,7 +39,7 @@ services:
       - back-network
 
   card-generator:
-    build: ./card-market-back/card-generator
+    build: ./back/card-market/card-generator
     container_name: card-market-card-generator
     ports:
       - "8081:8081"
@@ -47,7 +47,7 @@ services:
       - back-network
 
   image-generator:
-    build: ./card-market-back/image-generator
+    build: ./back/card-market/image-generator
     container_name: card-market-image-generator
     networks:
       - back-network
@@ -57,7 +57,7 @@ services:
       - image-generator-lib
 
   description-generator:
-    build: ./card-market-back/description-generator
+    build: ./back/card-market/description-generator
     container_name: card-market-description-generator
     networks:
       - back-network
@@ -67,7 +67,7 @@ services:
       - prompt-generator-lib
 
   properties-generator:
-    build: ./card-market-back/properties-generator
+    build: ./back/card-market/properties-generator
     container_name: card-market-properties-generator
     networks:
       - back-network
@@ -90,7 +90,7 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ./card-market-back/ollama:/root/.ollama
+      - ./back/card-market/ollama:/root/.ollama
     networks:
       - back-network
 
