@@ -17,8 +17,5 @@ const Home = () => {
         </div>
     )
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> f3b7de3096b6fcf44cf8a4c329c5e808b2df45f7
 export default Home;
