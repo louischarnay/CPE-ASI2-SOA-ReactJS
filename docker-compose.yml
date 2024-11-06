@@ -9,15 +9,6 @@ services:
       - NODE_ENV=development
     networks:
       - public-network
-  
-  node-back:
-    build: ./back/game
-    container_name: game-back
-    ports:
-      - "4000:4000"
-    networks:
-      - public-network
-      - back-network
 
   backend-monolithic:
     build: ./back/card-market/monolithic
@@ -28,9 +19,27 @@ services:
       - public-network
       - back-network
 
+  backend-message:
+    build: ./back/message
+    container_name: message-back
+    ports:
+      - "8085:8085"
+    networks:
+      - public-network
+      - back-network
+
+  backend-game:
+    build: ./back/game
+    container_name: game-back
+    ports:
+      - "4000:4000"
+    networks:
+      - public-network
+      - back-network
+
   active-mq:
     image: rmohr/activemq
-    container_name: card-market-activemq
+    container_name: activemq
     ports:
       - "8161:8161"
       - "61613:61613"

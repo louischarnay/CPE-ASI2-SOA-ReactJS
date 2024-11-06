@@ -21,8 +21,6 @@ app.get("/", (req: Request, res: Response) => {
     }
   });
 
-  const userService = new UserService();
-
   ioServer.on('connection', (socket: Socket) => {
     console.log('a user connected');
 

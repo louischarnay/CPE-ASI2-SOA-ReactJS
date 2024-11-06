@@ -41,7 +41,7 @@ export class ChatSocket {
         }
 
         const sendHeaders = {
-          'destination': '/queue/test',
+          'destination': 'message',
           'content-type': 'application/json',
         };
 
