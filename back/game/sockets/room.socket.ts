@@ -1,13 +1,15 @@
-import { Socket } from "socket.io";
-import { CreateRoom, generateRoomId, JoinRoom, Room } from "../models/room.model";
+import { Server, Socket } from "socket.io";
+import { generateRoomId, Room, Player } from "../models/room.model";
 
-const CREATE_ROOM_EVENT = 'create-room';
+const JOIN_QUEUE_EVENT = 'join-queue';
+const JOINED_QUEUE_EVENT = 'joined-queue';
+const LEAVE_QUEUE_EVENT = 'leave-queue';
+const LEFT_QUEUE_EVENT = 'left-queue';
 const CREATED_ROOM_EVENT = 'created-room';
-const JOIN_ROOM_EVENT = 'join-room';
-const JOINED_ROOM_EVENT = 'joined-room';
 
 export class RoomSocket {
   private rooms: Room[] = [];
+  private queue: Player[] = [];
 
   private constructor() {}
 
@@ -15,41 +17,35 @@ export class RoomSocket {
     return new RoomSocket();
   }
 
-  runSocket(socket: Socket) {
-    socket.on(CREATE_ROOM_EVENT, async ({ userId }: CreateRoom) => {
-      console.log(`Room created from client ${userId}`);
+  runSocket(socket: Socket, ioServer: Server) {
+    socket.on(JOIN_QUEUE_EVENT, async (player: Player) => {
+      console.log(`Queue joined by client ${player.id}`);
 
-      const newRoom: Room = {
-        id: generateRoomId(this.rooms),
-        player1: {
-          id: userId,
-          cards: [],
-        },
-      };
-      this.rooms.push(newRoom);
-      socket.emit(CREATED_ROOM_EVENT, newRoom);
+      this.queue.push(player);
+      socket.emit(JOINED_QUEUE_EVENT);
+
+      if (this.queue.length >= 2) {
+        const player1 = this.queue.shift();
+        const player2 = this.queue.shift();
+        if (!player1 || !player2) {
+          console.error('Players not found in queue');
+          return;
+        }
+
+        const room: Room = {
+          id: generateRoomId(this.rooms),
+          player1,
+          player2,
+        };
+        this.rooms.push(room);
+        ioServer.emit(CREATED_ROOM_EVENT, room);
+      }
     });
 
-    socket.on(JOIN_ROOM_EVENT, async ({ userId, roomId }: JoinRoom) => {
-      console.log(`Room ${roomId} joined from client ${userId}`);
-
-      const room = this.rooms.find((room) => room.id === roomId);
-      if (!room) {
-        console.error(`Room with ID ${roomId} not found`);
-        return;
-      }
-
-      if (room.player2) {
-        console.error(`Room with ID ${roomId} is already full`);
-        return;
-      }
-
-      room.player2 = {
-        id: userId,
-        cards: [],
-      };
-
-      socket.emit(JOINED_ROOM_EVENT, room);
+    socket.on(LEAVE_QUEUE_EVENT, async ({ id }: { id: number }) => {
+      console.log(`Queue left by client ${id}`);
+      this.queue = this.queue.filter((player) => player.id !== id);
+      socket.emit(LEFT_QUEUE_EVENT);
     });
   }
 }

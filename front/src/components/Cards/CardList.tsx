@@ -4,12 +4,12 @@ import Card from './Card';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar, Box } from '@mui/material';
 
 interface CardListProps {
-    fetchMethod: 'all' | 'user';
     cards: CardProps[];
     setSelectedCard: (card: CardProps) => void;
+    listTitle : string;
 }
 
-const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', cards, setSelectedCard}) => {
+const CardList: React.FC<CardListProps> = ({cards, setSelectedCard, listTitle}) => {
     const [error] = useState<string | null>(null);
     const [loading, setLoading] = useState(true); // Loading state
 
@@ -39,7 +39,7 @@ const CardList: React.FC<CardListProps> = ({ fetchMethod = 'all', cards, setSele
     return (
         <TableContainer component={Paper} style={{ borderRadius: '10px' }}>
         <Typography variant="h4" align="center" style={{ marginBottom: '20px' }}>
-            Liste des Cartes
+            {listTitle}
         </Typography>
         {loading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>

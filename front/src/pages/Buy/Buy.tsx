@@ -93,7 +93,7 @@ const Buy = () => {
             <Grid container spacing={3} style={{ padding: '20px' }}>
                 {/* Left side card table */}
                 <Grid item xs={12} md={9} style={{ width: '70%' }}>
-                    <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard} />
+                    <CardList cards={cards} setSelectedCard={setSelectedCard} listTitle="Card to Buy"/>
                 </Grid>
             
                 {/* Right side card preview */}

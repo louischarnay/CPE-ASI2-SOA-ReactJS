@@ -1,4 +1,4 @@
-type Player = {
+export type Player = {
   id: number;
   cards: number[];
 };
@@ -6,16 +6,7 @@ type Player = {
 export type Room = {
   id: number;
   player1: Player;
-  player2?: Player;
-};
-
-export type CreateRoom = {
-  userId: number;
-};
-
-export type JoinRoom = {
-  userId: number;
-  roomId: number;
+  player2: Player;
 };
 
 export function generateRoomId(rooms: Room[]): number {

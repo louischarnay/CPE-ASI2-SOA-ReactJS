@@ -64,6 +64,10 @@ const GamePrep = () => {
         setOpenBackdrop(true);
     }
 
+    const handleCancelJoin = () => {
+        setOpenBackdrop(false);
+    }
+
 
     /*const updateData = async (userId: number) => {
         // Update between stock and game inventory
@@ -85,8 +89,8 @@ const GamePrep = () => {
     return (
         <div>
         <div style={{ display: 'flex', gap: "20px"}}>
-            <CardList fetchMethod="user" cards={tempUserCards} setSelectedCard={handleAddClick} />
-            <CardList fetchMethod="user" cards={gameCards} setSelectedCard={handleRemoveClick}/>
+            <CardList cards={tempUserCards} setSelectedCard={handleAddClick} listTitle="My Cards"/>
+            <CardList cards={gameCards} setSelectedCard={handleRemoveClick} listTitle="Game Cards"/>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
@@ -116,7 +120,7 @@ const GamePrep = () => {
             <div className="backdrop-container">
                     <CircularProgress color="inherit" />
                     <p>Joining game...</p>
-                    <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleJoinGame}>
+                    <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleCancelJoin}>
                         Cancel
                     </Button>
             </div>
