@@ -9,10 +9,14 @@ const JOINED_ROOM_EVENT = 'joined-room';
 export class RoomSocket {
   private rooms: Room[] = [];
 
-  constructor(private readonly socket: Socket) { }
+  private constructor() {}
 
-  init() {
-    this.socket.on(CREATE_ROOM_EVENT, async ({ userId }: CreateRoom) => {
+  static init(): RoomSocket {
+    return new RoomSocket();
+  }
+
+  runSocket(socket: Socket) {
+    socket.on(CREATE_ROOM_EVENT, async ({ userId }: CreateRoom) => {
       console.log(`Room created from client ${userId}`);
 
       const newRoom: Room = {
@@ -23,10 +27,10 @@ export class RoomSocket {
         },
       };
       this.rooms.push(newRoom);
-      this.socket.emit(CREATED_ROOM_EVENT, newRoom);
+      socket.emit(CREATED_ROOM_EVENT, newRoom);
     });
 
-    this.socket.on(JOIN_ROOM_EVENT, async ({ userId, roomId }: JoinRoom) => {
+    socket.on(JOIN_ROOM_EVENT, async ({ userId, roomId }: JoinRoom) => {
       console.log(`Room ${roomId} joined from client ${userId}`);
 
       const room = this.rooms.find((room) => room.id === roomId);
@@ -45,7 +49,7 @@ export class RoomSocket {
         cards: [],
       };
 
-      this.socket.emit(JOINED_ROOM_EVENT, room);
+      socket.emit(JOINED_ROOM_EVENT, room);
     });
   }
 }

@@ -1,7 +1,5 @@
 import { User } from "../models/user.model";
 
-
-
 export class UserService {
     private MONOLITHIC_URL = "http://backend-monolithic:8080";
 

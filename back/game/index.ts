@@ -16,16 +16,18 @@ const ioServer = new Server(server, {
   }
 });
 
-ioServer.on('connection', (socket: Socket) => {
-  console.log('a user connected');
+(async () => {
+  const chatSocket = await ChatSocket.init();
+  const roomSocket = RoomSocket.init();
 
-  const chatSocket = new ChatSocket(socket);
-  const roomSocket = new RoomSocket(socket);
+  ioServer.on('connection', (socket: Socket) => {
+    console.log('a user connected');
 
-  chatSocket.init();
-  roomSocket.init();
-});
+    chatSocket.runSocket(socket);
+    roomSocket.runSocket(socket);
+  });
 
-server.listen(PORT, () => {
-  console.log(`[server]: Server is running at http://localhost:${PORT}`);
-});
+  server.listen(PORT, () => {
+    console.log(`[server]: Server is running at http://localhost:${PORT}`);
+  });
+})();

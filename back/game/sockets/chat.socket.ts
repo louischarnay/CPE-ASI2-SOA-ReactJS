@@ -9,15 +9,16 @@ const MESSAGE_SEND_EVENT = 'message-send';
 const MESSAGE_RECEIVE_EVENT = 'message-receive';
 
 export class ChatSocket {
-  private readonly userService: UserService;
+  private constructor(private readonly userService: UserService) {}
 
-  constructor(private readonly socket: Socket) {
-    this.userService = new UserService();
-    this.userService.fetchAllUsers();
+  static async init(): Promise<ChatSocket> {
+    const userService = new UserService();
+    await userService.fetchAllUsers();
+    return new ChatSocket(userService);
   }
 
-  init() {
-    this.socket.on(MESSAGE_SEND_EVENT, async (data: MessageSentByClient) => {
+  runSocket(socket: Socket) {
+    socket.on(MESSAGE_SEND_EVENT, async (data: MessageSentByClient) => {
       console.log(`Message received from client ${data.userId}: ${data.content}`);
 
       const userName = await this.userService.getUserName(data.userId);
@@ -50,7 +51,7 @@ export class ChatSocket {
         date: new Date(),
       };
 
-      this.socket.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+      socket.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
     });
   }
 }
