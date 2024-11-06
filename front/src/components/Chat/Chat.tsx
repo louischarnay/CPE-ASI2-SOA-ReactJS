@@ -1,52 +1,36 @@
 import { Button, TextField, Select, MenuItem, FormControl, InputLabel, Box } from "@mui/material";
 import Message from "../../models/message.model";
 import MessageComponent from "../MessageComponent/MessageComponent";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { socket } from "../../socket/socket";
 import User from "../../models/user.model";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserService } from "../../services/user.service";
 import "./Chat.css"; // Import du fichier CSS
 
-type ChatProps = {
-    typeChat: string;
-};
+type ChatProps = { typeChat: string; };
 
 const Chat = ({ typeChat }: ChatProps) => {
     const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([] as Message[]);
     const [targetList, setTargetList] = useState([] as User[]);
     const [selectedTarget, setSelectedTarget] = useState({} as User);
-    const [isConnected, setIsConnected] = useState(socket.connected);
 
-    const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        getTargets();
+    const messages: Message[] = useSelector((state: any) => state.messageReducer.messages);
+    const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);   
 
-        function onConnect() {
-            setIsConnected(true);
-        }
-
-        function onDisconnect() {
-            setIsConnected(false);
-        }
-
-        function onMessageReceived(value: Message) {
-            console.log(value);
-            setMessages((prevMessages) => [...prevMessages, value]);
-        }
-
-        socket.on("connect", onConnect);
-        socket.on("disconnect", onDisconnect);
-        socket.on("message-receive", onMessageReceived);
-
-        return () => {
-            socket.off("connect", onConnect);
-            socket.off("disconnect", onDisconnect);
-            socket.off("message-receive", onMessageReceived);
-        };
-    }, []);
+    const updateMessages = useCallback((newMessage: Message) => {
+        dispatch({
+            type: 'UPDATE_MESSAGES',
+            payload: newMessage, // Envoie seulement le nouveau message
+        });
+    }, [dispatch]);
+    
+    
+    const onMessageReceived = useCallback((value: Message) => {
+        updateMessages(value);
+    }, [updateMessages]);
 
     const getTargets = async () => {
         const targets: User[] = await UserService.getAllUsers();
@@ -61,6 +45,17 @@ const Chat = ({ typeChat }: ChatProps) => {
         }
         setMessage("");
     };
+
+    useEffect(() => {
+        getTargets();
+        socket.emit('register', currentUser.id);
+        
+        socket.on("message-receive", onMessageReceived);
+    
+        return () => {
+            socket.off("message-receive", onMessageReceived);
+        };
+    }, [currentUser.id, onMessageReceived]); 
 
     return (
         <>

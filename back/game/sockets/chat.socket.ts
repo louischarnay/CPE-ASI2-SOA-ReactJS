@@ -9,7 +9,7 @@ const MESSAGE_SEND_EVENT = 'message-send';
 const MESSAGE_RECEIVE_EVENT = 'message-receive';
 
 export class ChatSocket {
-  private constructor(private readonly userService: UserService) {}
+  private constructor(private readonly userService: UserService) { }
 
   static async init(): Promise<ChatSocket> {
     const userService = new UserService();
@@ -51,19 +51,19 @@ export class ChatSocket {
       };
 
       if (!data.targetId) {
+        console.log("all", MESSAGE_RECEIVE_EVENT, messageReceived)
         ioServer.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
         return;
       }
 
       const senderSocket = userSockets.get(data.userId);
+      console.log(senderSocket)
       const targetSocket = userSockets.get(data.targetId);
+      console.log(targetSocket)
 
-      if (senderSocket) {
-        senderSocket.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
-      }
-      if (targetSocket) {
-        targetSocket.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
-      }
+      senderSocket?.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+      targetSocket?.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+
     });
   }
 }
