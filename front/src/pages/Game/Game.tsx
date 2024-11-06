@@ -1,6 +1,9 @@
+import ChatMenu from "../../components/Chat/ChatMenu";
+
 const Game = () => {
+    
     return (
-        <div></div>
+        <ChatMenu/>
     )
 }
 

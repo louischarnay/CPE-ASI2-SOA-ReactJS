@@ -1,7 +1,7 @@
 import { Client } from "stompit";
 import { UserService } from "../services/user.service";
 import { MessageSentByClient } from "../models/message.model";
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import stompit from "stompit";
 import { ESB_CONFIG } from "./esb.config";
 
@@ -17,7 +17,7 @@ export class ChatSocket {
     return new ChatSocket(userService);
   }
 
-  runSocket(socket: Socket) {
+  runSocket(socket: Socket, ioServer: Server) {
     socket.on(MESSAGE_SEND_EVENT, async (data: MessageSentByClient) => {
       console.log(`Message received from client ${data.userId}: ${data.content}`);
 
@@ -51,7 +51,8 @@ export class ChatSocket {
         date: new Date(),
       };
 
-      socket.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+      console.log(MESSAGE_RECEIVE_EVENT, messageReceived)
+      ioServer.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
     });
   }
 }

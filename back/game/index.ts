@@ -23,7 +23,7 @@ const ioServer = new Server(server, {
   ioServer.on('connection', (socket: Socket) => {
     console.log('a user connected');
 
-    chatSocket.runSocket(socket);
+    chatSocket.runSocket(socket, ioServer);
     roomSocket.runSocket(socket);
   });
 

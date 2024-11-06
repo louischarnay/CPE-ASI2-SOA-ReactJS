@@ -47,7 +47,7 @@ const UserForm = () => {
         e.preventDefault();
 
         // Validate password and terms acceptance
-        if ( !formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.rePassword ) {
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.rePassword) {
             setMessageError('All fields are required');
             setOpenError(true)
             return;
@@ -82,112 +82,114 @@ const UserForm = () => {
                 type: 'UPDATE_CURRENT_USER',
                 payload: response
             })
-            const userCards : CardProps[] = await CardService.getUserCards(response.id);
+            const userCards: CardProps[] = await CardService.getUserCards(response.id);
             dispatch({
                 type: 'UPDATE_USER_CARDS',
                 payload: userCards
             })
-            const buyCards : CardProps[] = await CardService.getAllCards();
+            const buyCards: CardProps[] = await CardService.getAllCards();
             dispatch({
                 type: 'UPDATE_BUY_CARDS',
                 payload: buyCards
             })
             navigate("/")
         } catch (err) {
-            alert(err)
+            console.log(err)
+            setMessageError('An error occured');
+            setOpenError(true)
         }
     };
 
     return (
         <>
-        <Box 
-            component="form" 
-            onSubmit={handleSubmit}
-            sx={{
-                maxWidth: 400,
-                margin: '50px auto',
-                padding: 4,
-                backgroundColor: '#f9f9f9',
-                borderRadius: 2,
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-            }}
-            >
-            <Typography variant="h5" gutterBottom>
-                Register
-            </Typography>
-            <TextField
-                label="First Name"
-                variant="outlined"
-                fullWidth
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                />
-            <TextField
-                label="Last Name"
-                variant="outlined"
-                fullWidth
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                />
-            <TextField
-                label="Email"
-                variant="outlined"
-                type="email"
-                fullWidth
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                />
-            <TextField
-                label="Password"
-                variant="outlined"
-                type="password"
-                fullWidth
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                />
-            <TextField
-                label="Re-Password"
-                variant="outlined"
-                type="password"
-                fullWidth
-                name="rePassword"
-                value={formData.rePassword}
-                onChange={handleChange}
-                />
-            <FormControlLabel
-                control={
-                    <Checkbox
-                    name="acceptedTerms"
-                    checked={formData.acceptedTerms}
-                    onChange={handleChange}
-                    />
-                }
-                label="I agree to the Terms and Conditions"
-                />
-            <Button
-                type="submit"
-                variant="contained"
-                fullWidth
+            <Box
+                component="form"
+                onSubmit={handleSubmit}
                 sx={{
-                    padding: '10px 0',
-                    backgroundColor: '#4CAF50',
-                    color: '#fff',
-                    '&:hover': {
-                        backgroundColor: '#45a049',
-                    },
+                    maxWidth: 400,
+                    margin: '50px auto',
+                    padding: 4,
+                    backgroundColor: '#f9f9f9',
+                    borderRadius: 2,
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
                 }}
+            >
+                <Typography variant="h5" gutterBottom>
+                    Register
+                </Typography>
+                <TextField
+                    label="First Name"
+                    variant="outlined"
+                    fullWidth
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                />
+                <TextField
+                    label="Last Name"
+                    variant="outlined"
+                    fullWidth
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                />
+                <TextField
+                    label="Email"
+                    variant="outlined"
+                    type="email"
+                    fullWidth
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                />
+                <TextField
+                    label="Password"
+                    variant="outlined"
+                    type="password"
+                    fullWidth
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                />
+                <TextField
+                    label="Re-Password"
+                    variant="outlined"
+                    type="password"
+                    fullWidth
+                    name="rePassword"
+                    value={formData.rePassword}
+                    onChange={handleChange}
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            name="acceptedTerms"
+                            checked={formData.acceptedTerms}
+                            onChange={handleChange}
+                        />
+                    }
+                    label="I agree to the Terms and Conditions"
+                />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    sx={{
+                        padding: '10px 0',
+                        backgroundColor: '#4CAF50',
+                        color: '#fff',
+                        '&:hover': {
+                            backgroundColor: '#45a049',
+                        },
+                    }}
                 >
-                Submit
-            </Button>
-        </Box>
-        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+                    Submit
+                </Button>
+            </Box>
+            <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
                 <Alert
                     onClose={handleCloseError}
                     severity="error"
@@ -197,7 +199,7 @@ const UserForm = () => {
                     {messageError}
                 </Alert>
             </Snackbar>
-                </>
+        </>
     );
 };
 

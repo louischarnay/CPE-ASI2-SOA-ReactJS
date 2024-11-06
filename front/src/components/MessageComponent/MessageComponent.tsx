@@ -7,8 +7,9 @@ type MessageProps = {
 const MessageComponent = ({ message }: MessageProps) => {
 
     const formatTime = (date: Date) => {
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const myDate = new Date(date)
+        const hours = String(myDate.getHours()).padStart(2, '0');
+        const minutes = String(myDate.getMinutes()).padStart(2, '0');
         
         return `${hours}:${minutes}`;
       }

@@ -23,6 +23,7 @@ export class UserService {
             }
         
             const users: User[] = await response.json();
+            console.log(users)
             this.allUsers = new Map(users.map((user) => [user.id, user.surName]));
         } catch (error) {
             console.error("Failed to fetch users:", error);
@@ -51,6 +52,8 @@ export class UserService {
         
             const user: User = await response.json();
             this.allUsers.set(user.id, user.surName);
+            console.log(user)
+
             return user;
         } catch (error) {
             console.error(`Failed to fetch user ${id}: ${error}`);

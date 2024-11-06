@@ -13,6 +13,7 @@ const Home = () => {
             <HomeItem icon={<ShoppingCartIcon/>} description="Buy" redirection="/buy/"/>
             <HomeItem icon={<ScienceIcon/>} description="Create" redirection="/create/"/>
             <HomeItem icon={<ScienceIcon/>} description="Game" redirection="/game-prep/"/>
+            <HomeItem icon={<ScienceIcon/>} description="Game (test)" redirection="/game/"/>
         </Stack>
         </div>
     )
