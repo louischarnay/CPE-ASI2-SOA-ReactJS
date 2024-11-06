@@ -1,0 +1,19 @@
+.button-container {
+    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.backdrop-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 36px;
+    background-color: rgba(0, 0, 0, .3);
+    border-radius: 9px;
+}
+
+.backdrop-cancelButton{
+    margin-top: 15px !important;
+}

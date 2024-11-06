@@ -7,12 +7,18 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import CardProps from "../../models/CardProps";
 import Slide from '@mui/material/Slide';
+import Button from '@mui/material/Button';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import "./GamePrep.css";
+import { Card } from "@mui/material";
 
 const GamePrep = () => {
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
     const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
     const [gameCards, setGameCards] = useState<CardProps[]>([]);
     const [open, setOpen] = useState(false);
+    const [openBackdrop, setOpenBackdrop] = useState(false);
     //const dispatch = useDispatch();
 
     useEffect(() => {
@@ -46,6 +52,18 @@ const GamePrep = () => {
         setOpen(false);
     };
 
+    const handleJoinGame = () => {
+        // Join game
+
+        // Check card number
+        if(gameCards.length !== 4) {
+            setOpen(true);
+            return;
+        }
+
+        setOpenBackdrop(true);
+    }
+
 
     /*const updateData = async (userId: number) => {
         // Update between stock and game inventory
@@ -65,6 +83,7 @@ const GamePrep = () => {
     );
 
     return (
+        <div>
         <div style={{ display: 'flex', gap: "20px"}}>
             <CardList fetchMethod="user" cards={tempUserCards} setSelectedCard={handleAddClick} />
             <CardList fetchMethod="user" cards={gameCards} setSelectedCard={handleRemoveClick}/>
@@ -84,6 +103,25 @@ const GamePrep = () => {
                 You have reach the maximum amount of cards
             </Alert>
             </Snackbar>
+        </div>
+        <div className="button-container">
+            <Button variant="contained" color="success" onClick={handleJoinGame}>
+                Join Game
+            </Button>
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                open={openBackdrop}
+                onClick={handleClose}
+            >
+            <div className="backdrop-container">
+                    <CircularProgress color="inherit" />
+                    <p>Joining game...</p>
+                    <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleJoinGame}>
+                        Cancel
+                    </Button>
+            </div>
+            </Backdrop>
+        </div>
         </div>
     );
 }
