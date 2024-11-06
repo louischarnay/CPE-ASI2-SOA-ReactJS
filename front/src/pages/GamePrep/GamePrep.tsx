@@ -85,8 +85,8 @@ const GamePrep = () => {
     return (
         <div>
         <div style={{ display: 'flex', gap: "20px"}}>
-            <CardList fetchMethod="user" cards={tempUserCards} setSelectedCard={handleAddClick} />
-            <CardList fetchMethod="user" cards={gameCards} setSelectedCard={handleRemoveClick}/>
+            <CardList cards={tempUserCards} setSelectedCard={handleAddClick} listTitle="My Cards"/>
+            <CardList cards={gameCards} setSelectedCard={handleRemoveClick} listTitle="Game Cards"/>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}

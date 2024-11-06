@@ -83,7 +83,7 @@ const Sell = () => {
             <Grid container spacing={3} style={{ padding: '20px' }}>
                 {/* Left side card table */}
                 <Grid item xs={12} md={9} style={{ width: '70%' }}>
-                    <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard} />
+                    <CardList cards={cards} setSelectedCard={setSelectedCard} listTitle="My Cards"/>
                 </Grid>
             
                 {/* Right side card preview */}
