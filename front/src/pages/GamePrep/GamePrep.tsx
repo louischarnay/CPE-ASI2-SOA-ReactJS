@@ -11,7 +11,7 @@ const GamePrep = () => {
     const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
     const [gameCards, setGameCards] = useState<CardProps[]>([]);
     const [open, setOpen] = useState(false);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     useEffect(() => {
         setTempUserCards([]);
@@ -45,9 +45,9 @@ const GamePrep = () => {
     };
 
 
-    const updateData = async (userId: number) => {
+    /*const updateData = async (userId: number) => {
         // Update between stock and game inventory
-    }
+    }*/
 
     const action = (
         <Fragment>
