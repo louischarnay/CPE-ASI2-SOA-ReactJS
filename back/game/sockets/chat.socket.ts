@@ -21,11 +21,11 @@ export class ChatSocket {
     socket.on(MESSAGE_SEND_EVENT, async (data: MessageSentByClient) => {
       console.log(`Message received from client ${data.userId}: ${data.content}`);
 
-      const userName = await this.userService.getUserName(data.userId);
-      if (!userName) {
-        console.error(`User with ID ${data.userId} not found`);
-        return;
-      }
+      // const userName = await this.userService.getUserName(data.userId);
+      // if (!userName) {
+      //   console.error(`User with ID ${data.userId} not found`);
+      //   return;
+      // }
 
       stompit.connect(ESB_CONFIG, (error: Error | null, client: Client) => {
 
@@ -46,7 +46,7 @@ export class ChatSocket {
 
       const messageReceived = {
         userId: data.userId,
-        userName,
+        // userName,
         content: data.content,
         date: new Date(),
       };

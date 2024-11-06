@@ -46,8 +46,6 @@ services:
       - "61616:61616"
     networks:
       - back-network
-    # volumes:
-    #   - ./docker/activemq.xml:/opt/activemq/conf/activemq.xml
 
   card-generator:
     build: ./back/card-market/card-generator

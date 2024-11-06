@@ -18,9 +18,7 @@ public class ActiveMQListenerRoute extends RouteBuilder {
                 .log("Received message from message topic: ${body}")
                 .process(exchange -> {
                     String message = exchange.getIn().getBody(String.class);
-                    Long id = exchange.getIn().getHeader("id", Long.class);  // Retrieve the message ID
-                    System.out.println("Processing image message for ID: " + id);
-                    messageService.processMessage(id, message);  // Process the image message
+                    messageService.processMessage(message);  // Process the image message
                 });
     }
 }
