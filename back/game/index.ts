@@ -1,34 +1,33 @@
 import express, { Express, Request, Response } from "express";
-import stompit, { Client } from "stompit";
 import { Server, Socket } from 'socket.io';
 import { createServer } from 'http';
-import { MessageSentByClient } from "./models/message.model";
-import { UserService } from "./services/user.service";
 import { ChatSocket } from "./sockets/chat.socket";
+import { RoomSocket } from "./sockets/room.socket";
 
 const app: Express = express();
 const PORT = 4000;
 
 const server = createServer(app);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Backend Node");
+const ioServer = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
-  const ioServer = new Server(server, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
-    }
-  });
+(async () => {
+  const chatSocket = await ChatSocket.init();
+  const roomSocket = RoomSocket.init();
 
   ioServer.on('connection', (socket: Socket) => {
     console.log('a user connected');
 
-    const chatSocket = new ChatSocket(socket);
-    chatSocket.init();
+    chatSocket.runSocket(socket);
+    roomSocket.runSocket(socket);
   });
-});
 
-server.listen(PORT, () => {
-  console.log(`[server]: Server is running at http://localhost:${PORT}`);
-});
+  server.listen(PORT, () => {
+    console.log(`[server]: Server is running at http://localhost:${PORT}`);
+  });
+})();

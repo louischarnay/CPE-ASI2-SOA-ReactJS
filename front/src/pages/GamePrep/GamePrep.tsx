@@ -1,23 +1,39 @@
 import { useDispatch, useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
-import User from "../../models/user.model";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { UserService } from "../../services/user.service";
-import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
+import Slide from '@mui/material/Slide';
 
 const GamePrep = () => {
-    const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
-    const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // State for storing selected card
+    const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
+    const [gameCards, setGameCards] = useState<CardProps[]>([]);
     const [open, setOpen] = useState(false);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
-    const handleCLick = async (cardId: any) => {
-        //TODO : Add to user set
+    useEffect(() => {
+        setTempUserCards([]);
+        setGameCards([]);
+
+        setTempUserCards(cards);
+    }, [cards]);
+
+    const handleAddClick = (Card: CardProps) => {
+        if(gameCards.length >= 4) {
+            setOpen(true);
+            return;
+        }
+        setTempUserCards(tempUserCards.filter(card => card.id !== Card.id));
+        setGameCards(gameCards.concat(Card));
+    }
+
+    const handleRemoveClick = (Card: CardProps) => {
+        setGameCards(gameCards.filter(card => card.id !== Card.id));
+        setTempUserCards(tempUserCards.concat(Card));
     }
 
     const handleClose = (
@@ -31,10 +47,9 @@ const GamePrep = () => {
     };
 
 
-    const updateData = async (userId: number) => {
+    /*const updateData = async (userId: number) => {
         // Update between stock and game inventory
-
-    }
+    }*/
 
     const action = (
         <Fragment>
@@ -50,16 +65,25 @@ const GamePrep = () => {
     );
 
     return (
-        <div style={{ display: 'flex'}}>
-            <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard} />
-            <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard}/>
+        <div style={{ display: 'flex', gap: "20px"}}>
+            <CardList fetchMethod="user" cards={tempUserCards} setSelectedCard={handleAddClick} />
+            <CardList fetchMethod="user" cards={gameCards} setSelectedCard={handleRemoveClick}/>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
-                message="Your card is selected"
+                message="You have reach the maximum amount of cards"
+                TransitionComponent={Slide}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
                 onClose={handleClose}
                 action={action}
-            />
+            >
+            <Alert severity="error">
+                You have reach the maximum amount of cards
+            </Alert>
+            </Snackbar>
         </div>
     );
 }

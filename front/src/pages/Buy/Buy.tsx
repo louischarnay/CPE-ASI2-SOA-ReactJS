@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import CardList from "../../components/Cards/CardList";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import User from "../../models/user.model";
@@ -9,7 +9,10 @@ import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
 import Alert from '@mui/material/Alert';
 import CardPreview from "../../components/Cards/CardPreview";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Grid, Box } from '@mui/material';
+import { Typography, Grid, Box } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
 
 const Buy = () => {
     const [open, setOpen] = useState(false);
@@ -71,6 +74,19 @@ const Buy = () => {
             payload: cards
         })
     }
+
+    const action = (
+        <Fragment>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </Fragment>
+    );
 
     return (
         <div>
@@ -137,7 +153,13 @@ const Buy = () => {
                 open={open}
                 autoHideDuration={6000}
                 message="You just bought a card"
+                TransitionComponent={Slide}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
                 onClose={handleClose}
+                action={action}
             />
             <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
                 <Alert
