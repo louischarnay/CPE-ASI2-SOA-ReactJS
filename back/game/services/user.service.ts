@@ -1,7 +1,7 @@
 import { User } from "../models/user.model";
 
 export class UserService {
-    private MONOLITHIC_URL = "http://backend-monolithic:8080";
+    private MONOLITHIC_URL = "http://card-market-back-monolithic:8080/api";
 
     private allUsers = new Map<number, string>();
 
@@ -15,6 +15,8 @@ export class UserService {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
+
+            console.log(response)
         
             if (!response.ok) {
                 throw new Error(`Error fetching users: ${response.statusText}`);
@@ -40,6 +42,8 @@ export class UserService {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
+
+            console.log(response)
         
             if (!response.ok) {
                 throw new Error(`Error fetching user ${id}: ${response.statusText}`);
