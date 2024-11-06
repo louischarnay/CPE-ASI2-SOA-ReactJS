@@ -10,23 +10,50 @@ import Slide from '@mui/material/Slide';
 import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { socket } from "../../socket/socket";
+import User from "../../models/user.model";
 import "./GamePrep.css";
-import { Card } from "@mui/material";
 
 const GamePrep = () => {
+    const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
     const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
     const [gameCards, setGameCards] = useState<CardProps[]>([]);
     const [open, setOpen] = useState(false);
     const [openBackdrop, setOpenBackdrop] = useState(false);
+    const [isConnected, setIsConnected] = useState(socket.connected);
     //const dispatch = useDispatch();
 
+    const [loadingTextContent, setLoadingTextContent] = useState<string>("Joining Queue...");
+
     useEffect(() => {
+        // Setup cards lists
         setTempUserCards([]);
         setGameCards([]);
-
         setTempUserCards(cards);
-    }, [cards]);
+
+        // Setup socket
+        function onConnect() {
+            setIsConnected(true);
+        }
+
+        function onDisconnect() {
+            setIsConnected(false);
+        }
+
+        function onQueueJoined() {
+            setLoadingTextContent("Waiting for other players...");
+        }
+
+        function onQueueLeft() {
+            setOpen(true)
+        }
+
+        socket.on("connect", onConnect);
+        socket.on("disconnect", onDisconnect);
+        socket.on("joined-queue", onQueueJoined);
+        socket.on("left-queue", onQueueLeft);
+    }, []);
 
     const handleAddClick = (Card: CardProps) => {
         if(gameCards.length >= 4) {
@@ -54,7 +81,6 @@ const GamePrep = () => {
 
     const handleJoinGame = () => {
         // Join game
-
         // Check card number
         if(gameCards.length !== 4) {
             setOpen(true);
@@ -62,10 +88,12 @@ const GamePrep = () => {
         }
 
         setOpenBackdrop(true);
+        socket.emit("join-queue", { player: currentUser });
     }
 
     const handleCancelJoin = () => {
         setOpenBackdrop(false);
+        socket.emit("leave-queue", { id: currentUser.id });
     }
 
 
@@ -119,7 +147,7 @@ const GamePrep = () => {
             >
             <div className="backdrop-container">
                     <CircularProgress color="inherit" />
-                    <p>Joining game...</p>
+                    <p>{loadingTextContent}</p>
                     <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleCancelJoin}>
                         Cancel
                     </Button>
