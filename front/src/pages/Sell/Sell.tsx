@@ -11,6 +11,7 @@ import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
 import CardPreview from "../../components/Cards/CardPreview";
 import { Typography, Grid, Box } from '@mui/material';
+import Slide from '@mui/material/Slide';
 
 const Sell = () => {
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
@@ -143,6 +144,11 @@ const Sell = () => {
                 autoHideDuration={6000}
                 message="You just sold a card"
                 onClose={handleClose}
+                TransitionComponent={Slide}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
                 action={action}
             />
         </div>

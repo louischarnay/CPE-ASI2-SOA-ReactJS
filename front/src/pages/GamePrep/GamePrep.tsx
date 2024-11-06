@@ -2,9 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
 import { useState, Fragment, useEffect } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import CardProps from "../../models/CardProps";
+import Slide from '@mui/material/Slide';
 
 const GamePrep = () => {
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
@@ -70,9 +72,18 @@ const GamePrep = () => {
                 open={open}
                 autoHideDuration={6000}
                 message="You have reach the maximum amount of cards"
+                TransitionComponent={Slide}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
                 onClose={handleClose}
                 action={action}
-            />
+            >
+            <Alert severity="error">
+                You have reach the maximum amount of cards
+            </Alert>
+            </Snackbar>
         </div>
     );
 }

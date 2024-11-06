@@ -12,6 +12,7 @@ import CardPreview from "../../components/Cards/CardPreview";
 import { Typography, Grid, Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
 
 const Buy = () => {
     const [open, setOpen] = useState(false);
@@ -152,6 +153,11 @@ const Buy = () => {
                 open={open}
                 autoHideDuration={6000}
                 message="You just bought a card"
+                TransitionComponent={Slide}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
                 onClose={handleClose}
                 action={action}
             />
