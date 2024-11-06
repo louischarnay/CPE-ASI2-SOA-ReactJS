@@ -64,6 +64,10 @@ const GamePrep = () => {
         setOpenBackdrop(true);
     }
 
+    const handleCancelJoin = () => {
+        setOpenBackdrop(false);
+    }
+
 
     /*const updateData = async (userId: number) => {
         // Update between stock and game inventory
@@ -116,7 +120,7 @@ const GamePrep = () => {
             <div className="backdrop-container">
                     <CircularProgress color="inherit" />
                     <p>Joining game...</p>
-                    <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleJoinGame}>
+                    <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleCancelJoin}>
                         Cancel
                     </Button>
             </div>
