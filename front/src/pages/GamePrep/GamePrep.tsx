@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import "./GamePrep.css";
+import { Card } from "@mui/material";
 
 const GamePrep = () => {
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
@@ -59,7 +60,7 @@ const GamePrep = () => {
             setOpen(true);
             return;
         }
-        
+
         setOpenBackdrop(true);
     }
 
@@ -112,7 +113,13 @@ const GamePrep = () => {
                 open={openBackdrop}
                 onClick={handleClose}
             >
-                <CircularProgress color="inherit" />
+            <div className="backdrop-container">
+                    <CircularProgress color="inherit" />
+                    <p>Joining game...</p>
+                    <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleJoinGame}>
+                        Cancel
+                    </Button>
+            </div>
             </Backdrop>
         </div>
         </div>
