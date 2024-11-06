@@ -143,6 +143,7 @@ const Sell = () => {
                 autoHideDuration={6000}
                 message="You just sold a card"
                 onClose={handleClose}
+                action={action}
             />
         </div>
     );
