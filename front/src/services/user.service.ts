@@ -5,4 +5,8 @@ export class UserService {
     static async getUserById(id: number) : Promise<User> {
         return apiFetch(`/user/${id}`, 'GET')
     }
+
+    static async getAllUsers() : Promise<User[]> {
+        return apiFetch('/users', 'GET')
+    }
 }

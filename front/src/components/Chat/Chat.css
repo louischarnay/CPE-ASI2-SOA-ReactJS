@@ -1,0 +1,25 @@
+/* Chat.css */
+
+/* Conteneur pour l'affichage des messages */
+.messages-container {
+    padding-bottom: 80px; /* Pour éviter que les messages soient masqués par la barre de saisie */
+}
+
+/* Barre de saisie fixe en bas de l'écran */
+.input-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 50vw;
+    display: flex;
+    gap: 16px; /* Espacement entre le champ de texte et le bouton */
+    padding: 16px;
+    background-color: white;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Champ de texte et bouton avec hauteur uniforme */
+.input-field, .send-button {
+    height: 48px;
+}
