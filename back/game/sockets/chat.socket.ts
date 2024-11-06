@@ -5,7 +5,7 @@ import { Socket } from "socket.io";
 import stompit from "stompit";
 
 const ESB_CONFIG = {
-  host: 'localhost',
+  host: 'active-mq',
   port: 61613,
   connectHeaders: {
     host: '/'
@@ -41,7 +41,7 @@ export class ChatSocket {
         }
 
         const sendHeaders = {
-          'destination': 'message',
+          'destination': '/topic/message',
           'content-type': 'application/json',
         };
 
