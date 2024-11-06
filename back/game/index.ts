@@ -11,24 +11,19 @@ const PORT = 4000;
 
 const server = createServer(app);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Backend Node");
+const ioServer = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+})
+const userService = new UserService();
 
-  const ioServer = new Server(server, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
-    }
-  });
+ioServer.on('connection', (socket: Socket) => {
+  console.log('a user connected');
 
-  const userService = new UserService();
-
-  ioServer.on('connection', (socket: Socket) => {
-    console.log('a user connected');
-
-    const chatSocket = new ChatSocket(socket);
-    chatSocket.init();
-  });
+  const chatSocket = new ChatSocket(socket);
+  chatSocket.init();
 });
 
 server.listen(PORT, () => {
