@@ -17,18 +17,17 @@ export class ChatSocket {
     return new ChatSocket(userService);
   }
 
-  runSocket(socket: Socket, ioServer: Server) {
+  runSocket(socket: Socket, ioServer: Server, userSockets: Map<number, Socket>) {
     socket.on(MESSAGE_SEND_EVENT, async (data: MessageSentByClient) => {
       console.log(`Message received from client ${data.userId}: ${data.content}`);
 
-      // const userName = await this.userService.getUserName(data.userId);
-      // if (!userName) {
-      //   console.error(`User with ID ${data.userId} not found`);
-      //   return;
-      // }
+      const userName = await this.userService.getUserName(data.userId);
+      if (!userName) {
+        console.error(`User with ID ${data.userId} not found`);
+        return;
+      }
 
       stompit.connect(ESB_CONFIG, (error: Error | null, client: Client) => {
-
         if (error) {
           console.error('Connection error:', error.message);
           return;
@@ -46,13 +45,25 @@ export class ChatSocket {
 
       const messageReceived = {
         userId: data.userId,
-        // userName,
+        userName,
         content: data.content,
         date: new Date(),
       };
 
-      console.log(MESSAGE_RECEIVE_EVENT, messageReceived)
-      ioServer.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+      if (!data.targetId) {
+        ioServer.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+        return;
+      }
+
+      const senderSocket = userSockets.get(data.userId);
+      const targetSocket = userSockets.get(data.targetId);
+
+      if (senderSocket) {
+        senderSocket.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+      }
+      if (targetSocket) {
+        targetSocket.emit(MESSAGE_RECEIVE_EVENT, messageReceived);
+      }
     });
   }
 }

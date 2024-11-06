@@ -16,15 +16,25 @@ const ioServer = new Server(server, {
   }
 });
 
+const userSockets = new Map<number, Socket>();
+
 (async () => {
   const chatSocket = await ChatSocket.init();
   const roomSocket = RoomSocket.init();
 
   ioServer.on('connection', (socket: Socket) => {
-    console.log('a user connected');
+    socket.on('register', (userId: number) => {
+      userSockets.set(userId, socket);
+      console.log(`User ${userId} connected`);
 
-    chatSocket.runSocket(socket, ioServer);
-    roomSocket.runSocket(socket);
+      chatSocket.runSocket(socket, ioServer, userSockets);
+      roomSocket.runSocket(socket, ioServer);
+      
+      socket.on('disconnect', () => {
+        userSockets.delete(userId);
+        console.log(`User ${userId} disconnected`);
+      });
+    });
   });
 
   server.listen(PORT, () => {
