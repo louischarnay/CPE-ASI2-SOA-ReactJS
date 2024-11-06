@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
 import User from "../../models/user.model";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,12 +12,24 @@ import CardProps from "../../models/CardProps";
 const GamePrep = () => {
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser)
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
+    const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
+    const [gameCards, setGameCards] = useState<CardProps[]>([]);
     const [selectedCard, setSelectedCard] = useState<CardProps | null>(null); // State for storing selected card
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
-    const handleCLick = async (cardId: any) => {
-        //TODO : Add to user set
+    useEffect(() => {
+        setTempUserCards(cards);
+    }, [cards]);
+
+    const handleAddClick = (Card: CardProps) => {
+        setTempUserCards(tempUserCards.filter(card => card.id !== Card.id));
+        setGameCards(gameCards.concat(Card));
+    }
+
+    const handleRemoveClick = (Card: CardProps) => {
+        setGameCards(gameCards.filter(card => card.id !== Card.id));
+        setTempUserCards(tempUserCards.concat(Card));
     }
 
     const handleClose = (
@@ -50,9 +62,9 @@ const GamePrep = () => {
     );
 
     return (
-        <div style={{ display: 'flex'}}>
-            <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard} />
-            <CardList fetchMethod="user" cards={cards} setSelectedCard={setSelectedCard}/>
+        <div style={{ display: 'flex', gap: "20px"}}>
+            <CardList fetchMethod="user" cards={tempUserCards} setSelectedCard={handleAddClick} />
+            <CardList fetchMethod="user" cards={gameCards} setSelectedCard={handleRemoveClick}/>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
