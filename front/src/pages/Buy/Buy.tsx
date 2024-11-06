@@ -9,7 +9,7 @@ import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
 import Alert from '@mui/material/Alert';
 import CardPreview from "../../components/Cards/CardPreview";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Grid, Box } from '@mui/material';
+import { Typography, Grid, Box } from '@mui/material';
 
 const Buy = () => {
     const [open, setOpen] = useState(false);

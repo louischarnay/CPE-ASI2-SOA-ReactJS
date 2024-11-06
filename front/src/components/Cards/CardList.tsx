@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CardProps from '../../models/CardProps';
 import Card from './Card';
-import CardPreview from './CardPreview';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar, Grid, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Snackbar, Box } from '@mui/material';
 
 interface CardListProps {
     fetchMethod: 'all' | 'user';

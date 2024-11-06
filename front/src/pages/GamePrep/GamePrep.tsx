@@ -1,12 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
-import User from "../../models/user.model";
 import { useState, Fragment, useEffect } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { UserService } from "../../services/user.service";
-import { CardService } from "../../services/card.service";
 import CardProps from "../../models/CardProps";
 
 const GamePrep = () => {
