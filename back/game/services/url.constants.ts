@@ -1,0 +1,1 @@
+export const MONOLITHIC_URL = "http://card-market-back-monolithic:8080/api";

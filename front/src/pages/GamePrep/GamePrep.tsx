@@ -21,10 +21,18 @@ const GamePrep = () => {
     const [gameCards, setGameCards] = useState<CardProps[]>([]);
     const [open, setOpen] = useState(false);
     const [openBackdrop, setOpenBackdrop] = useState(false);
-    const [isConnected, setIsConnected] = useState(socket.connected);
     //const dispatch = useDispatch();
 
     const [loadingTextContent, setLoadingTextContent] = useState<string>("Joining Queue...");
+
+    function onQueueJoined() {
+        console.log("Queue joined");
+        setLoadingTextContent("Waiting for other players...");
+    }
+
+    function onQueueLeft() {
+        setOpen(true)
+    }
 
     useEffect(() => {
         // Setup cards lists
@@ -32,33 +40,15 @@ const GamePrep = () => {
         setGameCards([]);
         setTempUserCards(cards);
 
+        socket.open();
+
         // Setup socket
-        function onConnect() {
-            setIsConnected(true);
-        }
-
-        function onDisconnect() {
-            setIsConnected(false);
-        }
-
-        function onQueueJoined() {
-            console.log("Queue joined");
-            setLoadingTextContent("Waiting for other players...");
-        }
-
-        function onQueueLeft() {
-            setOpen(true)
-        }
-
-        socket.on("connect", onConnect);
-        socket.on("disconnect", onDisconnect);
         socket.on("joined-queue", onQueueJoined);
         socket.on("left-queue", onQueueLeft);
         return () => {
-            socket.off("connect", onConnect);
-            socket.off("disconnect", onDisconnect);
             socket.off("joined-queue", onQueueJoined);
             socket.off("left-queue", onQueueLeft);
+            socket.close();
         };
     }, []);
 
@@ -95,7 +85,7 @@ const GamePrep = () => {
         }
 
         setOpenBackdrop(true);
-        socket.emit("join-queue", { player: currentUser });
+        socket.emit("join-queue", { player: currentUser.id, cards: gameCards.map(card => card.id) });
         console.log("Joining queue");
     }
 

@@ -1,8 +1,9 @@
-import Message from "../../models/message.model";
+import { GlobalMessageReceived, PrivateMessageReceived } from "../../models/message.model";
 
 const initialState = {
-    messagesGlobal: [] as Message[],
-    messagesPrivate: [] as Message[]
+    messagesGlobal: [] as GlobalMessageReceived[],
+    messagesPrivate: [] as PrivateMessageReceived[],
+    targetId: 0
 };
 
 export const messageReducer = (state = initialState, action: any) => {
@@ -22,6 +23,11 @@ export const messageReducer = (state = initialState, action: any) => {
                 ...state,
                 messagesPrivate: [], 
                 messagesGlobal: []
+            }
+        case 'UPDATE_TARGET_ID':
+            return {
+                ...state,
+                targetId: action.payload
             }
         default:
             return state;

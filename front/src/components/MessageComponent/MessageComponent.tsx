@@ -1,7 +1,7 @@
-import Message from "../../models/message.model";
+import { GlobalMessageReceived, PrivateMessageReceived } from "../../models/message.model";
 
 type MessageProps = {
-    message: Message;
+    message: PrivateMessageReceived | GlobalMessageReceived;
 }
 
 const MessageComponent = ({ message }: MessageProps) => {
