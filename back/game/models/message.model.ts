@@ -1,13 +1,19 @@
-export type MessageSentByClient = {
+type WithTargetId = {
+    targetId: number;
+};
+
+export type GlobalMessageSentByClient = {
     userId: number;
-    targetId?: number;
     content: string;
 };
 
-export type MessageReceivedByClient = {
+export type PrivateMessageSentByClient = GlobalMessageSentByClient & WithTargetId;
+
+export type GlobalMessageReceivedByClient = {
     userId: number;
     userName: string;
-    targetId?: number;
     content: string;
     date: Date;
 };
+
+export type PrivateMessageReceivedByClient = GlobalMessageReceivedByClient & WithTargetId;
