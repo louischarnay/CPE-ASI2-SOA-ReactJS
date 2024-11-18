@@ -5,14 +5,23 @@ import { socket } from "../../socket/socket";
 import User from "../../models/user.model";
 import { useDispatch, useSelector } from "react-redux";
 import { UserService } from "../../services/user.service";
+import { MessageService } from "../../services/message.service";
 import "./Chat.css";
-import { GlobalMessageReceived, GlobalMessageSent, PrivateMessageReceived, PrivateMessageSent } from "../../models/message.model";
+import { GlobalMessageReceived, PrivateMessageReceived } from "../../models/message.model";
 
 type ChatProps = { typeChat: string; };
+
+interface APIMessage {
+    targetId: number;
+    message: string;
+    userId: number;
+    timestamp: string;
+}
 
 const Chat = ({ typeChat }: ChatProps) => {
     const [message, setMessage] = useState("");
     const [targetList, setTargetList] = useState([] as User[]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -20,6 +29,68 @@ const Chat = ({ typeChat }: ChatProps) => {
     const messagesGlobal: GlobalMessageReceived[] = useSelector((state: any) => state.messageReducer.messagesGlobal);
     const targetId: number = useSelector((state: any) => state.messageReducer.targetId);
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
+
+    const convertApiMessage = async (apiMessage: APIMessage) => {
+        const user = await UserService.getUserById(apiMessage.userId)
+        return {
+            userId: apiMessage.userId,
+            content: apiMessage.message,
+            date: (new Date(apiMessage.timestamp)).toISOString(),
+            userName: user.surName,
+            ...(apiMessage.targetId !== -1 && { targetId: apiMessage.targetId })
+        };
+    };
+
+    const loadMessageHistory = async () => {
+        // Si on est en mode privé et qu'il n'y a pas de targetId, on ne charge pas les messages
+        if (typeChat === "private" && !targetId) {
+            dispatch({ type: 'EMPTY_MESSAGES' });
+            return;
+        }
+
+        if (typeChat === "private" && targetId == 0) {
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+            const response = await MessageService.getAllMessages(currentUser.id);
+            const allMessages = Array.isArray(response) ? response : [];
+
+            // On vide d'abord les messages avant d'ajouter les nouveaux
+            dispatch({ type: 'EMPTY_MESSAGES' });
+
+            if (typeChat === "global") {
+                const globalMessages = await Promise.all(
+                    allMessages
+                        .filter((msg: APIMessage) => msg.targetId === -1)
+                        .map(async (msg) => await convertApiMessage(msg))
+                );
+                dispatch({
+                    type: 'SET_MESSAGES_GLOBAL',
+                    payload: globalMessages
+                });
+            } else if (typeChat === "private" && targetId) {
+                const privateMessages = await Promise.all(
+                    allMessages
+                        .filter((msg: APIMessage) =>
+                            (msg.targetId === targetId && msg.userId === currentUser.id) ||
+                            (msg.targetId === currentUser.id && msg.userId === targetId)
+                        )
+                        .map(async (msg) => await convertApiMessage(msg))
+                );
+
+                dispatch({
+                    type: 'SET_MESSAGES_PRIVATE',
+                    payload: privateMessages
+                });
+            }
+        } catch (error) {
+            console.error("Error loading message history:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const updateMessagesPrivate = useCallback((newMessage: PrivateMessageReceived) => {
         dispatch({
@@ -36,12 +107,11 @@ const Chat = ({ typeChat }: ChatProps) => {
     }, [dispatch]);
 
     const onMessageReceivedPrivate = useCallback((value: PrivateMessageReceived) => {
-        // Vérification que la conversation concerne soit l'expéditeur soit le destinataire
-        if ((value.userId === currentUser.id && value.targetId === targetId) || 
+        if ((value.userId === currentUser.id && value.targetId === targetId) ||
             (value.targetId === currentUser.id && value.userId === targetId)) {
             updateMessagesPrivate(value);
         }
-    }, [targetId, currentUser.id, updateMessagesPrivate]); // Ajout de targetId dans les dépendances
+    }, [targetId, currentUser.id, updateMessagesPrivate]);
 
     const onMessageReceivedGlobal = useCallback((value: GlobalMessageReceived) => {
         updateMessagesGlobal(value);
@@ -49,28 +119,27 @@ const Chat = ({ typeChat }: ChatProps) => {
 
     const getTargets = async () => {
         const targets: User[] = await UserService.getAllUsers();
-        setTargetList(targets);
+        setTargetList(targets.filter(target => target.id !== currentUser.id)); // Filtrer l'utilisateur courant
     };
 
     const sendMessage = () => {
         if (message.trim() === "") return;
 
         if (typeChat === "global") {
-            socket.emit("message-send-global", { 
-                content: message, 
-                userId: currentUser.id 
-            } as GlobalMessageSent);
+            socket.emit("message-send-global", {
+                content: message,
+                userId: currentUser.id
+            });
         } else if (targetId) {
-            socket.emit("message-send-private", { 
-                content: message, 
-                userId: currentUser.id, 
-                targetId: targetId 
-            } as PrivateMessageSent);
+            socket.emit("message-send-private", {
+                content: message,
+                userId: currentUser.id,
+                targetId: targetId
+            });
         }
         setMessage("");
     };
 
-    // Effet pour gérer les connexions socket
     useEffect(() => {
         getTargets();
         socket.open();
@@ -79,6 +148,8 @@ const Chat = ({ typeChat }: ChatProps) => {
         socket.on("message-receive-private", onMessageReceivedPrivate);
         socket.on("message-receive-global", onMessageReceivedGlobal);
 
+        loadMessageHistory()
+
         return () => {
             socket.off("message-receive-private", onMessageReceivedPrivate);
             socket.off("message-receive-global", onMessageReceivedGlobal);
@@ -86,12 +157,28 @@ const Chat = ({ typeChat }: ChatProps) => {
         };
     }, [currentUser.id, onMessageReceivedPrivate, onMessageReceivedGlobal]);
 
-    // Effet pour nettoyer les messages quand on change de destinataire
     useEffect(() => {
-        if (typeChat === "private") {
-            dispatch({ type: 'EMPTY_MESSAGES' });
-        }
-    }, [targetId, dispatch, typeChat]);
+        console.log(typeChat)
+        loadMessageHistory();
+    }, [typeChat, targetId]);
+
+    const showGlobalMessages = () => {
+        const copyGlobal = [...messagesGlobal]
+        return copyGlobal
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            .map((message, index) => (
+                <MessageComponent key={`global-${index}`} message={message} />
+            ))
+    }
+
+    const showPrivateMessages = () => {
+        const copyPrivate = [...messagesPrivate]
+        return copyPrivate
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            .map((message, index) => (
+                <MessageComponent key={`private-${index}`} message={message} />
+            ))
+    }
 
     return (
         <>
@@ -101,7 +188,7 @@ const Chat = ({ typeChat }: ChatProps) => {
                     <InputLabel>Select Target</InputLabel>
                     <Select
                         value={targetId || ""}
-                        onChange={(e) => {
+                        onChange={(e: any) => {
                             const newTargetId = e.target.value as number;
                             dispatch({
                                 type: 'UPDATE_TARGET_ID',
@@ -118,17 +205,15 @@ const Chat = ({ typeChat }: ChatProps) => {
                 </FormControl>
             )}
             <Box className="messages-container">
-                {typeChat === "global" ?
-                    messagesGlobal
-                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                        .map((message, index) => (
-                            <MessageComponent key={index} message={message} />
-                        )) :
-                    messagesPrivate
-                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                        .map((message, index) => (
-                            <MessageComponent key={index} message={message} />
-                        ))}
+                {isLoading ? (
+                    <div>Loading messages...</div>
+                ) : typeChat === "global" ? (
+                    showGlobalMessages()
+                ) : targetId ? (
+                    showPrivateMessages()
+                ) : (
+                    <div>Please select a user to start chatting</div>
+                )}
             </Box>
 
             <div className="input-bar">
@@ -137,7 +222,7 @@ const Chat = ({ typeChat }: ChatProps) => {
                     label="Send a message"
                     variant="filled"
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e: any) => setMessage(e.target.value)}
                     className="input-field"
                 />
                 <Button
