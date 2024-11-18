@@ -10,7 +10,7 @@ import java.nio.file.StandardOpenOption;
 @Service
 public class MessageService {
 
-    private static final String FILE_PATH = "messages.log"; // Define the file path
+    private static final String FILE_PATH = "log/messages.log"; // Define the file path
 
     public void processMessage(String message) {
         try {
