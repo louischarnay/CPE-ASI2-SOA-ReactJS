@@ -28,6 +28,15 @@ services:
       - public-network
       - back-network
 
+  backend-log:
+    build: ./back/log
+    container_name: log-back
+    ports:
+      - "8086:8086"
+    networks:
+      - public-network
+      - back-network
+
   backend-game:
     build: ./back/game
     container_name: game-back
