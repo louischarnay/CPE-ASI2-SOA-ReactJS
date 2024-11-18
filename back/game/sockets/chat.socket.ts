@@ -27,6 +27,9 @@ export class ChatSocket {
   runSocket(socket: Socket, ioServer: Server, userSockets: Map<number, Socket>) {
     socket.on(MESSAGE_SEND_PRIVATE_EVENT, async (data: PrivateMessageSentByClient) => {
       const messageReceived = await this.handlePrivateMessage(data);
+      if (!messageReceived) return;
+
+      this.sendToESB(messageReceived);
 
       const senderSocket = userSockets.get(data.userId);
       const targetSocket = userSockets.get(data.targetId);
@@ -37,6 +40,9 @@ export class ChatSocket {
 
     socket.on(MESSAGE_SEND_GLOBAL_EVENT, async (data: PrivateMessageSentByClient) => {
       const messageReceived = await this.handleGlobalMessage(data);
+      if (!messageReceived) return;
+
+      this.sendToESB(messageReceived);
 
       ioServer.emit(MESSAGE_RECEIVE_GLOBAL_EVENT, messageReceived);
     });
@@ -50,7 +56,6 @@ export class ChatSocket {
       console.error(`User with ID ${data.userId} not found`);
       return;
     }
-    this.sendToESB(data);
 
     return {
       userId: data.userId,
@@ -69,7 +74,6 @@ export class ChatSocket {
       console.error(`User with ID ${data.userId} not found`);
       return;
     }
-    this.sendToESB(data);
 
     return {
       userId: data.userId,
@@ -79,7 +83,7 @@ export class ChatSocket {
     };
   }
 
-  private sendToESB(data: PrivateMessageSentByClient | GlobalMessageReceivedByClient) {
+  private sendToESB(data: PrivateMessageReceivedByClient | GlobalMessageReceivedByClient) {
     stompit.connect(ESB_CONFIG, (error: Error | null, client: Client) => {
       if (error) {
         console.error('Connection error:', error.message);
