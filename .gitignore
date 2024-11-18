@@ -3,3 +3,4 @@
 ollama
 node_modules
 dist
+back/logs/messages.log
