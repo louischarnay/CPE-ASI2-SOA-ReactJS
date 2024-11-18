@@ -1,20 +1,27 @@
 import Message from "../../models/message.model";
 
 const initialState = {
-    messages: [] as Message[]
+    messagesGlobal: [] as Message[],
+    messagesPrivate: [] as Message[]
 };
 
 export const messageReducer = (state = initialState, action: any) => {
     switch (action.type) {
-        case 'UPDATE_MESSAGES':
+        case 'UPDATE_MESSAGES_PRIVATE':
             return {
                 ...state,
-                messages: [...state.messages, action.payload], // Ajouter le message sans doublons
+                messagesPrivate: [...state.messagesPrivate, action.payload], // Ajouter le message sans doublons
+            };
+        case 'UPDATE_MESSAGES_GLOBAL':
+            return {
+                ...state,
+                messagesGlobal: [...state.messagesGlobal, action.payload], // Ajouter le message sans doublons
             };
         case 'EMPTY_MESSAGES':
             return {
                 ...state,
-                messages: [],
+                messagesPrivate: [], 
+                messagesGlobal: []
             }
         default:
             return state;

@@ -17,20 +17,32 @@ const Chat = ({ typeChat }: ChatProps) => {
 
     const dispatch = useDispatch();
 
-    const messages: Message[] = useSelector((state: any) => state.messageReducer.messages);
-    const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);   
+    const messagesPrivate: Message[] = useSelector((state: any) => state.messageReducer.messagesPrivate);
+    const messagesGlobal: Message[] = useSelector((state: any) => state.messageReducer.messagesGlobal);
+    const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
 
-    const updateMessages = useCallback((newMessage: Message) => {
+    const updateMessagesPrivate = useCallback((newMessage: Message) => {
         dispatch({
-            type: 'UPDATE_MESSAGES',
+            type: 'UPDATE_MESSAGES_PRIVATE',
             payload: newMessage, // Envoie seulement le nouveau message
         });
     }, [dispatch]);
-    
-    
-    const onMessageReceived = useCallback((value: Message) => {
-        updateMessages(value);
-    }, [updateMessages]);
+
+    const updateMessagesGlobal = useCallback((newMessage: Message) => {
+        dispatch({
+            type: 'UPDATE_MESSAGES_GLOBAL',
+            payload: newMessage, // Envoie seulement le nouveau message
+        });
+    }, [dispatch]);
+
+
+    const onMessageReceivedPrivate = useCallback((value: Message) => {
+        updateMessagesPrivate(value);
+    }, [updateMessagesPrivate]);
+
+    const onMessageReceivedGlobal = useCallback((value: Message) => {
+        updateMessagesGlobal(value);
+    }, [updateMessagesGlobal]);
 
     const getTargets = async () => {
         const targets: User[] = await UserService.getAllUsers();
@@ -39,9 +51,9 @@ const Chat = ({ typeChat }: ChatProps) => {
 
     const sendMessage = () => {
         if (typeChat === "global") {
-            socket.emit("message-send", { content: message, userId: currentUser.id });
+            socket.emit("message-send-global", { content: message, userId: currentUser.id });
         } else {
-            socket.emit("message-send", { content: message, userId: currentUser.id, targetId: selectedTarget.id });
+            socket.emit("message-send-private", { content: message, userId: currentUser.id, targetId: selectedTarget.id });
         }
         setMessage("");
     };
@@ -49,13 +61,15 @@ const Chat = ({ typeChat }: ChatProps) => {
     useEffect(() => {
         getTargets();
         socket.emit('register', currentUser.id);
-        
-        socket.on("message-receive", onMessageReceived);
-    
+
+        socket.on("message-receive-private", onMessageReceivedPrivate);
+        socket.on("message-receive-global", onMessageReceivedGlobal);
+
         return () => {
-            socket.off("message-receive", onMessageReceived);
+            socket.off("message-receive", onMessageReceivedPrivate);
+            socket.off("message-receive", onMessageReceivedGlobal);
         };
-    }, [currentUser.id, onMessageReceived]); 
+    }, [currentUser.id, onMessageReceivedPrivate, onMessageReceivedGlobal]);
 
     return (
         <>
@@ -81,12 +95,19 @@ const Chat = ({ typeChat }: ChatProps) => {
                 </FormControl>
             )}
             <Box className="messages-container">
-                {messages
-                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                    .map((message, index) => (
-                        <MessageComponent key={index} message={message} />
-                    ))}
+                {typeChat === "global" ?
+                    messagesGlobal
+                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                        .map((message, index) => (
+                            <MessageComponent key={index} message={message} />
+                        )) :
+                    messagesPrivate
+                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                        .map((message, index) => (
+                            <MessageComponent key={index} message={message} />
+                        ))}
             </Box>
+
 
             <div className="input-bar">
                 <TextField
