@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -23,13 +25,23 @@ public class MessageController {
 
     @GetMapping("/messages")
     public String getMessages(@RequestParam int userId) {
-        Optional<List<MessageStatus>> messages = repository.findAllByUserId(userId);
-        if (messages.isPresent()) {
+        Optional<List<MessageStatus>> userMessages = repository.findAllByUserId(userId);
+        Optional<List<MessageStatus>> targetMessages = repository.findAllByTargetId(userId);
+        Optional<List<MessageStatus>> generalMessages = repository.findAllByTargetId(-1);
+
+        // Combine messages into a set to avoid duplicates
+        Set<MessageStatus> messages = new HashSet<>();
+        userMessages.ifPresent(messages::addAll);
+        targetMessages.ifPresent(messages::addAll);
+        generalMessages.ifPresent(messages::addAll);
+
+        if (!messages.isEmpty()) {
             JSONArray response = new JSONArray();
-            for (MessageStatus message : messages.get()) {
+            for (MessageStatus message : messages) {
                 JSONObject messageJson = new JSONObject();
                 messageJson.put("userId", message.getUserId());
                 messageJson.put("targetId", message.getTargetId());
+                messageJson.put("timestamp", message.getTimestamp());
                 messageJson.put("message", message.getMessage());
                 response.put(messageJson);
             }

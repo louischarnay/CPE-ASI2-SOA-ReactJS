@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface MessageStatusRepository extends JpaRepository<MessageStatus, Long> {
     Optional<List<MessageStatus>> findAllByUserId(int userId);
+    Optional<List<MessageStatus>> findAllByTargetId(int targetId);
 }

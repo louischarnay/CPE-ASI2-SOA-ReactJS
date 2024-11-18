@@ -10,6 +10,7 @@ export type Room = {
 };
 
 export function generateRoomId(rooms: Room[]): number {
+  if (rooms.length === 0) return 0;
   const ids = rooms.map((room) => room.id);
   const maxId = Math.max(...ids);
   return maxId + 1;
