@@ -42,6 +42,7 @@ const GamePrep = () => {
         }
 
         function onQueueJoined() {
+            console.log("Queue joined");
             setLoadingTextContent("Waiting for other players...");
         }
 
@@ -53,6 +54,12 @@ const GamePrep = () => {
         socket.on("disconnect", onDisconnect);
         socket.on("joined-queue", onQueueJoined);
         socket.on("left-queue", onQueueLeft);
+        return () => {
+            socket.off("connect", onConnect);
+            socket.off("disconnect", onDisconnect);
+            socket.off("joined-queue", onQueueJoined);
+            socket.off("left-queue", onQueueLeft);
+        };
     }, []);
 
     const handleAddClick = (Card: CardProps) => {
@@ -89,6 +96,7 @@ const GamePrep = () => {
 
         setOpenBackdrop(true);
         socket.emit("join-queue", { player: currentUser });
+        console.log("Joining queue");
     }
 
     const handleCancelJoin = () => {
