@@ -4,7 +4,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "npx ts-node index.ts",
-    "test": "vitest --watch"
+    "test": "vitest --watch",
+    "test:ci": "vitest --watch=false"
   },
   "repository": {
     "type": "git",
