@@ -65,6 +65,13 @@ const router = createBrowserRouter([
 
 const store = configureStore({
   reducer: globalReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+        serializableCheck: {
+            ignoredActions: ['SET_MESSAGES_PRIVATE'],
+            ignoredPaths: ['payload.0.date'],  // Ignore la date dans les actions
+        },
+    }),
 });
 
 const root = ReactDOM.createRoot(
