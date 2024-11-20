@@ -6,7 +6,7 @@ export type NewPlayer = {
 };
 
 export type GameCard = Card & {
-  health: number;
+  currentHp: number;
 }
 
 export type Player = {

@@ -1,21 +1,21 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { DEFAULT_CARD_HEALTH, DEFAULT_REMAINING_ACTIONS, GameManager } from "./game.manager";
+import { DEFAULT_REMAINING_ACTIONS, GameManager } from "./game.manager";
 import { CardService } from "../services/card.service";
 import { EndTurn, GamePlay, NewPlayer } from "../models/game.model";
+
+const DEFAULT_HP = 100;
+const DEFAULT_ATTACK = 10;
 
 describe("GameManager", () => {
   let gameManager: GameManager;
   let mockCardService: CardService;
 
-  const createMockPlayer = (id: number, cardIds: number[]): NewPlayer => ({
-    id,
-    cards: cardIds,
-  });
+  const createMockPlayer = (id: number, cards: number[]): NewPlayer => ({ id, cards });
 
   beforeEach(() => {
     mockCardService = {
       getCardById: vi.fn((id: number) =>
-        Promise.resolve({ id, attack: 10, health: 100 })
+        Promise.resolve({ id, attack: DEFAULT_ATTACK, currentHp: DEFAULT_HP })
       ),
     } as unknown as CardService;
 
@@ -40,6 +40,7 @@ describe("GameManager", () => {
     const player2 = createMockPlayer(2, [2]);
 
     const game = await gameManager.initRoom(player1, player2);
+    console.log(game.player1.cards);
     const currentPlayer = game.currentPlayer === 1 ? player1 : player2;
     const opponent = game.currentPlayer === 1 ? player2 : player1;
 
@@ -53,7 +54,7 @@ describe("GameManager", () => {
     const updatedGame = await gameManager.play(play);
 
     const opponentCard = updatedGame.currentPlayer === 1 ? updatedGame.player2.cards[0] : updatedGame.player1.cards[0];
-    expect(opponentCard.health).toBe(DEFAULT_CARD_HEALTH - 10);
+    expect(opponentCard.currentHp).toBe(opponentCard.currentHp - DEFAULT_ATTACK);
 
     const player = updatedGame.currentPlayer === 1 ? updatedGame.player1 : updatedGame.player2;
     expect(player.remainingActions).toBe(2);
