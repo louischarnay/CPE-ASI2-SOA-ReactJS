@@ -3,6 +3,7 @@ import { GlobalMessageReceived, PrivateMessageReceived } from "../../models/mess
 const initialState = {
     messagesGlobal: [] as GlobalMessageReceived[],
     messagesPrivate: [] as PrivateMessageReceived[],
+    typeChat: "global",
     targetId: 0
 };
 
@@ -31,13 +32,18 @@ export const messageReducer = (state = initialState, action: any) => {
         case 'EMPTY_MESSAGES':
             return {
                 ...state,
-                messagesPrivate: [], 
+                messagesPrivate: [],
                 messagesGlobal: []
             };
         case 'UPDATE_TARGET_ID':
             return {
                 ...state,
                 targetId: action.payload
+            };
+        case 'UPDATE_TYPE_CHAT':
+            return {
+                ...state,
+                typeChat: action.payload
             };
         default:
             return state;
