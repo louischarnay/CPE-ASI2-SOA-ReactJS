@@ -13,6 +13,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { socket } from "../../socket/socket";
 import User from "../../models/user.model";
 import "./GamePrep.css";
+import PlayerCards from "../../components/Game/PlayerCards";
+import { useNavigate } from "react-router-dom";
 
 const GamePrep = () => {
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
@@ -47,12 +49,27 @@ const GamePrep = () => {
         // Setup socket
         socket.on("joined-queue", onQueueJoined);
         socket.on("left-queue", onQueueLeft);
+        socket.on("created-room", (room: any) => {
+            console.log("Room created: " + room.id);
+            console.log("Players: " + room.player1.id + " and " + room.player2.id);
+            console.log("Starting game...");
+            // Update data
+            //updateData(currentUser.id);
+            // Redirect to game
+            //history.push("/game");
+            handleNavigate();
+        });
         return () => {
             socket.off("joined-queue", onQueueJoined);
             socket.off("left-queue", onQueueLeft);
             socket.close();
         };
     }, []);
+
+    const navigate = useNavigate();
+    const handleNavigate = () => {
+        navigate("/game");
+    }
 
     const handleAddClick = (Card: CardProps) => {
         if(gameCards.length >= 4) {
@@ -146,13 +163,14 @@ const GamePrep = () => {
                 open={openBackdrop}
                 onClick={handleClose}
             >
-            <div className="backdrop-container">
+                <div className="backdrop-container">
+                    <PlayerCards cards={gameCards} />
                     <CircularProgress color="inherit" />
                     <p>{loadingTextContent}</p>
                     <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleCancelJoin}>
                         Cancel
                     </Button>
-            </div>
+                </div>
             </Backdrop>
         </div>
         </div>

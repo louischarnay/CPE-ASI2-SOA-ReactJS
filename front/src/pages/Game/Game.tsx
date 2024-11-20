@@ -3,7 +3,9 @@ import ChatMenu from "../../components/Chat/ChatMenu";
 const Game = () => {
     
     return (
-        <ChatMenu/>
+        <>
+            <h1>Game</h1>
+        </>
     )
 }
 
