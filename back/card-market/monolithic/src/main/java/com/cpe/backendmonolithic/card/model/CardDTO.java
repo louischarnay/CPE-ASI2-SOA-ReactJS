@@ -3,7 +3,7 @@ package com.cpe.backendmonolithic.card.model;
 public class CardDTO extends CardBasics {
 	private Integer id;
 	private float energy;
-	private float hp;
+	private int hp;
 	private float defence;
 	private float attack;
 	private float price;
@@ -44,11 +44,11 @@ public class CardDTO extends CardBasics {
 		this.energy = energy;
 	}
 
-	public float getHp() {
+	public int getHp() {
 		return hp;
 	}
 
-	public void setHp(float hp) {
+	public void setHp(int hp) {
 		this.hp = hp;
 	}
 
