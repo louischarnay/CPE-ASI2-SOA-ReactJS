@@ -2,7 +2,6 @@ import { EndTurn, Game, GamePlay } from "../models/game.model";
 import { NewPlayer, Player, GameCard } from "../models/game.model";
 import { CardService } from "../services/card.service";
 
-export const DEFAULT_CARD_HEALTH = 100;
 export const DEFAULT_REMAINING_ACTIONS = 3;
 
 export class GameManager {
@@ -33,9 +32,9 @@ export class GameManager {
     const card = this.findCardById(player.cards, play.cardId);
     const targetCard = this.findCardById(opponent.cards, play.targetCardId);
 
-    targetCard.health -= card.attack;
+    targetCard.currentHp -= card.attack;
 
-    if (targetCard.health <= 0) {
+    if (targetCard.currentHp <= 0) {
       opponent.cards = opponent.cards.filter((c) => c.id !== targetCard.id);
     }
 
@@ -81,7 +80,7 @@ export class GameManager {
     const cards = await Promise.all(
       player.cards.map(async (cardId) => {
         const card = await this.cardService.getCardById(cardId);
-        return card ? { ...card, health: DEFAULT_CARD_HEALTH } : null;
+        return card ? { ...card, currentHp: card.hp } : null;
       })
     );
     return {

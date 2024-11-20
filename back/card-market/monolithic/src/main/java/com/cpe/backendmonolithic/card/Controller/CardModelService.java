@@ -52,15 +52,15 @@ public class CardModelService {
 		cardRepository.deleteById(id);
 	}
 	
-	public List<CardModel> getRandCard(int nbr){
-		List<CardModel> cardList=new ArrayList<>();
-		for(int i=0;i<nbr;i++) {
-			CardReference currentCardRef=cardRefService.getRandCardRef();
-			CardModel currentCard=new CardModel(currentCardRef);
-			currentCard.setAttack(rand.nextFloat()*100);
-			currentCard.setDefence(rand.nextFloat()*100);
-			currentCard.setEnergy(100);
-			currentCard.setHp(rand.nextFloat()*100);
+	public List<CardModel> getRandCard(int nbr) {
+		List<CardModel> cardList = new ArrayList<>();
+		for (int i = 0; i < nbr; i++) {
+			CardReference currentCardRef = cardRefService.getRandCardRef();
+			CardModel currentCard = new CardModel(currentCardRef);
+			currentCard.setAttack(rand.nextInt(51) + 50); // Entre 50 et 100 inclus
+			currentCard.setDefence(rand.nextInt(51) + 50); // Entre 50 et 100 inclus
+			currentCard.setEnergy(100); // Valeur fixe
+			currentCard.setHp(rand.nextInt(51) + 50); // Entre 50 et 100 inclus
 			currentCard.setPrice(currentCard.computePrice());
 			//save new card before sending for user creation
 			//this.addCard(currentCard);
@@ -68,7 +68,7 @@ public class CardModelService {
 		}
 		return cardList;
 	}
-
+	
 
 	public List<CardModel> getAllCardToSell(){
 		return this.cardRepository.findByUser(null);
