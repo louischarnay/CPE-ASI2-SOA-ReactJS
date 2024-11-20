@@ -16,7 +16,7 @@ const MessageComponent = ({ message }: MessageProps) => {
 
     return (
     <div>
-        <span>{formatTime(message.date)}</span> - {message.userName} : {message.content}
+        <span style={{color: 'grey'}}>{formatTime(message.date)}</span> - <b>{message.userName} :</b> {message.content}
     </div>)
 }
 

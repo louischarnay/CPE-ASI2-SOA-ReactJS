@@ -4,6 +4,7 @@
 .messages-container {
     overflow-y: auto;
     height: 70vh;
+    padding: 5px;
     /* Pour éviter que les messages soient masqués par la barre de saisie */
 }
 
@@ -30,4 +31,8 @@
     /* Optionnel : différencier visuellement */
     overflow: auto;
     /* Ajoute le défilement si nécessaire */
+}
+
+.chat-type-selector {
+    padding: 8px;
 }

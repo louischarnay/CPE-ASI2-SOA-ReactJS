@@ -14,7 +14,7 @@ public class CardModel extends CardBasics{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private float energy;
-	private float hp;
+	private int hp;
 	private float defence;
 	private float attack;
 	private float price;
@@ -44,7 +44,7 @@ public class CardModel extends CardBasics{
 		super(cardBasic);
 	}
 
-	public CardModel(String name, String description, float energy, float hp, float defence, float attack, String imgUrl, float price) {
+	public CardModel(String name, String description, float energy, int hp, float defence, float attack, String imgUrl, float price) {
 		super(name, description, imgUrl);
 		this.energy = energy;
 		this.hp = hp;
@@ -59,10 +59,10 @@ public class CardModel extends CardBasics{
 	public void setEnergy(float energy) {
 		this.energy = energy;
 	}
-	public float getHp() {
+	public int getHp() {
 		return hp;
 	}
-	public void setHp(float hp) {
+	public void setHp(int hp) {
 		this.hp = hp;
 	}
 	public float getDefence() {
