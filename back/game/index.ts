@@ -1,12 +1,10 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import { Server, Socket } from 'socket.io';
 import { createServer } from 'http';
 import { ChatSocket } from "./sockets/chat.socket";
 import { RoomSocket } from "./sockets/room.socket";
 import { GameManager } from "./manager/game.manager";
 import { GameSocket } from "./sockets/game.socket";
-import { CardService } from "./services/card.service";
-import { UserService } from "./services/user.service";
 
 const app: Express = express();
 const PORT = 4000;
@@ -24,13 +22,8 @@ const chatUserSockets = new Map<number, Socket>();
 const gameUserSockets = new Map<number, Socket>();
 
 (async () => {
-  const cardService = new CardService();
-  await cardService.fetchAllCards();
-  const userService = new UserService();
-  await userService.fetchAllUsers();
-
-  const gameManager = new GameManager(cardService);
-  const chatSocket = new ChatSocket(userService);
+  const chatSocket = new ChatSocket();
+  const gameManager = new GameManager();
   const roomSocket = new RoomSocket(gameManager);
   const gameSocket = new GameSocket(gameManager);
 

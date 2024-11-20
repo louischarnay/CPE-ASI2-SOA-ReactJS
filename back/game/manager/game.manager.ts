@@ -1,3 +1,4 @@
+import { Card } from "../models/card.model";
 import { EndTurn, Game, GamePlay } from "../models/game.model";
 import { NewPlayer, Player, GameCard } from "../models/game.model";
 import { CardService } from "../services/card.service";
@@ -5,9 +6,10 @@ import { CardService } from "../services/card.service";
 export const DEFAULT_REMAINING_ACTIONS = 3;
 
 export class GameManager {
+  private cards: Card[] = [];
   private games: Game[] = [];
 
-  constructor(private readonly cardService: CardService) {}
+  constructor() {}
 
   async initRoom(player1: NewPlayer, player2: NewPlayer): Promise<Game> {
     const game: Game = {
@@ -78,10 +80,7 @@ export class GameManager {
 
   private async buildPlayer(player: NewPlayer): Promise<Player> {
     const cards = await Promise.all(
-      player.cards.map(async (cardId) => {
-        const card = await this.cardService.getCardById(cardId);
-        return card ? { ...card, currentHp: card.hp } : null;
-      })
+      player.cards.map(async (cardId) => await this.getCardById(cardId))
     );
     return {
       id: player.id,
@@ -110,5 +109,16 @@ export class GameManager {
 
   private getOpponent(game: Game, playerId: number): Player {
     return game.player1.id === playerId ? game.player2 : game.player1;
+  }
+
+  private async getCardById(id: number): Promise<GameCard> {
+    const existingCard = this.cards.find((c) => c.id === id);
+    if (existingCard) return {...existingCard, currentHp: existingCard.hp};
+
+    const card = await CardService.getCardById(id);
+    if (!card) throw new Error(`Card with ID ${id} not found.`);
+    
+    this.cards.push(card);
+    return {...card, currentHp: card.hp};
   }
 }

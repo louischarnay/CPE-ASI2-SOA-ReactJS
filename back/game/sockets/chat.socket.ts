@@ -1,9 +1,10 @@
 import { Client } from "stompit";
-import { UserService } from "../services/user.service";
 import { Server, Socket } from "socket.io";
 import stompit from "stompit";
 import { ESB_CONFIG } from "./esb.config";
 import { GlobalMessageReceivedByClient, PrivateMessageReceivedByClient, PrivateMessageSentByClient } from "../models/message.model";
+import { UserService } from "../services/user.service";
+import { User } from "../models/user.model";
 
 const MESSAGE_SEND_GLOBAL_EVENT = 'message-send-global';
 const MESSAGE_SEND_PRIVATE_EVENT = 'message-send-private';
@@ -16,7 +17,9 @@ const HEADERS = {
 };
 
 export class ChatSocket {
-  constructor(private readonly userService: UserService) { }
+  private users: User[] = [];
+
+  constructor() {}
 
   runSocket(socket: Socket, ioServer: Server, userSockets: Map<number, Socket>) {
     socket.on(MESSAGE_SEND_PRIVATE_EVENT, async (data: PrivateMessageSentByClient) => {
@@ -45,7 +48,7 @@ export class ChatSocket {
   private async handlePrivateMessage(data: PrivateMessageSentByClient): Promise<PrivateMessageReceivedByClient | undefined> {
     console.log(`Private message received from client ${data.userId}: ${data.content}`);
 
-    const userName = await this.userService.getUserName(data.userId);
+    const userName = await this.getUserNameById(data.userId);
     if (!userName) {
       console.error(`User with ID ${data.userId} not found`);
       return;
@@ -63,12 +66,7 @@ export class ChatSocket {
   private async handleGlobalMessage(data: PrivateMessageSentByClient): Promise<GlobalMessageReceivedByClient | undefined> {
     console.log(`Global message received from client ${data.userId}: ${data.content}`);
 
-    const userName = await this.userService.getUserName(data.userId);
-    if (!userName) {
-      console.error(`User with ID ${data.userId} not found`);
-      return;
-    }
-
+    const userName = await this.getUserNameById(data.userId);
     return {
       userId: data.userId,
       userName,
@@ -88,5 +86,16 @@ export class ChatSocket {
       frame.write(JSON.stringify(data));
       frame.end();
     });
+  }
+
+  private async getUserNameById(id: number): Promise<string> {
+    const existingUser = this.users.find((user) => user.id === id);
+    if (existingUser) return existingUser.surName;
+
+    const user = await UserService.getUserById(id);
+    if (!user) throw new Error(`User with ID ${id} not found.`);
+    
+    this.users.push(user);
+    return user.surName;
   }
 }
