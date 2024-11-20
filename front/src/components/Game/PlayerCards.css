@@ -1,0 +1,24 @@
+.card-view {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.card-container{
+    max-width: 345;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease, box-shadow 0.5s ease; 
+}
+
+
+.card-container:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Augmente légèrement l'ombre pour un effet de soulèvement plus marqué */
+    transform: scale(1.07); /* Légère augmentation du facteur de grossissement pour accentuer l'effet */
+}
+
+.card-name{
+    text-align: center;
+}

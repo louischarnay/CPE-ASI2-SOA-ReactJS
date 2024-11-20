@@ -1,4 +1,30 @@
 services:
+
+# ActiveMQ
+  active-mq:
+    image: rmohr/activemq
+    container_name: activemq
+    ports:
+      - "8161:8161"
+      - "61613:61613"
+      - "61616:61616"
+    networks:
+      - back-network
+
+# Nginx
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    networks:
+      - public-network
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+
+# Frontend
   frontend:
     build: ./front
     container_name: front
@@ -10,11 +36,21 @@ services:
     networks:
       - public-network
 
+# Backends
   backend-monolithic:
     build: ./back/card-market/monolithic
     container_name: card-market-back-monolithic
     ports:
       - "8080:8080"
+    networks:
+      - public-network
+      - back-network
+
+  backend-game:
+    build: ./back/game
+    container_name: game-back
+    ports:
+      - "4000:4000"
     networks:
       - public-network
       - back-network
@@ -39,25 +75,7 @@ services:
       - public-network
       - back-network
 
-  backend-game:
-    build: ./back/game
-    container_name: game-back
-    ports:
-      - "4000:4000"
-    networks:
-      - public-network
-      - back-network
-
-  active-mq:
-    image: rmohr/activemq
-    container_name: activemq
-    ports:
-      - "8161:8161"
-      - "61613:61613"
-      - "61616:61616"
-    networks:
-      - back-network
-
+# Generators
   card-generator:
     build: ./back/card-market/card-generator
     container_name: card-market-card-generator
@@ -94,6 +112,7 @@ services:
     ports:
       - "8084:8084"
 
+# Generators libs
   image-generator-lib:
     image: registry.gitlab.com/js-asi2/asi2-resources/img-gene-neural-love-api:v1.1
     container_name: image-generator-lib
