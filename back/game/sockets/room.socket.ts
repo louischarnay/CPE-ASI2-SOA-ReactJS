@@ -19,7 +19,7 @@ export class RoomSocket {
 
   runSocket(socket: Socket, ioServer: Server) {
     socket.on(JOIN_QUEUE_EVENT, async (player: Player) => {
-      console.log(`Queue joined by client ${player.id}`);
+      console.log(`Queue joined by client ${player.id} with cards ${player.cards}`);
 
       this.queue.push(player);
       socket.emit(JOINED_QUEUE_EVENT);
@@ -38,6 +38,7 @@ export class RoomSocket {
           player2,
         };
         this.rooms.push(room);
+        console.log(`Room created: ${room.id} with players ${room.player1.id} and ${room.player2.id}`);
         ioServer.emit(CREATED_ROOM_EVENT, room);
       }
     });

@@ -31,7 +31,7 @@ const GamePrep = () => {
     }
 
     function onQueueLeft() {
-        setOpen(true)
+        console.log("Queue left");
     }
 
     useEffect(() => {
@@ -41,6 +41,8 @@ const GamePrep = () => {
         setTempUserCards(cards);
 
         socket.open();
+
+        socket.emit('register', currentUser.id);
 
         // Setup socket
         socket.on("joined-queue", onQueueJoined);
@@ -85,7 +87,8 @@ const GamePrep = () => {
         }
 
         setOpenBackdrop(true);
-        socket.emit("join-queue", { player: currentUser.id, cards: gameCards.map(card => card.id) });
+        console.log("Joining game as player " + currentUser.id);
+        socket.emit("join-queue", { id: currentUser.id, cards: gameCards.map(card => card.id) });
         console.log("Joining queue");
     }
 
