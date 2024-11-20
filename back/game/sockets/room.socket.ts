@@ -11,11 +11,7 @@ const CREATED_ROOM_EVENT = 'created-room';
 export class RoomSocket {
   private queue: NewPlayer[] = [];
 
-  private constructor(private readonly gameManager: GameManager) {}
-
-  static init(gameManager: GameManager): RoomSocket {
-    return new RoomSocket(gameManager);
-  }
+  constructor(private readonly gameManager: GameManager) {}
 
   runSocket(socket: Socket, userSockets: Map<number, Socket>) {
     socket.on(JOIN_QUEUE_EVENT, async (player: NewPlayer) => {
@@ -33,8 +29,7 @@ export class RoomSocket {
         return;
       }
 
-      const room = this.gameManager.initRoom(player1, player2);
-      console.log(`Room created: ${room.id} with players ${room.player1.id} and ${room.player2.id}`);
+      const room = await this.gameManager.initRoom(player1, player2);
       
       const player1Socket = userSockets.get(room.player1.id);
       const player2Socket = userSockets.get(room.player2.id);

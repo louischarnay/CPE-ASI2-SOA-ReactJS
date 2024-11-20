@@ -16,13 +16,7 @@ const HEADERS = {
 };
 
 export class ChatSocket {
-  private constructor(private readonly userService: UserService) { }
-
-  static async init(): Promise<ChatSocket> {
-    const userService = new UserService();
-    await userService.fetchAllUsers();
-    return new ChatSocket(userService);
-  }
+  constructor(private readonly userService: UserService) { }
 
   runSocket(socket: Socket, ioServer: Server, userSockets: Map<number, Socket>) {
     socket.on(MESSAGE_SEND_PRIVATE_EVENT, async (data: PrivateMessageSentByClient) => {
