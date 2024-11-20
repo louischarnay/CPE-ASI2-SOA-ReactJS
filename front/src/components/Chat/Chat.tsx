@@ -117,7 +117,6 @@ const Chat = () => {
 
 
     useEffect(() => {
-        socket.open();
         socket.emit('register', currentUser.id);
 
         socket.on("message-receive-private", onMessageReceivedPrivate);
@@ -128,7 +127,6 @@ const Chat = () => {
         return () => {
             socket.off("message-receive-private", onMessageReceivedPrivate);
             socket.off("message-receive-global", onMessageReceivedGlobal);
-            socket.close();
         };
     }, [currentUser.id, onMessageReceivedPrivate, onMessageReceivedGlobal]);
 

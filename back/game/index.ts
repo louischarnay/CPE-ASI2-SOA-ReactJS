@@ -35,6 +35,10 @@ const userSockets = new Map<number, Socket>();
 
   ioServer.on('connection', (socket: Socket) => {
     socket.on('register', (userId: number) => {
+      if(userSockets.has(userId)) {
+        console.log(`User ${userId} already connected`);
+        return;
+      }
       userSockets.set(userId, socket);
       console.log(`User ${userId} connected`);
 

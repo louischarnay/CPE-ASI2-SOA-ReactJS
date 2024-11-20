@@ -15,8 +15,10 @@ import User from "../../models/user.model";
 import "./GamePrep.css";
 import PlayerCards from "../../components/Game/PlayerCards";
 import { useNavigate } from "react-router-dom";
+import { useSocket } from "../../socket/socketContext";
 
 const GamePrep = () => {
+    const {socket} = useSocket();
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
     const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
@@ -37,14 +39,16 @@ const GamePrep = () => {
     }
 
     useEffect(() => {
+        if(!socket) return;
+
         // Setup cards lists
         setTempUserCards([]);
         setGameCards([]);
         setTempUserCards(cards);
 
-        socket.open();
+        //socket.open();
 
-        socket.emit('register', currentUser.id);
+        //socket.emit('register', currentUser.id);
 
         // Setup socket
         socket.on("joined-queue", onQueueJoined);
@@ -62,9 +66,8 @@ const GamePrep = () => {
         return () => {
             socket.off("joined-queue", onQueueJoined);
             socket.off("left-queue", onQueueLeft);
-            socket.close();
         };
-    }, []);
+    }, [socket, currentUser.id]);
 
     const navigate = useNavigate();
     const handleNavigate = () => {
@@ -96,6 +99,7 @@ const GamePrep = () => {
     };
 
     const handleJoinGame = () => {
+        if(!socket) return;
         // Join game
         // Check card number
         if(gameCards.length !== 4) {
@@ -110,6 +114,7 @@ const GamePrep = () => {
     }
 
     const handleCancelJoin = () => {
+        if(!socket) return;
         setOpenBackdrop(false);
         socket.emit("leave-queue", { id: currentUser.id });
     }

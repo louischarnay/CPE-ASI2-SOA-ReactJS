@@ -16,6 +16,7 @@ import globalReducer from './core/reducers';
 import { Provider } from 'react-redux';
 import Create from './pages/Create/Create';
 import ProtectedRoute from './routes/ProtectedRoot';
+import { SocketProvider } from "./socket/socketContext";
 
 const router = createBrowserRouter([
   {
@@ -38,10 +39,6 @@ const router = createBrowserRouter([
         path: "login",
         element: <Login />,
       },
-      {
-        path: "game-prep",
-        element : <GamePrep />,
-      },
       // Les routes protégées
       {
         path: "create",
@@ -50,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "buy",
         element: <ProtectedRoute element={<Buy />} /> // Protège la route "buy"
+      },
+      {
+        path: "game-prep",
+        element : <ProtectedRoute element={<GamePrep />} />
       },
       {
         path: "game",
@@ -77,9 +78,12 @@ const store = configureStore({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <SocketProvider> 
+        <RouterProvider router={router} />
+      </SocketProvider>
     </Provider>
 );
 

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/louischarnay/CPE-ASI2-SOA-ReactJS#readme",
   "dependencies": {
     "express": "4.21.1",
+    "node-back": "file:",
     "socket.io": "4.8.1",
     "stompit": "1.0.0",
     "ts-node": "10.9.2",
