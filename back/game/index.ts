@@ -5,6 +5,8 @@ import { ChatSocket } from "./sockets/chat.socket";
 import { RoomSocket } from "./sockets/room.socket";
 import { GameManager } from "./manager/game.manager";
 import { GameSocket } from "./sockets/game.socket";
+import { CardService } from "./services/card.service";
+import { UserService } from "./services/user.service";
 
 const app: Express = express();
 const PORT = 4000;
@@ -21,13 +23,22 @@ const ioServer = new Server(server, {
 const userSockets = new Map<number, Socket>();
 
 (async () => {
-  const gameManager = new GameManager();
-  const chatSocket = await ChatSocket.init();
-  const roomSocket = RoomSocket.init(gameManager);
-  const gameSocket = await GameSocket.init(gameManager);
+  const cardService = new CardService();
+  await cardService.fetchAllCards();
+  const userService = new UserService();
+  await userService.fetchAllUsers();
+
+  const gameManager = new GameManager(cardService);
+  const chatSocket = new ChatSocket(userService);
+  const roomSocket = new RoomSocket(gameManager);
+  const gameSocket = new GameSocket(gameManager);
 
   ioServer.on('connection', (socket: Socket) => {
     socket.on('register', (userId: number) => {
+      if(userSockets.has(userId)) {
+        console.log(`User ${userId} already connected`);
+        return;
+      }
       userSockets.set(userId, socket);
       console.log(`User ${userId} connected`);
 
