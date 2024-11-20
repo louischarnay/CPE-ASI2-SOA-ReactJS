@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "start": "npx ts-node index.ts",
+    "start": "ts-node index.ts",
     "test": "vitest --watch",
     "test:ci": "vitest --watch=false"
   },
