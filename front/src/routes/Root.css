@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: red;
+    /* Hauteur totale de la fenêtre */
+    display: flex;
+    flex-direction: column;
+    /* Header en haut, contenu en dessous */
+}
+
+#header {
+    height: 13vh;
+    background-color: #ccc;
+    padding: 10px;
+    text-align: center;
+    flex: 0 0 auto;
+    /* Taille fixe */
+}
+
+#container {
+    height: 87vh;
+    display: flex;
+    flex: 1 1 auto;
+    /* Prend tout l’espace disponible sous le header */
+}
+
+#chat {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 30%;
+    padding: 1rem;
+    background-color: #f0f0f0;
+}
+
+#content {
+    flex: 1 1 auto;
+    /* Prend le reste de la largeur */
+    background-color: #e0e0e0;
+    /* Optionnel : différencier visuellement */
+}

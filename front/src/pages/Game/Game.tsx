@@ -1,4 +1,4 @@
-import ChatMenu from "../../components/Chat/ChatMenu";
+import ChatMenu from "../../components/Chat/ChatContainer";
 
 const Game = () => {
     
