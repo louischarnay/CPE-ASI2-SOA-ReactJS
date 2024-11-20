@@ -16,7 +16,8 @@ import globalReducer from './core/reducers';
 import { Provider } from 'react-redux';
 import Create from './pages/Create/Create';
 import ProtectedRoute from './routes/ProtectedRoot';
-import { SocketProvider } from "./socket/socketContext";
+import { SocketChatProvider } from "./socket/socketChatContext";
+import { SocketGameProvider } from "./socket/socketGameContext";
 
 const router = createBrowserRouter([
   {
@@ -81,9 +82,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <Provider store={store}>
-      <SocketProvider> 
-        <RouterProvider router={router} />
-      </SocketProvider>
+      <SocketChatProvider> 
+        <SocketGameProvider>
+          <RouterProvider router={router} />
+        </SocketGameProvider>
+      </SocketChatProvider>
     </Provider>
 );
 

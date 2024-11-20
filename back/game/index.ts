@@ -20,7 +20,8 @@ const ioServer = new Server(server, {
   }
 });
 
-const userSockets = new Map<number, Socket>();
+const chatUserSockets = new Map<number, Socket>();
+const gameUserSockets = new Map<number, Socket>();
 
 (async () => {
   const cardService = new CardService();
@@ -34,21 +35,35 @@ const userSockets = new Map<number, Socket>();
   const gameSocket = new GameSocket(gameManager);
 
   ioServer.on('connection', (socket: Socket) => {
-    socket.on('register', (userId: number) => {
-      if(userSockets.has(userId)) {
-        console.log(`User ${userId} already connected`);
+    socket.on('register-chat', (userId: number) => {
+      if(chatUserSockets.has(userId)) {
+        console.log(`User ${userId} already connected in chat`);
         return;
       }
-      userSockets.set(userId, socket);
-      console.log(`User ${userId} connected`);
+      chatUserSockets.set(userId, socket);
+      console.log(`User ${userId} connected in chat`);
 
-      chatSocket.runSocket(socket, ioServer, userSockets);
-      roomSocket.runSocket(socket, userSockets);
-      gameSocket.runSocket(socket, userSockets);
+      chatSocket.runSocket(socket, ioServer, chatUserSockets);
       
       socket.on('disconnect', () => {
-        userSockets.delete(userId);
-        console.log(`User ${userId} disconnected`);
+        chatUserSockets.delete(userId);
+        console.log(`User ${userId} disconnected from chat`);
+      });
+    });
+    socket.on('register-game', (userId: number) => {
+      if(gameUserSockets.has(userId)) {
+        console.log(`User ${userId} already connected in game`);
+        return;
+      }
+      gameUserSockets.set(userId, socket);
+      console.log(`User ${userId} connected in game`);
+
+      roomSocket.runSocket(socket, chatUserSockets);
+      gameSocket.runSocket(socket, chatUserSockets);
+
+      socket.on('disconnect', () => {
+        gameUserSockets.delete(userId);
+        console.log(`User ${userId} disconnected from game`);
       });
     });
   });

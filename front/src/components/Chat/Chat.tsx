@@ -8,6 +8,7 @@ import { UserService } from "../../services/user.service";
 import { MessageService } from "../../services/message.service";
 import "./Chat.css";
 import { GlobalMessageReceived, PrivateMessageReceived } from "../../models/message.model";
+import { useSocket } from "../../socket/socketChatContext";
 
 interface APIMessage {
     targetId: number;
@@ -17,6 +18,7 @@ interface APIMessage {
 }
 
 const Chat = () => {
+    const {chatSocket} = useSocket();
     const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
@@ -117,18 +119,20 @@ const Chat = () => {
 
 
     useEffect(() => {
-        socket.emit('register', currentUser.id);
+        if(!chatSocket) return;
 
-        socket.on("message-receive-private", onMessageReceivedPrivate);
-        socket.on("message-receive-global", onMessageReceivedGlobal);
+        chatSocket.emit('register-chat', currentUser.id);
+
+        chatSocket.on("message-receive-private", onMessageReceivedPrivate);
+        chatSocket.on("message-receive-global", onMessageReceivedGlobal);
 
         loadMessageHistory()
 
         return () => {
-            socket.off("message-receive-private", onMessageReceivedPrivate);
-            socket.off("message-receive-global", onMessageReceivedGlobal);
+            chatSocket.off("message-receive-private", onMessageReceivedPrivate);
+            chatSocket.off("message-receive-global", onMessageReceivedGlobal);
         };
-    }, [currentUser.id, onMessageReceivedPrivate, onMessageReceivedGlobal]);
+    }, [chatSocket, currentUser.id, onMessageReceivedPrivate, onMessageReceivedGlobal]);
 
     useEffect(() => {
         loadMessageHistory();

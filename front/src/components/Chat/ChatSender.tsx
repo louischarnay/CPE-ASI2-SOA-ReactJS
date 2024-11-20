@@ -3,8 +3,10 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { socket } from "../../socket/socket";
 import User from "../../models/user.model";
+import { useSocket } from "../../socket/socketChatContext";
 
 const ChatSender = () => {
+    const {chatSocket} = useSocket();
     const [message, setMessage] = useState("");
 
     const typeChat: string = useSelector((state: any) => state.messageReducer.typeChat);
@@ -12,15 +14,17 @@ const ChatSender = () => {
     const targetId: number = useSelector((state: any) => state.messageReducer.targetId);
 
     const sendMessage = () => {
+        if(!chatSocket) return;
+        
         if (message.trim() === "") return;
 
         if (typeChat === "global") {
-            socket.emit("message-send-global", {
+            chatSocket.emit("message-send-global", {
                 content: message,
                 userId: currentUser.id
             });
         } else if (targetId) {
-            socket.emit("message-send-private", {
+            chatSocket.emit("message-send-private", {
                 content: message,
                 userId: currentUser.id,
                 targetId: targetId

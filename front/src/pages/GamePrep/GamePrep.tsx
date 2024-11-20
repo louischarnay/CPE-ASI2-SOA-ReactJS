@@ -15,10 +15,10 @@ import User from "../../models/user.model";
 import "./GamePrep.css";
 import PlayerCards from "../../components/Game/PlayerCards";
 import { useNavigate } from "react-router-dom";
-import { useSocket } from "../../socket/socketContext";
+import { useSocket } from "../../socket/socketGameContext";
 
 const GamePrep = () => {
-    const {socket} = useSocket();
+    const {gameSocket} = useSocket();
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
     const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
@@ -39,7 +39,7 @@ const GamePrep = () => {
     }
 
     useEffect(() => {
-        if(!socket) return;
+        if(!gameSocket) return;
 
         // Setup cards lists
         setTempUserCards([]);
@@ -48,12 +48,12 @@ const GamePrep = () => {
 
         //socket.open();
 
-        //socket.emit('register', currentUser.id);
+        gameSocket.emit('register-game', currentUser.id);
 
         // Setup socket
-        socket.on("joined-queue", onQueueJoined);
-        socket.on("left-queue", onQueueLeft);
-        socket.on("created-room", (room: any) => {
+        gameSocket.on("joined-queue", onQueueJoined);
+        gameSocket.on("left-queue", onQueueLeft);
+        gameSocket.on("created-room", (room: any) => {
             console.log("Room created: " + room.id);
             console.log("Players: " + room.player1.id + " and " + room.player2.id);
             console.log("Starting game...");
@@ -64,10 +64,10 @@ const GamePrep = () => {
             handleNavigate();
         });
         return () => {
-            socket.off("joined-queue", onQueueJoined);
-            socket.off("left-queue", onQueueLeft);
+            gameSocket.off("joined-queue", onQueueJoined);
+            gameSocket.off("left-queue", onQueueLeft);
         };
-    }, [socket, currentUser.id]);
+    }, [gameSocket, currentUser.id]);
 
     const navigate = useNavigate();
     const handleNavigate = () => {
@@ -99,7 +99,7 @@ const GamePrep = () => {
     };
 
     const handleJoinGame = () => {
-        if(!socket) return;
+        if(!gameSocket) return;
         // Join game
         // Check card number
         if(gameCards.length !== 4) {
@@ -109,14 +109,14 @@ const GamePrep = () => {
 
         setOpenBackdrop(true);
         console.log("Joining game as player " + currentUser.id);
-        socket.emit("join-queue", { id: currentUser.id, cards: gameCards.map(card => card.id) });
+        gameSocket.emit("join-queue", { id: currentUser.id, cards: gameCards.map(card => card.id) });
         console.log("Joining queue");
     }
 
     const handleCancelJoin = () => {
-        if(!socket) return;
+        if(!gameSocket) return;
         setOpenBackdrop(false);
-        socket.emit("leave-queue", { id: currentUser.id });
+        gameSocket.emit("leave-queue", { id: currentUser.id });
     }
 
 
