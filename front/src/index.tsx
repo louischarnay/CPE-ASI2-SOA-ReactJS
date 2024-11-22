@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -9,7 +8,7 @@ import UserForm from './pages/UserForm/UserForm';
 import Login from './pages/Login/Login';
 import Buy from './pages/Buy/Buy';
 import Sell from './pages/Sell/Sell';
-import Game from './pages/Game/Game';
+import Game from './pages/Game/GameRoom';
 import GamePrep from './pages/GamePrep/GamePrep';
 import { configureStore } from '@reduxjs/toolkit';
 import globalReducer from './core/reducers';
@@ -18,6 +17,7 @@ import Create from './pages/Create/Create';
 import ProtectedRoute from './routes/ProtectedRoot';
 import { SocketChatProvider } from "./socket/socketChatContext";
 import { SocketGameProvider } from "./socket/socketGameContext";
+import Winner from './pages/Winner/Winner';
 
 const router = createBrowserRouter([
   {
@@ -56,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "game",
         element: <ProtectedRoute element={<Game />} /> // Protège la route "sell"
+      },
+      {
+        path: "winner",
+        element: <ProtectedRoute element={<Winner />} /> // Protège la route "sell"
       },
       {
         path: "sell",
