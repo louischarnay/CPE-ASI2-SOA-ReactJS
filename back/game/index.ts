@@ -51,8 +51,8 @@ const gameUserSockets = new Map<number, Socket>();
       gameUserSockets.set(userId, socket);
       console.log(`User ${userId} connected in game`);
 
-      roomSocket.runSocket(socket, chatUserSockets);
-      gameSocket.runSocket(socket, chatUserSockets);
+      roomSocket.runSocket(socket, gameUserSockets);
+      gameSocket.runSocket(socket, gameUserSockets);
 
       socket.on('disconnect', () => {
         gameUserSockets.delete(userId);
