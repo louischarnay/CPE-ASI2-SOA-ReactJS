@@ -34,7 +34,8 @@ export class GameManager {
     const card = this.findCardById(player.cards, play.cardId);
     const targetCard = this.findCardById(opponent.cards, play.targetCardId);
 
-    targetCard.currentHp -= card.attack;
+    const damage = Math.max(Math.floor(card.attack * (1 - targetCard.defence / 100)), 1);
+    targetCard.currentHp -= damage;
 
     if (targetCard.currentHp <= 0) {
       opponent.cards = opponent.cards.filter((c) => c.id !== targetCard.id);
@@ -84,7 +85,7 @@ export class GameManager {
     );
     return {
       id: player.id,
-      cards: cards.filter(Boolean) as GameCard[],
+      cards,
       remainingActions: DEFAULT_REMAINING_ACTIONS,
     };
   }
