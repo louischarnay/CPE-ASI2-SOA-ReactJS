@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { EndTurn, Game, GameCard, GamePlay, Player } from "../../models/game.model";
+import { EndTurn, Game, GameCard, GamePlay } from "../../models/game.model";
 import PlayerCards from "../../components/Game/PlayerCards";
 import User from "../../models/user.model";
 import { Button } from "@mui/material";
 import { useSocket } from "../../socket/socketGameContext";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { UserService } from "../../services/user.service";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +29,7 @@ const GameRoom = () => {
             targetCardId: firstSelectedCard.id,
         };
 
-        console.log(currentGame)
+        console.log(gamePlay)
         dispatch({
             type: "RESET_SELECTED_CARDS",
         });
@@ -37,13 +37,13 @@ const GameRoom = () => {
 
     };
 
-    const handleGameUpdate = (room: Game) => {
+    const handleGameUpdate = useCallback((room: Game) => {
         console.log("Player attacked:", room);
         dispatch({
             type: 'UPDATE_GAME',
             payload: room
         })
-    };
+    }, [dispatch])
 
     const handleEndTurn = () => {
         if (!gameSocket) return;
@@ -54,7 +54,7 @@ const GameRoom = () => {
         gameSocket.emit("game-player-end-turn", endTurn);
     }
 
-    const handleGameEnd = async (winner: any) => {
+    const handleGameEnd = useCallback(async (winner: any) => {
         console.log("winner", winner)
         const winnerUser: User = await UserService.getUserById(winner.winner.id);
         console.log("winnerUser", winnerUser)
@@ -63,7 +63,7 @@ const GameRoom = () => {
             payload: winnerUser
         })
         navigate("/winner/")
-    }
+    }, [dispatch, navigate])
 
     useEffect(() => {
         if (!gameSocket) return;
@@ -78,10 +78,10 @@ const GameRoom = () => {
             gameSocket.off("game-end", handleGameEnd);
 
         };
-    }, [gameSocket]);
+    }, [gameSocket, handleGameEnd, handleGameUpdate]);
 
     return (
-        <>
+        <div style={{ alignItems: "center", justifyContent: "center" }}>
             <h1>Game</h1>
             {!firstSelectedCard && !secondSelectedCard && <p>Select cards to attack</p>}
             <h2>Opponent Cards</h2>
@@ -100,18 +100,27 @@ const GameRoom = () => {
 
             {/* Attack button visible only for the current player */}
             {currentUser.id === currentGame.currentPlayer && (
-                <>
+                <div style={{ display: "flex", gap: "20px", justifyContent: "center", alignItems: "center" }}>
+                    {
+                        currentUser.id === currentGame.player1.id ?
+                            <span>
+                                Remaining Actions : {currentGame.player1.remainingActions}
+                            </span> :
+                            <span>
+                                Remaining Actions : {currentGame.player2.remainingActions}
+                            </span>
+                    }
                     {
                         (firstSelectedCard && secondSelectedCard) && (
-                            <Button onClick={handleAttack} disabled={!firstSelectedCard || !secondSelectedCard}>
+                            <Button variant="contained" onClick={handleAttack} disabled={!firstSelectedCard || !secondSelectedCard}>
                                 Attack
                             </Button>
                         )
                     }
-                    <Button onClick={handleEndTurn} disabled={!firstSelectedCard || !secondSelectedCard}>
+                    <Button onClick={handleEndTurn} variant="contained" disabled={!firstSelectedCard || !secondSelectedCard}>
                         End Turn
                     </Button>
-                </>
+                </div>
             )}
 
             <h2>Your Cards</h2>
@@ -128,7 +137,7 @@ const GameRoom = () => {
                 />
             }
 
-        </>
+        </div>
     );
 };
 

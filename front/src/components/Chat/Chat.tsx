@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import MessageComponent from "../MessageComponent/MessageComponent";
 import { useCallback, useEffect, useState } from "react";
-import { socket } from "../../socket/socket";
 import User from "../../models/user.model";
 import { useDispatch, useSelector } from "react-redux";
 import { UserService } from "../../services/user.service";
@@ -18,7 +17,7 @@ interface APIMessage {
 }
 
 const Chat = () => {
-    const {chatSocket} = useSocket();
+    const { chatSocket } = useSocket();
     const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const Chat = () => {
         };
     };
 
-    const loadMessageHistory = async () => {
+    const loadMessageHistory = useCallback(async () => {
         // Si on est en mode privé et qu'il n'y a pas de targetId, on ne charge pas les messages
         if (typeChat === "private" && !targetId) {
             dispatch({ type: 'EMPTY_MESSAGES' });
@@ -89,8 +88,8 @@ const Chat = () => {
         } finally {
             setIsLoading(false);
         }
-    };
-
+    }, [dispatch, currentUser.id, targetId, typeChat])
+    
     const updateMessagesPrivate = useCallback((newMessage: PrivateMessageReceived) => {
         dispatch({
             type: 'UPDATE_MESSAGES_PRIVATE',
@@ -119,7 +118,7 @@ const Chat = () => {
 
 
     useEffect(() => {
-        if(!chatSocket) return;
+        if (!chatSocket) return;
 
         chatSocket.emit('register-chat', currentUser.id);
 
@@ -132,11 +131,11 @@ const Chat = () => {
             chatSocket.off("message-receive-private", onMessageReceivedPrivate);
             chatSocket.off("message-receive-global", onMessageReceivedGlobal);
         };
-    }, [chatSocket, currentUser.id, onMessageReceivedPrivate, onMessageReceivedGlobal]);
+    }, [chatSocket, currentUser.id, onMessageReceivedPrivate, onMessageReceivedGlobal, loadMessageHistory]);
 
     useEffect(() => {
         loadMessageHistory();
-    }, [typeChat, targetId]);
+    }, [typeChat, targetId, loadMessageHistory]);
 
     const showGlobalMessages = () => {
         const copyGlobal = [...messagesGlobal]

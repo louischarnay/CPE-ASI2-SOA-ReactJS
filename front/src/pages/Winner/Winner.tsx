@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { Player } from "../../models/game.model";
 import User from "../../models/user.model";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";

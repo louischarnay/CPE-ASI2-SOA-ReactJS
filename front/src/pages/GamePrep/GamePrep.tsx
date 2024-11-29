@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect, useCallback } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
@@ -26,6 +26,7 @@ const GamePrep = () => {
     const [open, setOpen] = useState(false);
     const [openBackdrop, setOpenBackdrop] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [loadingTextContent, setLoadingTextContent] = useState<string>("Joining Queue...");
 
@@ -37,6 +38,14 @@ const GamePrep = () => {
     function onQueueLeft() {
         console.log("Queue left");
     }
+
+    const handleRoomCreation = useCallback((room: Game) => {
+        dispatch({
+            type: 'UPDATE_GAME',
+            payload: room
+        })
+        navigate("/game");
+    }, [dispatch, navigate])
 
     useEffect(() => {
         if (!gameSocket) return;
@@ -64,17 +73,7 @@ const GamePrep = () => {
             gameSocket.off("joined-queue", onQueueJoined);
             gameSocket.off("left-queue", onQueueLeft);
         };
-    }, [gameSocket, currentUser.id]);
-
-    const navigate = useNavigate();
-
-    const handleRoomCreation = (room: Game) => {
-        dispatch({
-            type: 'UPDATE_GAME',
-            payload: room
-        })
-        navigate("/game");
-    }
+    }, [gameSocket, currentUser.id, cards, handleRoomCreation]);
 
     const handleAddClick = (Card: CardProps) => {
         if (gameCards.length >= 4) {
