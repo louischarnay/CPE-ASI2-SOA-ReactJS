@@ -17,21 +17,22 @@ export class GameSocket {
 
       const game = await this.gameManager.play(data);
       const opponentSocket = this.getOpponentSocket(data.playerId, game, userSockets);
-
+      
       socket.emit(GAME_PLAYER_ATTACKED_EVENT, game);
       opponentSocket?.emit(GAME_PLAYER_ATTACKED_EVENT, game);
-
-      if (this.gameManager.checkTurnEnd(data)) {
-        const opponentSocket = this.getOpponentSocket(data.playerId, game, userSockets);
-
-        socket.emit(GAME_PLAYER_NEXT_TURN_EVENT, game);
-        opponentSocket?.emit(GAME_PLAYER_NEXT_TURN_EVENT, game);
-      }
 
       const winner = this.gameManager.findWinnerIfExists(data.gameId);
       if (winner) {
         socket.emit(GAME_END_EVENT, { winner });
         opponentSocket?.emit(GAME_END_EVENT, { winner });
+        return;
+      }
+      
+      if (this.gameManager.checkTurnEnd(data)) {
+        const updatedGame = this.gameManager.findGameById(data.gameId);
+
+        socket.emit(GAME_PLAYER_NEXT_TURN_EVENT, updatedGame);
+        opponentSocket?.emit(GAME_PLAYER_NEXT_TURN_EVENT, updatedGame);
       }
     });
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Chat from "./Chat";
 import "./Chat.css"
 import ChatSelector from "./ChatSelector";
@@ -12,14 +12,14 @@ const ChatContainer = () => {
     const [targetList, setTargetList] = useState<User[]>([]);
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
 
-    const getTargets = async () => {
+    const getTargets = useCallback( async () => {
         const targets: User[] = await UserService.getAllUsers();
         setTargetList(targets.filter(target => target.id !== currentUser.id)); // Filtrer l'utilisateur courant
-    };
+    }, [currentUser.id])
 
     useEffect(() => {
         getTargets();
-    }, [])
+    }, [getTargets])
 
     return (
         <>

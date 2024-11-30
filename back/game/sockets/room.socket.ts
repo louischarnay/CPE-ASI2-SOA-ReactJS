@@ -21,19 +21,22 @@ export class RoomSocket {
       socket.emit(JOINED_QUEUE_EVENT);
 
       if (this.queue.length < 2) return;
-
+      
       const player1 = this.queue.shift();
       const player2 = this.queue.shift();
       if (!player1 || !player2) {
         console.error('Players not found in queue');
         return;
       }
-
+      
+      console.log(`room created`);
       const room = await this.gameManager.initRoom(player1, player2);
       
       const player1Socket = userSockets.get(room.player1.id);
       const player2Socket = userSockets.get(room.player2.id);
 
+      console.log("player1", room.player1.id)
+      console.log("player2", room.player2.id)
       player1Socket?.emit(CREATED_ROOM_EVENT, room);
       player2Socket?.emit(CREATED_ROOM_EVENT, room);
     });

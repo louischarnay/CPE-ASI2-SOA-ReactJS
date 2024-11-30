@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import CardList from "../../components/Cards/CardList";
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect, useCallback } from "react";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
@@ -10,22 +10,23 @@ import Slide from '@mui/material/Slide';
 import Button from '@mui/material/Button';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { socket } from "../../socket/socket";
 import User from "../../models/user.model";
 import "./GamePrep.css";
 import PlayerCards from "../../components/Game/PlayerCards";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../../socket/socketGameContext";
+import { Game } from "../../models/game.model";
 
 const GamePrep = () => {
-    const {gameSocket} = useSocket();
+    const { gameSocket } = useSocket();
     const currentUser: User = useSelector((state: any) => state.userReducer.currentUser);
     const cards: CardProps[] = useSelector((state: any) => state.cardReducer.userCards)
     const [tempUserCards, setTempUserCards] = useState<CardProps[]>([]);
     const [gameCards, setGameCards] = useState<CardProps[]>([]);
     const [open, setOpen] = useState(false);
     const [openBackdrop, setOpenBackdrop] = useState(false);
-    //const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [loadingTextContent, setLoadingTextContent] = useState<string>("Joining Queue...");
 
@@ -38,8 +39,16 @@ const GamePrep = () => {
         console.log("Queue left");
     }
 
+    const handleRoomCreation = useCallback((room: Game) => {
+        dispatch({
+            type: 'UPDATE_GAME',
+            payload: room
+        })
+        navigate("/game");
+    }, [dispatch, navigate])
+
     useEffect(() => {
-        if(!gameSocket) return;
+        if (!gameSocket) return;
 
         // Setup cards lists
         setTempUserCards([]);
@@ -53,29 +62,21 @@ const GamePrep = () => {
         // Setup socket
         gameSocket.on("joined-queue", onQueueJoined);
         gameSocket.on("left-queue", onQueueLeft);
+
+        gameSocket.on("created-room", () => console.log('created-room'))
         gameSocket.on("created-room", (room: any) => {
             console.log("Room created: " + room.id);
             console.log("Players: " + room.player1.id + " and " + room.player2.id);
-            console.log("Starting game...");
-            // Update data
-            //updateData(currentUser.id);
-            // Redirect to game
-            //history.push("/game");
-            handleNavigate();
+            handleRoomCreation(room);
         });
         return () => {
             gameSocket.off("joined-queue", onQueueJoined);
             gameSocket.off("left-queue", onQueueLeft);
         };
-    }, [gameSocket, currentUser.id]);
-
-    const navigate = useNavigate();
-    const handleNavigate = () => {
-        navigate("/game");
-    }
+    }, [gameSocket, currentUser.id, cards, handleRoomCreation]);
 
     const handleAddClick = (Card: CardProps) => {
-        if(gameCards.length >= 4) {
+        if (gameCards.length >= 4) {
             setOpen(true);
             return;
         }
@@ -99,10 +100,10 @@ const GamePrep = () => {
     };
 
     const handleJoinGame = () => {
-        if(!gameSocket) return;
+        if (!gameSocket) return;
         // Join game
         // Check card number
-        if(gameCards.length !== 4) {
+        if (gameCards.length !== 4) {
             setOpen(true);
             return;
         }
@@ -114,7 +115,7 @@ const GamePrep = () => {
     }
 
     const handleCancelJoin = () => {
-        if(!gameSocket) return;
+        if (!gameSocket) return;
         setOpenBackdrop(false);
         gameSocket.emit("leave-queue", { id: currentUser.id });
     }
@@ -139,45 +140,46 @@ const GamePrep = () => {
 
     return (
         <div>
-        <div style={{ display: 'flex', gap: "20px"}}>
-            <CardList cards={tempUserCards} setSelectedCard={handleAddClick} listTitle="My Cards"/>
-            <CardList cards={gameCards} setSelectedCard={handleRemoveClick} listTitle="Game Cards"/>
-            <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                message="You have reach the maximum amount of cards"
-                TransitionComponent={Slide}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                onClose={handleClose}
-                action={action}
-            >
-            <Alert severity="error">
-                You have reach the maximum amount of cards
-            </Alert>
-            </Snackbar>
-        </div>
-        <div className="button-container">
-            <Button variant="contained" color="success" onClick={handleJoinGame}>
-                Join Game
-            </Button>
-            <Backdrop
-                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-                open={openBackdrop}
-                onClick={handleClose}
-            >
-                <div className="backdrop-container">
-                    <PlayerCards cards={gameCards} />
-                    <CircularProgress color="inherit" />
-                    <p>{loadingTextContent}</p>
-                    <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleCancelJoin}>
-                        Cancel
-                    </Button>
-                </div>
-            </Backdrop>
-        </div>
+            <div style={{ display: 'flex', gap: "20px" }}>
+                <CardList cards={tempUserCards} setSelectedCard={handleAddClick} listTitle="My Cards" />
+                <CardList cards={gameCards} setSelectedCard={handleRemoveClick} listTitle="Game Cards" />
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    message="You have reach the maximum amount of cards"
+                    TransitionComponent={Slide}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    onClose={handleClose}
+                    action={action}
+                >
+                    <Alert severity="error">
+                        You have reach the maximum amount of cards
+                    </Alert>
+                </Snackbar>
+            </div>
+            <div className="button-container">
+                <Button variant="contained" color="success" onClick={handleJoinGame}>
+                    Join Game
+                </Button>
+                <Backdrop
+                    sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                    open={openBackdrop}
+                    onClick={handleClose}
+                >
+                    <div className="backdrop-container">
+                        <PlayerCards cards={gameCards} isSelectable={false}
+                        />
+                        <CircularProgress color="inherit" />
+                        <p>{loadingTextContent}</p>
+                        <Button className="backdrop-cancelButton" variant="contained" color="error" onClick={handleCancelJoin}>
+                            Cancel
+                        </Button>
+                    </div>
+                </Backdrop>
+            </div>
         </div>
     );
 }

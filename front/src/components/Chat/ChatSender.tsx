@@ -1,7 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { socket } from "../../socket/socket";
 import User from "../../models/user.model";
 import { useSocket } from "../../socket/socketChatContext";
 
