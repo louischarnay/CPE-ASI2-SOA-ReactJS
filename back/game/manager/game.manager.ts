@@ -25,16 +25,19 @@ export class GameManager {
   async play(play: GamePlay): Promise<Game> {
     const game = this.findGameById(play.gameId);
     if (game.currentPlayer !== play.playerId) {
-      throw new Error(`Player ${play.playerId} is not allowed to play in game ${play.gameId}.`);
+      console.error(`Player ${play.playerId} is not allowed to play in game ${play.gameId}.`);
+      return game;
     }
 
     const player = this.findPlayerById(game, play.playerId);
+    if (!player) return game;
     const opponent = this.getOpponent(game, play.playerId);
 
-    const card = this.findCardById(player.cards, play.cardId);
-    const targetCard = this.findCardById(opponent.cards, play.targetCardId);
+    const card = this.findCardInGameById(player.cards, play.cardId);
+    const targetCard = this.findCardInGameById(opponent.cards, play.targetCardId);
+    if (!card || !targetCard) return game;
 
-    const damage = Math.max(Math.floor(card.attack * (1 - targetCard.defence / 100)), 1);
+    const damage = card.attack - (targetCard.defence / 2);
     targetCard.currentHp -= damage;
 
     if (targetCard.currentHp <= 0) {
@@ -48,6 +51,7 @@ export class GameManager {
   checkTurnEnd({ gameId, playerId }: EndTurn): boolean {
     const game = this.findGameById(gameId);
     const player = this.findPlayerById(game, playerId);
+    if (!player) return false;
 
     if (player.remainingActions <= 0) {
       this.endTurn({ gameId, playerId });
@@ -59,6 +63,7 @@ export class GameManager {
   endTurn({ gameId, playerId }: EndTurn): Game {
     const game = this.findGameById(gameId);
     const player = this.findPlayerById(game, playerId);
+    if (!player) return game;
 
     player.remainingActions = DEFAULT_REMAINING_ACTIONS;
     game.currentPlayer = this.getOpponent(game, playerId).id;
@@ -83,9 +88,10 @@ export class GameManager {
     const cards = await Promise.all(
       player.cards.map(async (cardId) => await this.getCardById(cardId))
     );
+    const filteredCards = cards.filter((card) => card !== null);
     return {
       id: player.id,
-      cards,
+      cards: filteredCards,
       remainingActions: DEFAULT_REMAINING_ACTIONS,
     };
   }
@@ -96,15 +102,21 @@ export class GameManager {
     return game;
   }
 
-  private findPlayerById(game: Game, playerId: number): Player {
+  private findPlayerById(game: Game, playerId: number): Player | null {
     const player = [game.player1, game.player2].find((p) => p.id === playerId);
-    if (!player) throw new Error(`Player with ID ${playerId} not found in game ${game.id}.`);
+    if (!player) {
+      console.error(`Player with ID ${playerId} not found in game ${game.id}.`);
+      return null;
+    }
     return player;
   }
 
-  private findCardById(cards: GameCard[], cardId: number): GameCard {
+  private findCardInGameById(cards: GameCard[], cardId: number): GameCard | null {
     const card = cards.find((c) => c.id === cardId);
-    if (!card) throw new Error(`Card with ID ${cardId} not found.`);
+    if (!card) {
+      console.error(`Card with ID ${cardId} not found.`);
+      return null;
+    }
     return card;
   }
 
@@ -112,12 +124,15 @@ export class GameManager {
     return game.player1.id === playerId ? game.player2 : game.player1;
   }
 
-  private async getCardById(id: number): Promise<GameCard> {
+  private async getCardById(id: number): Promise<GameCard | null> {
     const existingCard = this.cards.find((c) => c.id === id);
     if (existingCard) return {...existingCard, currentHp: existingCard.hp};
 
     const card = await CardService.getCardById(id);
-    if (!card) throw new Error(`Card with ID ${id} not found.`);
+    if (!card) {
+      console.error(`Card with ID ${id} not found.`);
+      return null;
+    }
     
     this.cards.push(card);
     return {...card, currentHp: card.hp};

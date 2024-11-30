@@ -67,6 +67,7 @@ export class ChatSocket {
     console.log(`Global message received from client ${data.userId}: ${data.content}`);
 
     const userName = await this.getUserNameById(data.userId);
+    if (!userName) return;
     return {
       userId: data.userId,
       userName,
@@ -88,12 +89,12 @@ export class ChatSocket {
     });
   }
 
-  private async getUserNameById(id: number): Promise<string> {
+  private async getUserNameById(id: number): Promise<string | null> {
     const existingUser = this.users.find((user) => user.id === id);
     if (existingUser) return existingUser.surName;
 
     const user = await UserService.getUserById(id);
-    if (!user) throw new Error(`User with ID ${id} not found.`);
+    if (!user) return null;
     
     this.users.push(user);
     return user.surName;
