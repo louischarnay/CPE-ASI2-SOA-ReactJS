@@ -28,7 +28,7 @@ public class SseController {
 
     @GetMapping("/sse")
     public SseEmitter streamSse(@RequestParam Long id) {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(300000L);
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
 

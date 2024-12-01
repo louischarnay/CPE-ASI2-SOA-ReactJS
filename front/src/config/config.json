@@ -1,6 +1,6 @@
 {
     "url": "http://localhost/api",
-    "generateUrl": "http://localhost/card",
+    "generateUrl": "http://localhost/generator",
     "socketUrl": "http://localhost",
     "messagesUrl": "http://localhost"
 }
