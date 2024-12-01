@@ -32,11 +32,11 @@ docker-compose up --build
 ### 📌 Louis Charnay
 #### Back-End
 - Mise en place des conteneurs Docker
-- Développement du **CardGenerator**
-- Intégration de l'**ESB** dans **imageGenerator**
-- Intégration de l'**ESB** dans **descriptionGenerator**
-- Intégration de l'**ESB** dans **propsGenerator**
-- Développement du **SSE** côté back
+- Intégration de l'**ESB** dans **backendGame**
+- Développement du backend spring de logging
+- Développement du backend spring d'historisation des messages
+- Mise en place du service **Nginx**
+- Mise en place du load-balancing
 
 ### 📌 Léon Dumestre
 #### Front-End
