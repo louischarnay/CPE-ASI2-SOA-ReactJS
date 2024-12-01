@@ -67,20 +67,15 @@ docker-compose up --build
 ### 📌 Dorian Gorse
 
 #### Front-End
-- Développement du **component Card**
-- Développement du **component Card List**
-- Développement du **component Card Preview**
-- Développement de la **page d'achat**
-- Développement de la **page de vente**
-- Mise en place de la **navigation sécurisée nécessitant une authentification**
-- Animation de **chargement des listes** et affichage des **messages d’erreurs**
-- Ajout d’une **Snackbar** pour confirmer les actions d’achat et de vente
+- Développement de la **page GamePrep**
+- Développement de **la selection de carte**
+- Développement du **component des cartes joueur**
+- Développement **recherche de partie**
+- Mise en place des **websockets** de recherche
+- Remaniement des **websockets** avec mise en place **d'un context** 
 
 #### Back-End
-- Implémentation du **Card Properties Generator** pour la génération dynamique des propriétés de carte
-
-#### CI/CD
-- Mise en place des **pipelines Back Generator**
+- Correction de bug sur **les websockets**
 
 ---
 
