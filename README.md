@@ -54,16 +54,11 @@ docker-compose up --build
 ### 📌 Nathan Guillemette
 
 #### Front-End
-- Travail préliminaire de découpage des pages en **composants**  
-- Instanciation des différentes **pages** de l'application
-- Mise en place de **react-router**
-- Mise en place de **Redux**
-- Mise en place de **Material UI**
-- Développement de la **page d'Authentification**
-- Développement de la **page d'Accueil**
-- Développement de la **page de génération d'image**
-- Développement de tous les **services** appellant le **Back-End**
-- Développement du **SSE** côté front (dont gestion d'erreur ou de réussite de la génération de carte)
+- Développement du **Chat et components associés**
+- Développement du **déroulement d'une partie**
+- Développement de la **page GameRoom**
+- Mise en place des **websockets** du chat
+- Mise en place des **websockets** d'une partie  
 
 ### 📌 Dorian Gorse
 
