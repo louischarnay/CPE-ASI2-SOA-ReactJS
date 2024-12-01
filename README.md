@@ -42,7 +42,7 @@ docker-compose up --build
 #### Back-End NodeJS
 - Création du backend **NodeJS** avec typescript
 - Implémenation des **sockets**
-- Création et tests de la **logique du jeu**
+- Création de la **logique du jeu**
 - Implémentation du **chat écrit**
 - Implémentation des **bonnes pratiques** dans le backend Node
 - Dialogue entre le backend Node et le monolithique pour récupérer les infos des cartes et utilisateurs
