@@ -11,6 +11,10 @@
 
 ---
 
+## 🌐 Lien du GitHub
+
+https://github.com/louischarnay/CPE-ASI2-SOA-ReactJS/tree/atelier-2
+
 ## ▶️ Lancement du projet
 
 Avant de commencer, il est nécessaire de créer une clé API pour générer des images. Pour cela, rendez vous sur le site de [Neural Love](https://docs.neural.love/docs/getting-started).
