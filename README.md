@@ -39,21 +39,13 @@ docker-compose up --build
 - Mise en place du load-balancing
 
 ### 📌 Léon Dumestre
-#### Front-End
-- Initialisation du projet React en typescript
-
-#### Back-End
-- Mise en place des conteneurs Docker
-- Développement du **Card Image Generator**
-- Développement du **Card Description Generator**
-- Création du **Card Properties Generator** et implémentation de la librairie
-- Modification de la partie monolithique pour l'adapter à notre architecture
-- Implémentation du container **Neural Love** pour générer des cartes
-- Implémentation du container **Ollama** pour générer des descriptions
-
-#### CI/CD
-- Mise en place des **pipelines Front**
-- Mise en place des **pipelines Back Monolithique**
+#### Back-End NodeJS
+- Création du backend **NodeJS** avec typescript
+- Implémenation des **sockets**
+- Création et tests de la **logique du jeu**
+- Implémentation du **chat écrit**
+- Implémentation des **bonnes pratiques** dans le backend Node
+- Dialogue entre le backend Node et le monolithique pour récupérer les infos des cartes et utilisateurs
 
 ### 📌 Nathan Guillemette
 
@@ -81,9 +73,9 @@ docker-compose up --build
 
 ## 📝 Fonctionnalités Réalisées
 
-- **Application React** : Frontend pour l’interface utilisateur
-- **Backend Monolithique** : Gestion centralisée des cartes et des utilisateurs
-- **Service d’Images et Propriétés** : Génération dynamique d'images, descriptions et propriétés des cartes
+- **Application React** : Frontend pour l’interface utilisateur avec un chat écrit et un jeu
+- **Backend NodeJS** : Backend avec des sockets pour gérer le chat et le jeu ainsi que l'ESB pour logs les actions
+- **Backend Spring** : Sauvegarde de logs et historisation des messages
 
 ---
 
